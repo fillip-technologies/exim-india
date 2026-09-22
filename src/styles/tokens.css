@@ -1,0 +1,62 @@
+/* ==========================================================================
+   MASTER DESIGN SYSTEM TOKENS - EXIM INDIA
+   100% LIGHT THEME SPECIFICATION
+   This is the SINGLE SOURCE OF TRUTH for all colors, fonts, and base tokens.
+   ========================================================================== */
+
+:root {
+  /* Headline & Text Colors */
+  --color-heading: #0f172a;
+  --color-body: #334155;
+  --color-body-muted: #64748b;
+
+  /* Hero Specific Palette from UI Design */
+  --hero-amber: #b45309;          /* "TO THE WORLD" accent */
+  --hero-amber-light: #d97706;
+  --hero-forest: #0a3622;         /* Primary "Explore Our Products" button */
+  --hero-forest-hover: #0f4d30;
+  --hero-accent-line: #c2410c;    /* Top accent line */
+
+  /* Logo Brand Tokens */
+  --brand-green: #16a34a;
+  --brand-green-dark: #15803d;
+  --brand-orange: #ea580c;
+  --brand-orange-light: #f97316;
+  --brand-blue: #0284c7;
+  --brand-purple: #7e22ce;
+  --brand-navy: #0f172a;
+
+  /* Light Theme Surfaces & Borders */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --border-light: #e2e8f0;
+  --border-subtle: #cbd5e1;
+
+  /* Typography Fonts */
+  --font-family-heading: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-body: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Tailwind CSS v4 Theme Integration */
+@theme {
+  --color-heading: var(--color-heading);
+  --color-body: var(--color-body);
+  --color-muted: var(--color-body-muted);
+
+  --color-hero-amber: var(--hero-amber);
+  --color-hero-forest: var(--hero-forest);
+  --color-hero-forest-hover: var(--hero-forest-hover);
+
+  --color-brand-green: var(--brand-green);
+  --color-brand-green-dark: var(--brand-green-dark);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-orange-light: var(--brand-orange-light);
+  --color-brand-blue: var(--brand-blue);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-navy: var(--brand-navy);
+
+  --font-heading: var(--font-family-heading);
+  --font-body: var(--font-family-body);
+  --font-serif: 'Playfair Display', Georgia, serif;
+}
