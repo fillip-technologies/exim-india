@@ -119,6 +119,16 @@ export default function Products() {
                         <span>&rarr;</span>
                       </Link>
                     </div>
+                  ) : prod.category === 'Flavours & Emulsions' ? (
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <Link
+                        to="/products/liquid-flavours"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-emerald-800 hover:text-emerald-950 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 transition-colors"
+                      >
+                        <span>Explore 20 Liquid Flavours &amp; Enhancers</span>
+                        <span>&rarr;</span>
+                      </Link>
+                    </div>
                   ) : <div />}
                   <Link
                     to="/contact"
