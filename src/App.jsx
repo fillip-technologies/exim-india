@@ -24,6 +24,21 @@ import DiscoDustPowder from './pages/DiscoDustPowder'
 import DiscoDustDetail from './pages/DiscoDustDetail'
 import FoodAdditives from './pages/FoodAdditives'
 import FoodAdditiveDetail from './pages/FoodAdditiveDetail'
+import MangoPulp from './pages/MangoPulp'
+import MangoPulpDetail from './pages/MangoPulpDetail'
+import Chemicals from './pages/Chemicals'
+import TitaniumDioxide from './pages/TitaniumDioxide'
+import TitaniumDioxideDetail from './pages/TitaniumDioxideDetail'
+import NaturalFoodColors from './pages/NaturalFoodColors'
+import NaturalFoodColorDetail from './pages/NaturalFoodColorDetail'
+import PearlPigmentPowder from './pages/PearlPigmentPowder'
+import PearlPigmentDetail from './pages/PearlPigmentDetail'
+import EdibleLustre from './pages/EdibleLustre'
+import EdibleLustreDetail from './pages/EdibleLustreDetail'
+import FluorescentColours from './pages/FluorescentColours'
+import NaturalFruitPowder from './pages/NaturalFruitPowder'
+import FruitFragrance from './pages/FruitFragrance'
+import PowderFlavours from './pages/PowderFlavours'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -58,6 +73,21 @@ export default function App() {
         <Route path="/products/disco-dust-powder/:id" element={<DiscoDustDetail />} />
         <Route path="/products/food-additives" element={<FoodAdditives />} />
         <Route path="/products/food-additives/:id" element={<FoodAdditiveDetail />} />
+        <Route path="/products/mango-pulp" element={<MangoPulp />} />
+        <Route path="/products/mango-pulp/:id" element={<MangoPulpDetail />} />
+        <Route path="/products/chemicals" element={<Chemicals />} />
+        <Route path="/products/titanium-dioxide" element={<TitaniumDioxide />} />
+        <Route path="/products/titanium-dioxide/:id" element={<TitaniumDioxideDetail />} />
+        <Route path="/products/natural-food-colors" element={<NaturalFoodColors />} />
+        <Route path="/products/natural-food-colors/:id" element={<NaturalFoodColorDetail />} />
+        <Route path="/products/pearl-pigment-powder" element={<PearlPigmentPowder />} />
+        <Route path="/products/pearl-pigment-powder/:id" element={<PearlPigmentDetail />} />
+        <Route path="/products/edible-lustre" element={<EdibleLustre />} />
+        <Route path="/products/edible-lustre/:id" element={<EdibleLustreDetail />} />
+        <Route path="/products/fluorescent-colours" element={<FluorescentColours />} />
+        <Route path="/products/natural-fruit-powder" element={<NaturalFruitPowder />} />
+        <Route path="/products/fruit-fragrance" element={<FruitFragrance />} />
+        <Route path="/products/powder-flavours" element={<PowderFlavours />} />
         <Route path="/products/:category" element={<Products />} />
         <Route path="/about" element={<About />} />
         <Route path="/certifications" element={<Certifications />} />

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-export default function CosmeticCard({ product }) {
+export default function PearlPigmentCard({ product }) {
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -20,19 +20,34 @@ export default function CosmeticCard({ product }) {
         />
 
         {/* ============================================================== */}
-        {/* HOVER OVERLAY: Order Now Button Only                          */}
+        {/* EXACT HOVER OVERLAY: Badges + Direct Contact Us Link          */}
         {/* ============================================================== */}
         <div
-          className={`absolute inset-0 bg-white/80 backdrop-blur-[2px] p-4 flex items-center justify-center transition-all duration-300 z-20 ${
+          className={`absolute inset-0 bg-white/85 backdrop-blur-[2px] p-3 sm:p-4 flex flex-col items-center justify-center gap-2.5 transition-all duration-300 z-20 ${
             isHovered
               ? 'opacity-100 pointer-events-auto'
               : 'opacity-0 pointer-events-none'
           }`}
         >
-          {/* White Button: Order Now (Directly navigates to Contact Us page) */}
+          {/* 1. Blue Badge: Minimum Order Quantity */}
+          <div className="w-full max-w-[94%] bg-[#337ab7] hover:bg-[#286090] text-white text-xs sm:text-[13px] font-bold py-1.5 px-3 rounded-xs text-center shadow-xs transition-colors">
+            Min.Order Quantity : {product.moq}
+          </div>
+
+          {/* 2. Red Badge: Supply Ability */}
+          <div className="w-full max-w-[94%] bg-[#d9534f] hover:bg-[#c9302c] text-white text-xs sm:text-[13px] font-bold py-1.5 px-3 rounded-xs text-center shadow-xs transition-colors">
+            Supply Ability : {product.supplyAbility}
+          </div>
+
+          {/* 3. Orange/Amber Badge: Port */}
+          <div className="w-full max-w-[94%] bg-[#f0ad4e] hover:bg-[#ec971f] text-white text-xs sm:text-[13px] font-bold py-1.5 px-3 rounded-xs text-center shadow-xs transition-colors">
+            Port: {product.port}
+          </div>
+
+          {/* 4. White Button: Order Now (Directly navigates to Contact Us page) */}
           <Link
             to="/contact"
-            className="bg-white hover:bg-slate-100 text-slate-900 border border-slate-400 py-2 px-6 text-xs sm:text-[13px] font-semibold rounded-xs shadow-xs transition-all active:scale-95 text-center inline-block cursor-pointer"
+            className="mt-1 bg-white hover:bg-slate-100 text-slate-900 border border-slate-400 py-1.5 px-5 text-xs sm:text-[13px] font-semibold rounded-xs shadow-xs transition-all active:scale-95 text-center inline-block cursor-pointer"
           >
             Order Now
           </Link>

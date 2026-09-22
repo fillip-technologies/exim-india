@@ -32,9 +32,11 @@ export const NAV_LINKS = [
 ]
 
 export const CONTACT_INFO = {
-  phone: '+91 (022) 6789-0123',
-  mobile: '+91 98200 12345',
-  email: 'exports@eximindiacorp.com',
+  phone: '+91 22 2892 5032',
+  mobile: '+91 98927 00271',
+  email: 'info@eximindiacorporation.com',
+  address: 'San Mamede Cottage, Flat No. 1, 1st Floor, Cross Road No. 4, I. C. Colony, Borivali West, Mumbai - 400103, Maharashtra, India',
   certifications: 'ISO 9001:2015 • FSSAI • HALAL • KOSHER • GMP',
   tagline: 'INDIAN PRODUCTS. GLOBAL OPPORTUNITIES.',
 }
+

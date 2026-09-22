@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // High-resolution images from src/assets/img/ matching user's requested product list
 import syntheticColoursImg from '../../assets/img/efc/synthethic.jpg'
@@ -12,31 +12,23 @@ import emulsionFlavoursImg from '../../assets/img/ef/Mango-Emulsion.jpg'
 import powderFlavoursImg from '../../assets/img/pf/fruit-powder.jpg'
 import discoDustImg from '../../assets/img/dust-color/Gold-Disco-Dust.jpg'
 import foodAdditivesImg from '../../assets/img/fa/soya-lecithin-powder.jpeg'
-import essentialOilsImg from '../../assets/img/essential-oil/lemon-grass-oil.jpg'
-import botanicalExtractsImg from '../../assets/img/nfp/grapes-extract-powder.jpg'
+import titaniumImg from '../../assets/img/to/pharma-food.jpg'
+import naturalColorsImg from '../../assets/img/nfc/high-quality-annatto-nor-bixin-powder.jpg'
+import pearlPigmentImg from '../../assets/img/pearl/1.png'
+import edibleLustreImg from '../../assets/img/edible-lustre-dust/gold-lustre-dust.jpg'
+import fluorescentImg from '../../assets/img/fc/yellow.jpg'
+import fruitPowderImg from '../../assets/img/nfp/mango-powder-250x250.jpg'
+import fruitFragranceImg from '../../assets/img/fruit-fragrance/strawberry-perfume.jpg'
+import chemicalsImg from '../../assets/img/chemicals.png'
 
 export default function DiverseRangeSection() {
+  const navigate = useNavigate()
   const [isReversed, setIsReversed] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
 
-  // Full product list including user's specific 10 products + foundational essentials
+  // Full product list mapping every homepage card directly to its active product page
   const products = [
-    {
-      title: 'Synthetic Food Colours',
-      image: syntheticColoursImg,
-      link: '/products/synthetic-food-colours',
-    },
-    {
-      title: 'Lake Colours',
-      image: lakeColoursImg,
-      link: '/products/lake-colours',
-    },
-    {
-      title: 'Blended Colours',
-      image: blendedColoursImg,
-      link: '/products/blended-colours',
-    },
     {
       title: 'Cosmetic Colours',
       image: cosmeticColoursImg,
@@ -68,23 +60,68 @@ export default function DiverseRangeSection() {
       link: '/products/disco-dust-powder',
     },
     {
+      title: 'Synthetic Food Colours',
+      image: syntheticColoursImg,
+      link: '/products/synthetic-food-colours',
+    },
+    {
+      title: 'Lake Colours',
+      image: lakeColoursImg,
+      link: '/products/lake-colours',
+    },
+    {
+      title: 'Blended Colours',
+      image: blendedColoursImg,
+      link: '/products/blended-colours',
+    },
+    {
       title: 'Food Additives',
       image: foodAdditivesImg,
       link: '/products/food-additives',
     },
     {
-      title: '100% Essential Oils',
-      image: essentialOilsImg,
-      link: '/products/essential-oils',
+      title: 'Titanium Dioxide',
+      image: titaniumImg,
+      link: '/products/titanium-dioxide',
     },
     {
-      title: 'Botanical Extracts',
-      image: botanicalExtractsImg,
-      link: '/products/botanical-extracts',
+      title: 'Natural Food Colors',
+      image: naturalColorsImg,
+      link: '/products/natural-food-colors',
+    },
+    {
+      title: 'Pearl Pigment Powder',
+      image: pearlPigmentImg,
+      link: '/products/pearl-pigment-powder',
+    },
+    {
+      title: 'Edible Lustre',
+      image: edibleLustreImg,
+      link: '/products/edible-lustre',
+    },
+    {
+      title: 'Fluorescent Colours',
+      image: fluorescentImg,
+      link: '/products/fluorescent-colours',
+    },
+    {
+      title: 'Natural Fruit Powder',
+      image: fruitPowderImg,
+      link: '/products/natural-fruit-powder',
+    },
+    {
+      title: 'Fruit Fragrance',
+      image: fruitFragranceImg,
+      link: '/products/fruit-fragrance',
+    },
+    {
+      title: 'Chemicals',
+      image: chemicalsImg,
+      link: '/products/chemicals',
     },
   ]
 
-  // Triple set for 100% seamless, mathematically invisible infinite wrapping
+  // Triple set for seamless, mathematically invisible infinite wrapping
   const tripleProducts = [...products, ...products, ...products]
 
   // Animation & interaction references
@@ -95,17 +132,19 @@ export default function DiverseRangeSection() {
   const isReversedRef = useRef(false)
   const isHoveredRef = useRef(false)
   const isDraggingRef = useRef(false)
+  const isPointerDownRef = useRef(false)
+  const pointerStartPosRef = useRef({ x: 0, y: 0 })
   const dragStartXRef = useRef(0)
   const dragStartPosRef = useRef(0)
   const hasDraggedRef = useRef(false)
-  const velocityRef = useRef(0)
   const lastTimeRef = useRef(0)
+  const velocityRef = useRef(0)
   const lastPointerXRef = useRef(0)
   const lastPointerTimeRef = useRef(0)
-  const touchDirectionRef = useRef(null)
   const touchStartYRef = useRef(0)
+  const touchDirectionRef = useRef(null)
 
-  // Keep refs in sync with state
+  // Keep ref sync with states
   useEffect(() => {
     isReversedRef.current = isReversed
   }, [isReversed])
@@ -114,21 +153,31 @@ export default function DiverseRangeSection() {
     isHoveredRef.current = isHovered
   }, [isHovered])
 
-  // Measure the exact single loop width between item 0 and item 12
+  // Measure exact pixel width of one complete product batch
   const updateMetrics = useCallback(() => {
-    if (trackRef.current && trackRef.current.children.length >= 24) {
-      const firstCard = trackRef.current.children[0]
-      const duplicateFirstCard = trackRef.current.children[products.length]
-      if (firstCard && duplicateFirstCard) {
-        const measured = duplicateFirstCard.offsetLeft - firstCard.offsetLeft
-        if (measured > 0) {
-          singleWidthRef.current = measured
-        }
+    if (!trackRef.current) return
+    const totalChildren = trackRef.current.children.length
+    if (totalChildren === 0) return
+
+    const oneBatchCount = products.length
+    let computedBatchWidth = 0
+
+    // Measure children of the first batch
+    for (let i = 0; i < oneBatchCount; i++) {
+      const child = trackRef.current.children[i]
+      if (child) {
+        const style = window.getComputedStyle(child)
+        const marginR = parseFloat(style.marginRight) || 0
+        computedBatchWidth += child.offsetWidth + marginR
       }
+    }
+
+    if (computedBatchWidth > 0) {
+      singleWidthRef.current = computedBatchWidth
     }
   }, [products.length])
 
-  // RequestAnimationFrame high-performance physics loop (60/120fps hardware accelerated)
+  // RequestAnimationFrame high-performance physics loop
   useEffect(() => {
     updateMetrics()
     window.addEventListener('resize', updateMetrics)
@@ -159,7 +208,7 @@ export default function DiverseRangeSection() {
         }
       }
 
-      // Seamless mathematical modulo wrap (zero visual glitch)
+      // Seamless modulo wrap
       if (W > 0) {
         while (xRef.current <= -W) xRef.current += W
         while (xRef.current > 0) xRef.current -= W
@@ -181,36 +230,25 @@ export default function DiverseRangeSection() {
     }
   }, [updateMetrics])
 
-  // Non-passive Mouse Wheel Listener: Enables silky smooth mouse scroll over the carousel
+  // Non-passive Mouse Wheel Listener: Enables smooth mouse scroll over the carousel
   useEffect(() => {
     const container = containerRef.current
     if (!container) return
 
     const handleWheel = (e) => {
-      // Support vertical wheel and horizontal trackpad gestures
       const isHorizontal = Math.abs(e.deltaX) > Math.abs(e.deltaY)
       const rawDelta = isHorizontal ? e.deltaX : e.deltaY
       if (Math.abs(rawDelta) < 0.5) return
 
-      // Prevent page vertical jumping while mouse wheeling over the product carousel
       e.preventDefault()
 
-      // Normalize delta across browsers/mice
       const delta = Math.sign(rawDelta) * Math.min(Math.abs(rawDelta), 120)
 
-      // Direct response + momentum glide
-      xRef.current -= delta * 1.15
-      velocityRef.current = -delta * 4.8
-
-      // Instant seamless wrap check
-      const W = singleWidthRef.current
-      if (W > 0) {
-        while (xRef.current <= -W) xRef.current += W
-        while (xRef.current > 0) xRef.current -= W
-      }
-
-      if (trackRef.current) {
-        trackRef.current.style.transform = `translate3d(${xRef.current}px, 0, 0)`
+      velocityRef.current = -delta * 8
+      if (delta > 0) {
+        setIsReversed(false)
+      } else if (delta < 0) {
+        setIsReversed(true)
       }
     }
 
@@ -223,45 +261,54 @@ export default function DiverseRangeSection() {
   // Desktop Mouse Drag Handlers
   const handleMouseDown = (e) => {
     if (e.button !== 0) return // Only primary click
-    isDraggingRef.current = true
-    setIsDragging(true)
+    isPointerDownRef.current = true
+    hasDraggedRef.current = false
+    pointerStartPosRef.current = { x: e.clientX, y: e.clientY }
     dragStartXRef.current = e.clientX
     dragStartPosRef.current = xRef.current
     lastPointerXRef.current = e.clientX
     lastPointerTimeRef.current = performance.now()
-    hasDraggedRef.current = false
+    velocityRef.current = 0
   }
 
   const handleMouseMove = (e) => {
-    if (!isDraggingRef.current) return
-    const diff = e.clientX - dragStartXRef.current
-    if (Math.abs(diff) > 5) {
+    if (!isPointerDownRef.current) return
+    const diffX = e.clientX - pointerStartPosRef.current.x
+    const diffY = e.clientY - pointerStartPosRef.current.y
+    const dist = Math.hypot(diffX, diffY)
+
+    // A real deliberate drag must exceed 10px
+    if (dist > 10) {
       hasDraggedRef.current = true
-    }
+      isDraggingRef.current = true
+      setIsDragging(true)
 
-    xRef.current = dragStartPosRef.current + diff
+      xRef.current = dragStartPosRef.current + (e.clientX - dragStartXRef.current)
 
-    // Calculate pointer release velocity
-    const now = performance.now()
-    const dt = (now - lastPointerTimeRef.current) / 1000
-    if (dt > 0.01) {
-      const v = (e.clientX - lastPointerXRef.current) / dt
-      velocityRef.current = Math.max(-1200, Math.min(1200, v))
-      lastPointerXRef.current = e.clientX
-      lastPointerTimeRef.current = now
+      const now = performance.now()
+      const dt = (now - lastPointerTimeRef.current) / 1000
+      if (dt > 0.01) {
+        const v = (e.clientX - lastPointerXRef.current) / dt
+        velocityRef.current = Math.max(-1200, Math.min(1200, v))
+        lastPointerXRef.current = e.clientX
+        lastPointerTimeRef.current = now
+      }
     }
   }
 
   const handleMouseUp = () => {
-    if (isDraggingRef.current) {
-      isDraggingRef.current = false
-      setIsDragging(false)
-    }
+    isPointerDownRef.current = false
+    isDraggingRef.current = false
+    setIsDragging(false)
+    setTimeout(() => {
+      hasDraggedRef.current = false
+    }, 120)
   }
 
-  // Mobile Touch Handlers (Preserves native vertical page scrolling without hitching)
+  // Mobile Touch Handlers
   const handleTouchStart = (e) => {
     const touch = e.touches[0]
+    pointerStartPosRef.current = { x: touch.clientX, y: touch.clientY }
     dragStartXRef.current = touch.clientX
     touchStartYRef.current = touch.clientY
     dragStartPosRef.current = xRef.current
@@ -276,20 +323,20 @@ export default function DiverseRangeSection() {
     const touch = e.touches[0]
     const diffX = touch.clientX - dragStartXRef.current
     const diffY = touch.clientY - touchStartYRef.current
+    const dist = Math.hypot(diffX, diffY)
 
-    // Determine gesture direction on initial movement
     if (touchDirectionRef.current === null) {
       if (Math.abs(diffY) > 8 && Math.abs(diffY) > Math.abs(diffX)) {
-        touchDirectionRef.current = 'vertical' // Allow normal smooth phone page scrolling
+        touchDirectionRef.current = 'vertical'
         return
-      } else if (Math.abs(diffX) > 8) {
+      } else if (Math.abs(diffX) > 10) {
         touchDirectionRef.current = 'horizontal'
         hasDraggedRef.current = true
       }
     }
 
-    // If user is intentionally sliding the carousel horizontally
-    if (touchDirectionRef.current === 'horizontal') {
+    if (touchDirectionRef.current === 'horizontal' && dist > 10) {
+      hasDraggedRef.current = true
       xRef.current = dragStartPosRef.current + diffX
 
       const now = performance.now()
@@ -305,13 +352,21 @@ export default function DiverseRangeSection() {
 
   const handleTouchEnd = () => {
     touchDirectionRef.current = null
+    setTimeout(() => {
+      hasDraggedRef.current = false
+    }, 120)
   }
 
-  // Prevent unwanted link navigation when dragging
-  const handleCardClick = (e) => {
+  // Accurate navigation handler that reliably routes to product pages on click
+  const handleCardClick = (e, targetLink) => {
     if (hasDraggedRef.current) {
       e.preventDefault()
+      e.stopPropagation()
+      return
     }
+    // Genuine click - navigate directly to corresponding page
+    e.preventDefault()
+    navigate(targetLink)
   }
 
   // Arrow button handlers with smooth directional momentum pulse
@@ -330,7 +385,7 @@ export default function DiverseRangeSection() {
       {/* Header Container - Contained within max-w-7xl for clean alignment */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6">
-          {/* Left Side: Overline Badge & Strict 2-Line High-Impact Title */}
+          {/* Left Side: Overline Badge & High-Impact Title */}
           <div className="max-w-2xl text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50/90 border border-emerald-200/80 mb-2.5 shadow-xs">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse shrink-0" />
@@ -348,13 +403,13 @@ export default function DiverseRangeSection() {
             </h2>
           </div>
 
-          {/* Right Side: Description & Direction Controls */}
-          <div className="max-w-md lg:max-w-lg text-left flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed flex-1">
+          {/* Right Side: Brief Overview & Interactive Direction Controls */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 md:max-w-md">
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed text-left">
               We export a full bouquet of high quality, research based products that are widely accepted and appreciated by our clients across the world.
             </p>
 
-            {/* Direction & Navigation Controls */}
+            {/* Carousel Navigation Arrow Buttons */}
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
@@ -413,7 +468,7 @@ export default function DiverseRangeSection() {
         <div className="pointer-events-none absolute inset-y-0 left-0 w-6 sm:w-16 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
         <div className="pointer-events-none absolute inset-y-0 right-0 w-6 sm:w-16 bg-gradient-to-l from-white via-white/80 to-transparent z-10" />
 
-        {/* GPU-Accelerated Scrolling Track (translate3d for 60/120fps smoothness) */}
+        {/* GPU-Accelerated Scrolling Track */}
         <div
           ref={trackRef}
           className="flex gap-4 sm:gap-5 px-4 sm:px-8 w-max will-change-transform"
@@ -423,12 +478,12 @@ export default function DiverseRangeSection() {
             <Link
               key={`${item.title}-${index}`}
               to={item.link}
-              onClick={handleCardClick}
+              onClick={(e) => handleCardClick(e, item.link)}
               draggable={false}
-              className="w-[210px] sm:w-[230px] lg:w-[245px] shrink-0 group bg-white rounded-2xl p-2.5 border border-slate-200/85 shadow-sm hover:shadow-xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 select-none"
+              className="w-[210px] sm:w-[230px] lg:w-[245px] shrink-0 group bg-white rounded-2xl p-2.5 border border-slate-200/85 shadow-sm hover:shadow-xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 select-none cursor-pointer"
             >
               {/* Card Image Container */}
-              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 mb-2.5 pointer-events-none select-none">
+              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 mb-2.5 pointer-events-none select-none flex items-center justify-center">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -440,7 +495,7 @@ export default function DiverseRangeSection() {
               </div>
 
               {/* Bottom Row with Title & Arrow */}
-              <div className="flex items-center justify-between px-1 py-1">
+              <div className="flex items-center justify-between px-1 py-1 pointer-events-none">
                 <span className="text-xs sm:text-[13px] font-bold font-heading text-slate-900 group-hover:text-emerald-800 transition-colors truncate">
                   {item.title}
                 </span>
@@ -455,4 +510,3 @@ export default function DiverseRangeSection() {
     </section>
   )
 }
-
