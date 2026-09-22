@@ -135,6 +135,13 @@ export default function Products() {
                         <span>Explore 20 Liquid Flavours &amp; Enhancers</span>
                         <span>&rarr;</span>
                       </Link>
+                      <Link
+                        to="/products/emulsion-flavours"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-orange-800 hover:text-orange-950 bg-orange-50 px-3 py-1.5 rounded-lg border border-orange-200 transition-colors"
+                      >
+                        <span>Explore 19 Emulsion Flavours &amp; Clouding Bases</span>
+                        <span>&rarr;</span>
+                      </Link>
                     </div>
                   ) : <div />}
                   <Link

@@ -18,6 +18,8 @@ import LiquidFlavours from './pages/LiquidFlavours'
 import LiquidFlavourDetail from './pages/LiquidFlavourDetail'
 import PharmaceuticalColours from './pages/PharmaceuticalColours'
 import PharmaceuticalColorDetail from './pages/PharmaceuticalColorDetail'
+import EmulsionFlavours from './pages/EmulsionFlavours'
+import EmulsionFlavourDetail from './pages/EmulsionFlavourDetail'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -46,6 +48,8 @@ export default function App() {
         <Route path="/products/liquid-flavours/:id" element={<LiquidFlavourDetail />} />
         <Route path="/products/pharmaceutical-colours" element={<PharmaceuticalColours />} />
         <Route path="/products/pharmaceutical-colours/:id" element={<PharmaceuticalColorDetail />} />
+        <Route path="/products/emulsion-flavours" element={<EmulsionFlavours />} />
+        <Route path="/products/emulsion-flavours/:id" element={<EmulsionFlavourDetail />} />
         <Route path="/products/:category" element={<Products />} />
         <Route path="/about" element={<About />} />
         <Route path="/certifications" element={<Certifications />} />
