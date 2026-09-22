@@ -16,6 +16,8 @@ import LakeColours from './pages/LakeColours'
 import LakeColorDetail from './pages/LakeColorDetail'
 import LiquidFlavours from './pages/LiquidFlavours'
 import LiquidFlavourDetail from './pages/LiquidFlavourDetail'
+import PharmaceuticalColours from './pages/PharmaceuticalColours'
+import PharmaceuticalColorDetail from './pages/PharmaceuticalColorDetail'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -42,6 +44,8 @@ export default function App() {
         <Route path="/products/lake-colours/:id" element={<LakeColorDetail />} />
         <Route path="/products/liquid-flavours" element={<LiquidFlavours />} />
         <Route path="/products/liquid-flavours/:id" element={<LiquidFlavourDetail />} />
+        <Route path="/products/pharmaceutical-colours" element={<PharmaceuticalColours />} />
+        <Route path="/products/pharmaceutical-colours/:id" element={<PharmaceuticalColorDetail />} />
         <Route path="/products/:category" element={<Products />} />
         <Route path="/about" element={<About />} />
         <Route path="/certifications" element={<Certifications />} />

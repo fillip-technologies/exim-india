@@ -118,6 +118,13 @@ export default function Products() {
                         <span>Explore 15 Cosmetic Colours</span>
                         <span>&rarr;</span>
                       </Link>
+                      <Link
+                        to="/products/pharmaceutical-colours"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-teal-800 hover:text-teal-950 bg-teal-50 px-3 py-1.5 rounded-lg border border-teal-200 transition-colors"
+                      >
+                        <span>Explore 16 Pharmaceutical Colours (IP/USP)</span>
+                        <span>&rarr;</span>
+                      </Link>
                     </div>
                   ) : prod.category === 'Flavours & Emulsions' ? (
                     <div className="flex flex-wrap items-center gap-2.5">
