@@ -20,6 +20,10 @@ import PharmaceuticalColours from './pages/PharmaceuticalColours'
 import PharmaceuticalColorDetail from './pages/PharmaceuticalColorDetail'
 import EmulsionFlavours from './pages/EmulsionFlavours'
 import EmulsionFlavourDetail from './pages/EmulsionFlavourDetail'
+import DiscoDustPowder from './pages/DiscoDustPowder'
+import DiscoDustDetail from './pages/DiscoDustDetail'
+import FoodAdditives from './pages/FoodAdditives'
+import FoodAdditiveDetail from './pages/FoodAdditiveDetail'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -50,6 +54,10 @@ export default function App() {
         <Route path="/products/pharmaceutical-colours/:id" element={<PharmaceuticalColorDetail />} />
         <Route path="/products/emulsion-flavours" element={<EmulsionFlavours />} />
         <Route path="/products/emulsion-flavours/:id" element={<EmulsionFlavourDetail />} />
+        <Route path="/products/disco-dust-powder" element={<DiscoDustPowder />} />
+        <Route path="/products/disco-dust-powder/:id" element={<DiscoDustDetail />} />
+        <Route path="/products/food-additives" element={<FoodAdditives />} />
+        <Route path="/products/food-additives/:id" element={<FoodAdditiveDetail />} />
         <Route path="/products/:category" element={<Products />} />
         <Route path="/about" element={<About />} />
         <Route path="/certifications" element={<Certifications />} />

@@ -33,6 +33,12 @@ export default function Products() {
       badge: 'Standardized Bioactives',
       items: ['Curcumin 95% (Turmeric)', 'Ashwagandha Extract (5% Withanolides)', 'Boswellia Serrata Extract', 'Green Tea Polyphenols'],
     },
+    {
+      category: 'Food Additives',
+      description: 'High-purity food grade acidulants, emulsifiers, gelling agents, texturizers, and botanical ingredients.',
+      badge: 'FSSAI, FCC & USP Grade',
+      items: ['Citric Acid (Anhydrous/Mono)', 'Soya Lecithin (Fluid & Powder)', 'Edible Gelatin Bloom 160-260', 'Cornstarch', 'Sucrose Pharma Grade', 'Pure Natural Saffron'],
+    },
   ]
 
   return (
@@ -125,6 +131,13 @@ export default function Products() {
                         <span>Explore 16 Pharmaceutical Colours (IP/USP)</span>
                         <span>&rarr;</span>
                       </Link>
+                      <Link
+                        to="/products/disco-dust-powder"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-pink-800 hover:text-pink-950 bg-pink-50 px-3 py-1.5 rounded-lg border border-pink-200 transition-colors"
+                      >
+                        <span>Explore 10 Disco Dust Powders &amp; 50+ Custom Shades</span>
+                        <span>&rarr;</span>
+                      </Link>
                     </div>
                   ) : prod.category === 'Flavours & Emulsions' ? (
                     <div className="flex flex-wrap items-center gap-2.5">
@@ -140,6 +153,16 @@ export default function Products() {
                         className="inline-flex items-center gap-1.5 text-xs font-extrabold text-orange-800 hover:text-orange-950 bg-orange-50 px-3 py-1.5 rounded-lg border border-orange-200 transition-colors"
                       >
                         <span>Explore 19 Emulsion Flavours &amp; Clouding Bases</span>
+                        <span>&rarr;</span>
+                      </Link>
+                    </div>
+                  ) : prod.category === 'Food Additives' ? (
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <Link
+                        to="/products/food-additives"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-blue-800 hover:text-blue-950 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition-colors"
+                      >
+                        <span>Explore 7 Essential Food Additives &amp; Extended Portfolio</span>
                         <span>&rarr;</span>
                       </Link>
                     </div>
