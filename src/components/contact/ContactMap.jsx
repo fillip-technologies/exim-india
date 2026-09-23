@@ -1,7 +1,7 @@
 export default function ContactMap() {
-  // Google Map embed URL centered on Borivali West, Mumbai (can easily replace with specific pin embed later)
+  // Official Exim India Corporation Google Map pin embed URL
   const mapSrc =
-    'https://maps.google.com/maps?q=I.C.+Colony,+Borivali+West,+Mumbai,+Maharashtra+400103,+India&t=&z=15&ie=UTF8&iwloc=&output=embed'
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3408.74558589839!2d72.8471282!3d19.2481348!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7b0fcd8d0d0f1%3A0xcc9c6ab99e5cc3a8!2sExim%20India%20Corporation!5e1!3m2!1sen!2sin!4v1790162942080!5m2!1sen!2sin'
 
   return (
     <section className="py-12 sm:py-16 bg-white border-t border-slate-200/80 font-body">
@@ -35,33 +35,6 @@ export default function ContactMap() {
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
           />
-
-          {/* Floating Directions Badge on Map */}
-          <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 z-10 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xl max-w-xs sm:max-w-sm text-left">
-            <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 font-heading">
-                Corporate Headquarters
-              </span>
-            </div>
-            <h3 className="font-bold text-slate-900 text-sm sm:text-base mt-1">
-              Exim India Corporation
-            </h3>
-            <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
-              I. C. Colony, Borivali West, Mumbai 400103
-            </p>
-            <div className="mt-3 pt-2.5 border-t border-slate-100">
-              <a
-                href="https://maps.google.com/?q=I.C.+Colony,+Borivali+West,+Mumbai,+Maharashtra+400103,+India"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0a3622] hover:text-[#15803d] transition-colors"
-              >
-                <span>Open in Google Maps</span>
-                <span>&rarr;</span>
-              </a>
-            </div>
-          </div>
         </div>
 
       </div>

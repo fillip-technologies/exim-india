@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 export default function LogisticsSection() {
   const [activeTab, setActiveTab] = useState(0)
@@ -154,10 +155,13 @@ export default function LogisticsSection() {
                   {item.icon}
                 </div>
 
-                <span className="text-[11px] font-semibold text-slate-400 group-hover:text-emerald-700 transition-colors flex items-center gap-1">
+                <Link
+                  to="/contact"
+                  className="text-[11px] font-semibold text-slate-500 group-hover:text-[#0a3622] hover:text-emerald-700 transition-colors flex items-center gap-1 cursor-pointer"
+                >
                   <span>Explore</span>
                   <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-                </span>
+                </Link>
               </div>
             </div>
           ))}
