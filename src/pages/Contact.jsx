@@ -1,5 +1,6 @@
 import ContactHero from '../components/contact/ContactHero'
 import ContactForm from '../components/contact/ContactForm'
+import ContactMap from '../components/contact/ContactMap'
 
 export default function Contact() {
   return (
@@ -119,6 +120,9 @@ export default function Contact() {
           </div>
         </div>
       </section>
+
+      {/* 3. Google Maps Section (Office Location) */}
+      <ContactMap />
     </div>
   )
 }

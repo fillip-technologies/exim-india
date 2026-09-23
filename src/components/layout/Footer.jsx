@@ -5,14 +5,38 @@ export default function Footer() {
   const currentYear = new Date().getFullYear()
 
   const productCategories = [
-    { left: 'Synthetic food colours', right: 'Food additives' },
-    { left: 'Lake colours', right: 'Botanical Extracts' },
-    { left: 'Blended Colours', right: 'Natural Food Colours' },
-    { left: 'Cosmetic Colours', right: 'Mango Pulp' },
-    { left: 'Liquid Flavours', right: 'Titanium Dioxide' },
-    { left: 'Emulsion Flavours', right: 'Essential Oils' },
-    { left: 'Powder Flavours', right: 'Edible Lustre' },
-    { left: 'Fruit Fragrance', right: 'Disco Dust Powder' },
+    {
+      left: { name: 'Synthetic food colours', path: '/products/synthetic-food-colours' },
+      right: { name: 'Food additives', path: '/products/food-additives' },
+    },
+    {
+      left: { name: 'Lake colours', path: '/products/lake-colours' },
+      right: { name: 'Botanical Extracts', path: '/products/botanical-extracts' },
+    },
+    {
+      left: { name: 'Blended Colours', path: '/products/blended-colours' },
+      right: { name: 'Natural Food Colours', path: '/products/natural-food-colors' },
+    },
+    {
+      left: { name: 'Cosmetic Colours', path: '/products/cosmetic-colours' },
+      right: { name: 'Mango Pulp', path: '/products/mango-pulp' },
+    },
+    {
+      left: { name: 'Liquid Flavours', path: '/products/liquid-flavours' },
+      right: { name: 'Titanium Dioxide', path: '/products/titanium-dioxide' },
+    },
+    {
+      left: { name: 'Emulsion Flavours', path: '/products/emulsion-flavours' },
+      right: { name: 'Essential Oils', path: '/products/essential-oils' },
+    },
+    {
+      left: { name: 'Powder Flavours', path: '/products/powder-flavours' },
+      right: { name: 'Edible Lustre', path: '/products/edible-lustre' },
+    },
+    {
+      left: { name: 'Fruit Fragrance', path: '/products/fruit-fragrance' },
+      right: { name: 'Disco Dust Powder', path: '/products/disco-dust-powder' },
+    },
   ]
 
   return (
@@ -148,18 +172,6 @@ export default function Footer() {
               </p>
             </div>
 
-            {/* Skype */}
-            <div className="pt-2 flex items-center gap-3 text-xs">
-              <div className="w-6 h-6 rounded-full bg-[#00aff0] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-xs">
-                S
-              </div>
-              <a
-                href="skype:exim1011?chat"
-                className="text-slate-200 hover:text-amber-300 font-medium transition-colors"
-              >
-                exim1011
-              </a>
-            </div>
           </div>
 
           {/* Column 3: Product Categories (lg:col-span-5) */}
@@ -180,24 +192,24 @@ export default function Footer() {
                 >
                   {/* Left Column Item */}
                   <Link
-                    to="/products"
+                    to={item.left.path}
                     className="flex items-center gap-2 text-slate-200 hover:text-amber-300 transition-colors group"
                   >
                     <span className="w-4 h-4 rounded-full border border-amber-400/80 flex items-center justify-center text-amber-400 text-[9px] font-black shrink-0 group-hover:bg-amber-400 group-hover:text-slate-900 transition-colors">
                       &rsaquo;
                     </span>
-                    <span className="truncate">{item.left}</span>
+                    <span className="truncate">{item.left.name}</span>
                   </Link>
 
                   {/* Right Column Item */}
                   <Link
-                    to="/products"
+                    to={item.right.path}
                     className="flex items-center gap-2 text-slate-200 hover:text-amber-300 transition-colors group"
                   >
                     <span className="w-4 h-4 rounded-full border border-amber-400/80 flex items-center justify-center text-amber-400 text-[9px] font-black shrink-0 group-hover:bg-amber-400 group-hover:text-slate-900 transition-colors">
                       &rsaquo;
                     </span>
-                    <span className="truncate">{item.right}</span>
+                    <span className="truncate">{item.right.name}</span>
                   </Link>
                 </div>
               ))}

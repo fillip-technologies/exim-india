@@ -3,7 +3,12 @@ import airImg from '../../assets/logistics-air.jpg'
 import roadImg from '../../assets/logistics-road.jpg'
 import warehouseImg from '../../assets/logistics-warehouse.jpg'
 
-export default function AboutServicesSection() {
+export default function AboutServicesSection({
+  overline = 'OUR SERVICES',
+  titleLine1 = 'Connecting Indian Products',
+  titleLine2 = 'With Global Markets.',
+  description = 'From ocean to air, land to storage — we provide end-to-end logistics solutions that keep your supply chain moving.',
+}) {
   const services = [
     {
       title: 'Ocean Freight',
@@ -37,22 +42,22 @@ export default function AboutServicesSection() {
             {/* Overline with accent bar */}
             <div className="flex items-center gap-3 mb-3">
               <span className="text-xs font-black uppercase tracking-widest text-[#0a3622] font-heading">
-                OUR SERVICES
+                {overline}
               </span>
               <span className="w-10 h-0.5 bg-[#c59b27]" />
             </div>
 
             {/* Impactful Master Font Heading */}
             <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-[42px] font-black font-heading text-slate-900 tracking-tight leading-[1.15] uppercase">
-              <span className="block whitespace-nowrap">Connecting Indian Products</span>
-              <span className="block whitespace-nowrap">With Global Markets.</span>
+              <span className="block sm:whitespace-nowrap">{titleLine1}</span>
+              <span className="block sm:whitespace-nowrap">{titleLine2}</span>
             </h2>
           </div>
 
           {/* Right Narrative Paragraph */}
           <div className="max-w-sm lg:max-w-md text-left">
             <p className="text-sm sm:text-base text-slate-600 font-normal leading-relaxed font-body">
-              From ocean to air, land to storage — we provide end-to-end logistics solutions that keep your supply chain moving.
+              {description}
             </p>
           </div>
         </div>

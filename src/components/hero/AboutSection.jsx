@@ -1,4 +1,6 @@
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import gsap from 'gsap'
 import mapImg from '../../assets/img/map.PNG'
 import syntheticColoursImg from '../../assets/img/efc/synthethic.jpg'
 import emulsionFlavoursImg from '../../assets/img/ef/Mango-Emulsion.jpg'
@@ -6,6 +8,9 @@ import essentialOilsImg from '../../assets/img/essential-oil/lemon-grass-oil.jpg
 import { CONTACT_INFO } from '../../constants/navigation'
 
 export default function AboutSection() {
+  const sectionRef = useRef(null)
+  const animatedRef = useRef(false)
+
   const cards = [
     {
       title: 'Food Colors & Lake Dyes',
@@ -27,8 +32,56 @@ export default function AboutSection() {
     },
   ]
 
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !animatedRef.current) {
+            animatedRef.current = true
+
+            const ctx = gsap.context(() => {
+              const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+              // Header text entrance
+              tl.fromTo(
+                '.about-header-text',
+                { opacity: 0, y: 35 },
+                { opacity: 1, y: 0, duration: 0.75, stagger: 0.15 }
+              )
+
+              // Direct phone badge spring pop
+              tl.fromTo(
+                '.about-phone-badge',
+                { opacity: 0, scale: 0.88, y: 20 },
+                { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'back.out(1.5)' },
+                '-=0.45'
+              )
+
+              // 3 Overlapping cards staggered entrance
+              tl.fromTo(
+                '.about-product-card',
+                { opacity: 0, y: 55, scale: 0.96 },
+                { opacity: 1, y: 0, scale: 1, duration: 0.8, stagger: 0.18, ease: 'power2.out' },
+                '-=0.35'
+              )
+            }, sectionRef)
+
+            return () => ctx.revert()
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
-    <section className="bg-white relative overflow-hidden">
+    <section ref={sectionRef} className="bg-white relative overflow-hidden">
       {/* Top Banner Container - Exim Brand Forest Green with Map Watermark & Wave Divider */}
       <div className="relative bg-gradient-to-br from-[#072417] via-[#0a3622] to-[#062014] text-white pt-14 sm:pt-18 pb-32 sm:pb-40 lg:pb-44 overflow-hidden">
         {/* Subtle Tech Grid Pattern */}
@@ -59,7 +112,7 @@ export default function AboutSection() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             {/* Left Side: Overline & Bold Headline */}
-            <div className="lg:col-span-4 text-left">
+            <div className="lg:col-span-4 text-left about-header-text">
               {/* Overline with Dash */}
               <div className="flex items-center gap-2.5 mb-3">
                 <span className="w-8 h-[2px] bg-emerald-400 rounded-full inline-block" />
@@ -79,7 +132,7 @@ export default function AboutSection() {
             </div>
 
             {/* Middle: Corporate Narrative Paragraph */}
-            <div className="lg:col-span-5 text-left space-y-3">
+            <div className="lg:col-span-5 text-left space-y-3 about-header-text">
               <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                 <strong className="text-white font-extrabold">EXIM INDIA CORPORATION</strong> is a leading professionally managed Export House based in <strong className="text-emerald-300 font-bold">MUMBAI</strong>, the financial capital of <strong className="text-amber-300 font-bold">INDIA</strong>, economically the most emerging Country in the world today.
               </p>
@@ -89,9 +142,9 @@ export default function AboutSection() {
             </div>
 
             {/* Right Side: Direct Contact / Toll-Free Phone Badge */}
-            <div className="lg:col-span-3 flex lg:justify-end">
+            <div className="lg:col-span-3 flex lg:justify-end about-phone-badge">
               <a
-                href={`tel:${CONTACT_INFO.phone.replace(/[^0-9+]/g, '')}`}
+                href="tel:+917977523176"
                 className="group inline-flex items-center gap-3.5 bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/20 hover:border-emerald-400/50 px-4 py-3 rounded-2xl transition-all shadow-lg hover:shadow-emerald-900/30 active:scale-95"
               >
                 {/* Circular Call Icon */}
@@ -106,7 +159,7 @@ export default function AboutSection() {
                     EXPORT INQUIRY (24/7)
                   </div>
                   <div className="text-sm sm:text-base font-extrabold text-white group-hover:text-emerald-200 transition-colors">
-                    {CONTACT_INFO.phone}
+                    +91 79775 23176
                   </div>
                 </div>
               </a>
@@ -136,7 +189,7 @@ export default function AboutSection() {
           {cards.map((card) => (
             <div
               key={card.title}
-              className="group bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 border border-slate-200/90 shadow-xl shadow-slate-900/8 hover:shadow-2xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-2"
+              className="about-product-card group bg-white rounded-2xl sm:rounded-3xl p-3 sm:p-3.5 border border-slate-200/90 shadow-xl shadow-slate-900/8 hover:shadow-2xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-2"
             >
               {/* Card Photo Container */}
               <div className="relative aspect-[16/10] w-full rounded-xl sm:rounded-2xl overflow-hidden bg-slate-100 mb-3 sm:mb-4">
