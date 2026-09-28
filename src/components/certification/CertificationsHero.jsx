@@ -3,7 +3,7 @@ import certHeroImg from '../../assets/certifications-hero.jpg'
 
 export default function CertificationsHero() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#03131e] min-h-[250px] sm:min-h-[280px] lg:min-h-[320px] flex items-center select-none font-body">
+    <section className="relative w-full overflow-hidden bg-[#03131e] min-h-[250px] sm:min-h-[280px] lg:min-h-[320px] flex items-center font-body">
       {/* Background Laboratory Image with Soft Left Vignette */}
       <div className="absolute inset-0 z-0">
         <img

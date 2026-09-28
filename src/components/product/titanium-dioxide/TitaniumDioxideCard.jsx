@@ -11,7 +11,7 @@ export default function TitaniumDioxideCard({ product }) {
       className="group relative bg-white rounded-2xl border border-slate-200 hover:border-emerald-600/40 p-3 sm:p-3.5 flex flex-col justify-between shadow-xs hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden"
     >
       {/* Top Media Container */}
-      <div className="relative w-full min-h-[220px] aspect-[4/3] sm:aspect-square rounded-xl overflow-hidden bg-white mb-2.5 select-none border border-slate-100">
+      <div className="relative w-full min-h-[220px] aspect-[4/3] sm:aspect-square rounded-xl overflow-hidden bg-white mb-2.5 border border-slate-100">
         <img
           src={product.image}
           alt={product.name}

@@ -42,7 +42,7 @@ export default function LogisticsSplitSection() {
   }
 
   return (
-    <section className="relative w-full h-auto lg:h-[430px] overflow-hidden bg-slate-900 select-none">
+    <section className="relative w-full h-auto lg:h-[430px] overflow-hidden bg-slate-900">
       {/* Continuous Panoramic Background Image Across All 4 Slices */}
       <div className="absolute inset-0 w-full h-full pointer-events-none">
         <img

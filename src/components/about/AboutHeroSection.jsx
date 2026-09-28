@@ -3,7 +3,7 @@ import aboutHeroPort from '../../assets/about-hero-port.jpg'
 
 export default function AboutHeroSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#03131e] min-h-[380px] sm:min-h-[440px] lg:min-h-[500px] flex items-center select-none">
+    <section className="relative w-full overflow-hidden bg-[#03131e] min-h-[380px] sm:min-h-[440px] lg:min-h-[500px] flex items-center">
       {/* Single Background Image: about-hero-port.jpg only */}
       <div className="absolute inset-0 z-0">
         <img

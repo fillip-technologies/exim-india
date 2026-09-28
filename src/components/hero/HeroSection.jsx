@@ -1,24 +1,126 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
-import heroBgi from '../../assets/hero-bgi-1.png'
+import hero5 from '../../assets/hero-7.png'
+import hero6 from '../../assets/hero-6.png'
+import hero7 from '../../assets/hero-5.png'
 import fdaImg from '../../assets/FDA-Maharashtra.jpg'
 import isoImg from '../../assets/iso-cer1.png'
 
+const HERO_SLIDES = [
+  {
+    id: 1,
+    image: hero5,
+    alt: 'Exim India Corporation - Connecting Indian Excellence To The World',
+    overline: 'INDIAN PRODUCTS. GLOBAL OPPORTUNITIES.',
+    headline1: 'CONNECTING',
+    headline2: 'INDIAN EXCELLENCE',
+    headline3: 'TO THE WORLD',
+    description:
+      'A leading research based export house delivering high quality Food Colors, Flavours, Emulsions, Fragrances, Essential Oils, Botanical Extracts and many more products to global markets.',
+  },
+  {
+    id: 2,
+    image: hero6,
+    alt: 'Exim India Corporation - Global Research & Ingredient Innovation',
+    overline: 'RESEARCH-DRIVEN FORMULATIONS.',
+    headline1: 'DELIVERING',
+    headline2: 'CERTIFIED PURITY',
+    headline3: 'ACROSS 50+ NATIONS',
+    description:
+      'Precision-engineered synthetic food colours, lake pigments, and natural botanical extracts crafted to stringent FDA, ISO 22000, and international regulatory standards.',
+  },
+  {
+    id: 3,
+    image: hero7,
+    alt: 'Exim India Corporation - Seamless Global Logistics & Export Network',
+    overline: 'WORLD-CLASS SUPPLY CHAIN.',
+    headline1: 'SEAMLESS',
+    headline2: 'MULTIMODAL LOGISTICS',
+    headline3: 'AT GLOBAL SCALE',
+    description:
+      'End-to-end maritime, air freight, and temperature-controlled cold chain logistics guaranteeing freshness and timely dispatch to international partners worldwide.',
+  },
+]
+
 export default function HeroSection() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
+  const [textFade, setTextFade] = useState(true)
+  const [touchStartX, setTouchStartX] = useState(null)
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const heroRef = useRef(null)
+
+  // Smooth slide change with text crossfade
+  const changeSlide = (newIndex) => {
+    setTextFade(false)
+    setTimeout(() => {
+      setCurrentSlide(newIndex)
+      setTextFade(true)
+    }, 180)
+  }
+
+  // Autoplay Slider Timer (pauses on hover)
+  useEffect(() => {
+    if (!isAutoPlaying) return
+    const timer = setInterval(() => {
+      changeSlide((currentSlide + 1) % HERO_SLIDES.length)
+    }, 5500)
+    return () => clearInterval(timer)
+  }, [isAutoPlaying, currentSlide])
+
+  const nextSlide = () => {
+    changeSlide((currentSlide + 1) % HERO_SLIDES.length)
+  }
+
+  const prevSlide = () => {
+    changeSlide((currentSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)
+  }
+
+  const goToSlide = (idx) => {
+    if (idx === currentSlide) return
+    changeSlide(idx)
+  }
+
+  // Mobile Touch Swipe Handlers
+  const handleTouchStart = (e) => {
+    setTouchStartX(e.touches[0].clientX)
+  }
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX === null) return
+    const touchEndX = e.changedTouches[0].clientX
+    const diffX = touchStartX - touchEndX
+    if (Math.abs(diffX) > 40) {
+      if (diffX > 0) {
+        nextSlide()
+      } else {
+        prevSlide()
+      }
+    }
+    setTouchStartX(null)
+  }
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') nextSlide()
+      if (e.key === 'ArrowLeft') prevSlide()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [currentSlide])
 
   // GSAP First Load Entrance Animation
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-      // 1. Subtle cinematic zoom and fade-in on background image
+      // 1. Subtle entrance on hero background
       tl.fromTo(
-        '.hero-bg-img',
-        { scale: 1.08, opacity: 0.75 },
-        { scale: 1, opacity: 1, duration: 1.5, ease: 'power2.out' },
+        '.hero-slide-strip',
+        { opacity: 0.7 },
+        { opacity: 1, duration: 1.2, ease: 'power2.out' },
         0
       )
 
@@ -82,51 +184,80 @@ export default function HeroSection() {
     return () => ctx.revert()
   }, [])
 
+  const activeSlide = HERO_SLIDES[currentSlide]
+
   return (
-    <section ref={heroRef} className="relative min-h-[100dvh] sm:min-h-[105vh] lg:min-h-[112vh] flex flex-col justify-between overflow-hidden">
-      {/* Background Image Container with Light Gradient Wash */}
+    <section
+      ref={heroRef}
+      onMouseEnter={() => setIsAutoPlaying(false)}
+      onMouseLeave={() => setIsAutoPlaying(true)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="relative min-h-[100dvh] sm:min-h-[105vh] lg:min-h-[112vh] flex flex-col justify-between overflow-hidden"
+    >
+      {/* Full-Bleed Sliding Image Strip: hero-5, hero-6, hero-7 */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src={heroBgi}
-          alt="Exim India Corporation - Global Products, Brighter Tomorrow"
-          className="hero-bg-img w-full h-full object-cover object-[52%_18%] sm:object-right lg:object-center origin-center"
-        />
+        <div
+          className="hero-slide-strip flex w-full h-full will-change-transform"
+          style={{
+            transform: `translate3d(-${currentSlide * 100}%, 0, 0)`,
+            transition: 'transform 1000ms cubic-bezier(0.25, 1, 0.5, 1)',
+          }}
+        >
+          {HERO_SLIDES.map((slide, idx) => (
+            <div key={slide.id} className="w-full h-full shrink-0 relative overflow-hidden">
+              <img
+                src={slide.image}
+                alt={slide.alt}
+                className={`w-full h-full object-cover object-[52%_18%] sm:object-right lg:object-center origin-center transition-transform duration-[6000ms] ease-out ${currentSlide === idx ? 'scale-100' : 'scale-105'
+                  }`}
+              />
+            </div>
+          ))}
+        </div>
 
         {/* Master Light Theme Wash Overlay:
-            - Soft & natural wash: preserves blue sky and airplane colors without milky white haze
-            - Desktop: compact soft fade leaving ship and aircraft completely vivid */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/35 via-35% to-transparent sm:bg-gradient-to-r sm:from-white/90 sm:via-white/55 sm:via-25% sm:to-transparent sm:to-38%" />
+            - Positioned above the sliding photos to remain completely smooth & stable
+            - Preserves crystal clear visibility of planes, ships, flasks and vibrant colors
+            - Guarantees razor-sharp readability of the text */}
+        <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-white/65 via-white/35 via-35% to-transparent sm:bg-gradient-to-r sm:from-white/90 sm:via-white/55 sm:via-25% sm:to-transparent sm:to-38%" />
       </div>
 
       {/* Hero Content Area */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-36 pb-8 sm:pb-12 w-full flex-1 flex flex-col justify-center">
-        <div className="max-w-md lg:max-w-[460px] space-y-3 sm:space-y-4 text-left">
-          
-          {/* Accent Line & Overline - Bold on Phone */}
-          <div className="hero-overline flex items-center gap-2">
-            <span className="w-5 h-[2px] bg-[#c2410c] inline-block shrink-0" />
-            <span className="text-[11px] sm:text-xs font-black sm:font-bold tracking-[0.16em] text-slate-950 sm:text-[#0f172a] uppercase drop-shadow-[0_1px_4px_rgba(255,255,255,1)]">
-              INDIAN PRODUCTS. GLOBAL OPPORTUNITIES.
-            </span>
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-36 pb-8 sm:pb-12 w-full flex-1 flex flex-col justify-center">
+        <div className="max-w-md lg:max-w-[490px] space-y-3 sm:space-y-4 text-left">
+
+          {/* Smooth Crossfading Text Area (Single Element: Zero Overlap) */}
+          <div
+            className={`space-y-3 sm:space-y-4 transition-opacity duration-300 ${textFade ? 'opacity-100' : 'opacity-0'
+              }`}
+          >
+            {/* Accent Line & Overline */}
+            <div className="hero-overline flex items-center gap-2">
+              <span className="w-5 h-[2px] bg-[#c2410c] inline-block shrink-0" />
+              <span className="text-[11px] sm:text-xs font-black sm:font-bold tracking-[0.16em] text-slate-950 sm:text-[#0f172a] uppercase drop-shadow-[0_1px_4px_rgba(255,255,255,1)]">
+                {activeSlide.overline}
+              </span>
+            </div>
+
+            {/* Main 3-Tier Headline */}
+            <h1 className="text-xl sm:text-3xl lg:text-[40px] font-black sm:font-extrabold font-heading tracking-tight leading-[1.12] text-slate-950 sm:text-[#0f172a] drop-shadow-[0_2px_8px_rgba(255,255,255,1)] drop-shadow-[0_0_12px_rgba(255,255,255,0.95)]">
+              <span className="hero-headline-line block">
+                {activeSlide.headline1}
+              </span>
+              <span className="hero-headline-line block text-slate-950 sm:text-[#0f172a]">
+                {activeSlide.headline2}
+              </span>
+              <span className="hero-headline-line block text-[#a14304] sm:text-[#b45309] mt-0.5">
+                {activeSlide.headline3}
+              </span>
+            </h1>
+
+            {/* Subtitle Description */}
+            <p className="hero-subtitle text-xs sm:text-xs lg:text-[13px] font-bold sm:font-normal text-slate-950 sm:text-slate-800 max-w-sm sm:max-w-md leading-relaxed drop-shadow-[0_1px_4px_rgba(255,255,255,1)] drop-shadow-[0_0_8px_rgba(255,255,255,0.95)] min-h-[48px] sm:min-h-[54px]">
+              {activeSlide.description}
+            </p>
           </div>
-
-          {/* Main 3-Tier Headline - Bold & Razor Sharp on Phone without any background */}
-          <h1 className="text-xl sm:text-3xl lg:text-[40px] font-black sm:font-extrabold font-heading tracking-tight leading-[1.12] text-slate-950 sm:text-[#0f172a] drop-shadow-[0_2px_8px_rgba(255,255,255,1)] drop-shadow-[0_0_12px_rgba(255,255,255,0.95)]">
-            <span className="hero-headline-line block">
-              CONNECTING
-            </span>
-            <span className="hero-headline-line block text-slate-950 sm:text-[#0f172a]">
-              INDIAN EXCELLENCE
-            </span>
-            <span className="hero-headline-line block text-[#a14304] sm:text-[#b45309] mt-0.5">
-              TO THE WORLD
-            </span>
-          </h1>
-
-          {/* Subtitle Description - Bold & High Contrast on Phone */}
-          <p className="hero-subtitle text-xs sm:text-xs lg:text-[13px] font-bold sm:font-normal text-slate-950 sm:text-slate-800 max-w-sm sm:max-w-md leading-relaxed drop-shadow-[0_1px_4px_rgba(255,255,255,1)] drop-shadow-[0_0_8px_rgba(255,255,255,0.95)]">
-            A leading research based export house delivering high quality Food Colors, Flavours, Emulsions, Fragrances, Essential Oils, Botanical Extracts and many more products to global markets.
-          </p>
 
           {/* CTA Action Buttons */}
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-1">
@@ -139,7 +270,7 @@ export default function HeroSection() {
               <span className="text-sm">&rarr;</span>
             </Link>
 
-            {/* Secondary Video Story Play Button - High Contrast on Phone */}
+            {/* Secondary Video Story Play Button */}
             <button
               type="button"
               onClick={() => setIsVideoModalOpen(true)}
@@ -154,13 +285,56 @@ export default function HeroSection() {
               <span className="w-4 h-[1.5px] bg-slate-500 group-hover:bg-[#b45309] transition-colors" />
             </button>
           </div>
+
+          {/* Slide Navigation Controls: Previous / Next & Active Pill Dots */}
+          <div className="pt-2 sm:pt-3 flex items-center gap-2.5 sm:gap-3">
+            {/* Previous Slide Button */}
+            <button
+              type="button"
+              onClick={prevSlide}
+              aria-label="Previous Hero Slide"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 hover:bg-white border border-slate-300/90 shadow-xs hover:shadow text-slate-800 hover:text-[#0a3622] flex items-center justify-center transition-all active:scale-90 cursor-pointer drop-shadow-xs"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            {/* Active Pill Dots */}
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {HERO_SLIDES.map((slide, idx) => (
+                <button
+                  key={slide.id}
+                  type="button"
+                  onClick={() => goToSlide(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`transition-all duration-500 rounded-full cursor-pointer ${currentSlide === idx
+                    ? 'w-7 sm:w-8 h-2 sm:h-2 bg-[#0a3622] shadow-xs'
+                    : 'w-2 h-2 bg-slate-400 hover:bg-slate-600'
+                    }`}
+                />
+              ))}
+            </div>
+
+            {/* Next Slide Button */}
+            <button
+              type="button"
+              onClick={nextSlide}
+              aria-label="Next Hero Slide"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 hover:bg-white border border-slate-300/90 shadow-xs hover:shadow text-slate-800 hover:text-[#0a3622] flex items-center justify-center transition-all active:scale-90 cursor-pointer drop-shadow-xs"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Bottom Frosted Metrics & Accreditation Bar - Certifications on Left */}
       <div className="relative z-10 hero-bottom-bar text-white py-4 sm:py-5 px-4 sm:px-8 mt-8">
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-8">
-          
+
           {/* Left Side: Accreditation & Certification Logos (On phone: 2 equal balanced columns matching stats grid) */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full lg:w-auto lg:flex lg:items-center lg:justify-start shrink-0">
             <div className="hero-cert-card bg-white rounded-xl h-11 sm:h-12 px-2.5 sm:px-3 shadow-md flex items-center justify-center hover:scale-105 transition-transform duration-200">

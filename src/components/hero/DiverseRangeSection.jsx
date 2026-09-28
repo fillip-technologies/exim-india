@@ -381,7 +381,7 @@ export default function DiverseRangeSection() {
   }
 
   return (
-    <section className="pt-6 sm:pt-9 pb-12 sm:pb-16 bg-white border-t border-slate-100 overflow-hidden w-full select-none">
+    <section className="pt-6 sm:pt-9 pb-12 sm:pb-16 bg-white border-t border-slate-100 overflow-hidden w-full">
       {/* Header Container - Contained within max-w-7xl for clean alignment */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6 sm:mb-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 sm:gap-6">
@@ -450,7 +450,7 @@ export default function DiverseRangeSection() {
       <div
         ref={containerRef}
         className={`relative w-full overflow-hidden py-2 ${
-          isDragging ? 'cursor-grabbing' : 'cursor-grab'
+          isDragging ? 'cursor-grabbing select-none' : 'cursor-grab'
         }`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => {
@@ -480,10 +480,10 @@ export default function DiverseRangeSection() {
               to={item.link}
               onClick={(e) => handleCardClick(e, item.link)}
               draggable={false}
-              className="w-[210px] sm:w-[230px] lg:w-[245px] shrink-0 group bg-white rounded-2xl p-2.5 border border-slate-200/85 shadow-sm hover:shadow-xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 select-none cursor-pointer"
+              className="w-[210px] sm:w-[230px] lg:w-[245px] shrink-0 group bg-white rounded-2xl p-2.5 border border-slate-200/85 shadow-sm hover:shadow-xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 cursor-pointer"
             >
               {/* Card Image Container */}
-              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 mb-2.5 pointer-events-none select-none flex items-center justify-center">
+              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 mb-2.5 select-none flex items-center justify-center">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -495,7 +495,7 @@ export default function DiverseRangeSection() {
               </div>
 
               {/* Bottom Row with Title & Arrow */}
-              <div className="flex items-center justify-between px-1 py-1 pointer-events-none">
+              <div className="flex items-center justify-between px-1 py-1">
                 <span className="text-xs sm:text-[13px] font-bold font-heading text-slate-900 group-hover:text-emerald-800 transition-colors truncate">
                   {item.title}
                 </span>

@@ -14,6 +14,17 @@ body {
   color: #0f172a;
 }
 
+/* Global High-Visibility Text Selection */
+::selection {
+  background-color: #ea580c;
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: #ea580c;
+  color: #ffffff;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-family-heading);
 }
