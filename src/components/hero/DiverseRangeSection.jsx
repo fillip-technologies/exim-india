@@ -471,7 +471,7 @@ export default function DiverseRangeSection() {
         {/* GPU-Accelerated Scrolling Track */}
         <div
           ref={trackRef}
-          className="flex gap-4 sm:gap-5 px-4 sm:px-8 w-max will-change-transform"
+          className="flex gap-5 sm:gap-6 px-4 sm:px-8 w-max will-change-transform"
           style={{ transform: 'translate3d(0, 0, 0)' }}
         >
           {tripleProducts.map((item, index) => (
@@ -480,10 +480,10 @@ export default function DiverseRangeSection() {
               to={item.link}
               onClick={(e) => handleCardClick(e, item.link)}
               draggable={false}
-              className="w-[210px] sm:w-[230px] lg:w-[245px] shrink-0 group bg-white rounded-2xl p-2.5 border border-slate-200/85 shadow-sm hover:shadow-xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 cursor-pointer"
+              className="w-[270px] sm:w-[310px] lg:w-[340px] shrink-0 group bg-white rounded-2xl p-3.5 sm:p-4 border border-slate-200/85 shadow-sm hover:shadow-xl hover:border-emerald-600/40 transition-all duration-300 flex flex-col justify-between hover:-translate-y-1.5 cursor-pointer"
             >
               {/* Card Image Container */}
-              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 mb-2.5 select-none flex items-center justify-center">
+              <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 mb-3 select-none flex items-center justify-center">
                 <img
                   src={item.image}
                   alt={item.title}
@@ -496,10 +496,10 @@ export default function DiverseRangeSection() {
 
               {/* Bottom Row with Title & Arrow */}
               <div className="flex items-center justify-between px-1 py-1">
-                <span className="text-xs sm:text-[13px] font-bold font-heading text-slate-900 group-hover:text-emerald-800 transition-colors truncate">
+                <span className="text-sm sm:text-base font-bold font-heading text-slate-900 group-hover:text-emerald-800 transition-colors truncate">
                   {item.title}
                 </span>
-                <span className="text-emerald-700 font-bold text-sm sm:text-base group-hover:translate-x-1 transition-transform ml-1 shrink-0">
+                <span className="text-emerald-700 font-bold text-base sm:text-lg group-hover:translate-x-1 transition-transform ml-2 shrink-0">
                   &rarr;
                 </span>
               </div>

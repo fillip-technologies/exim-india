@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import eximImage from '../../assets/global-logistics-panoramic.jpg'
+
+import colorProductImg from '../../assets/home/color-product.jpg'
+import makeupProductImg from '../../assets/home/makeup-product.jpg'
+import oilProductImg from '../../assets/home/oil-product.jpg'
+import cosmeticProductImg from '../../assets/home/coesmtic-product.jpg'
 
 export default function LogisticsSplitSection() {
   // No slice active by default; only when hovered/tapped
@@ -13,27 +17,35 @@ export default function LogisticsSplitSection() {
       description:
         'Certified synthetic food colors, lake pigments, and custom blended formulations exported to 50+ countries for food, beverage, and pharma applications.',
       link: '/products/synthetic-food-colours',
+      image: colorProductImg,
+      alt: 'Food Colors and Lake Dyes export range',
     },
     {
       id: '02',
-      title: 'Flavours & Emulsions',
+      title: 'Cosmetic & Personal Care Emulsions',
       description:
-        'Liquid flavours, beverage cloud emulsions, and spray-dried powder formulations crafted with authentic Indian profiles and export quality standards.',
-      link: '/products/liquid-flavours',
+        'Dermatologically tested cosmetic bases, stabilizing emulsions, and active formulation ingredients engineered for luxury skincare, lotions, and personal care.',
+      link: '/products/emulsion-flavours',
+      image: makeupProductImg,
+      alt: 'Cosmetic and Personal Care Emulsions',
     },
     {
       id: '03',
-      title: 'Essential Oils & Extracts',
+      title: 'Essential Oils & Botanical Extracts',
       description:
-        '100% pure steam-distilled Indian essential oils, standardized botanical extracts, and natural ingredients preserved under controlled storage.',
+        '100% pure steam-distilled Indian essential oils, standardized botanical extracts, and natural herbal ingredients preserved under controlled storage.',
       link: '/products/essential-oils',
+      image: oilProductImg,
+      alt: 'Essential Oils and Botanical Extracts',
     },
     {
       id: '04',
-      title: 'Global Export & Supply Chain',
+      title: 'Cosmetic Colours & Pigments',
       description:
-        'Climate-controlled warehousing in Mumbai with complete customs clearance, COA, FDA, Halal, and Kosher documentation for international shipments.',
-      link: '/products',
+        'High-purity cosmetic lake dyes, mica pearlescent pigments, and vibrant colorants certified to US FDA and EU standards for makeup, lipsticks, and beauty cosmetics.',
+      link: '/products/cosmetic-colours',
+      image: cosmeticProductImg,
+      alt: 'Cosmetic Colours, Makeup Pigments and Colorants',
     },
   ]
 
@@ -42,18 +54,7 @@ export default function LogisticsSplitSection() {
   }
 
   return (
-    <section className="relative w-full h-auto lg:h-[430px] overflow-hidden bg-slate-900">
-      {/* Continuous Panoramic Background Image Across All 4 Slices */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none">
-        <img
-          src={eximImage}
-          alt="Exim India Corporation Global Export of Food Colors, Flavours, and Essential Oils"
-          className="w-full h-full object-cover object-center filter contrast-105"
-        />
-        {/* Subtle dark ambient base overlay so text is always high contrast */}
-        <div className="absolute inset-0 bg-black/30 pointer-events-none" />
-      </div>
-
+    <section className="relative w-full h-auto lg:h-[430px] overflow-hidden bg-slate-950">
       {/* 4 Interactive Vertical Split Columns on desktop, responsive stack on mobile */}
       <div
         onMouseLeave={() => setActiveIndex(null)}
@@ -71,21 +72,38 @@ export default function LogisticsSplitSection() {
                 }
               }}
               onClick={() => handleToggle(idx)}
-              className={`relative flex flex-col justify-end p-5 sm:p-6 lg:p-6 border-b lg:border-b-0 lg:border-r border-white/20 last:border-b-0 last:border-r-0 cursor-pointer transition-all duration-500 ease-out ${
+              className={`group relative flex flex-col justify-end p-5 sm:p-6 lg:p-6 border-b lg:border-b-0 lg:border-r border-white/20 last:border-b-0 last:border-r-0 cursor-pointer overflow-hidden transition-all duration-500 ease-out min-h-[220px] lg:min-h-0 ${
                 isActive
-                  ? 'lg:flex-[1.6] backdrop-blur-md bg-white/20 shadow-2xl py-6 sm:py-7'
-                  : 'lg:flex-1 hover:bg-black/25 backdrop-blur-[1px] py-4 sm:py-5'
+                  ? 'lg:flex-[1.6] shadow-2xl py-6 sm:py-7'
+                  : 'lg:flex-1 py-5 sm:py-6'
               }`}
             >
-              {/* Active Column Frosted Highlight Layer */}
-              {isActive && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-white/10 to-transparent pointer-events-none" />
-              )}
+              {/* Individual Column Background Image with Zoom & Dark Gradient */}
+              <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+                <img
+                  src={item.image}
+                  alt={item.alt}
+                  className={`w-full h-full object-cover object-center transition-all duration-700 ease-out ${
+                    isActive
+                      ? 'scale-110 filter brightness-95'
+                      : 'scale-100 filter brightness-90 group-hover:scale-105'
+                  }`}
+                />
 
-              {/* Inactive Column Subtle Bottom Contrast Vignette */}
-              {!isActive && (
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent pointer-events-none" />
-              )}
+                {/* Dark Gradient Overlay for optimal text readability */}
+                <div
+                  className={`absolute inset-0 transition-all duration-500 ${
+                    isActive
+                      ? 'bg-gradient-to-t from-black/95 via-black/55 to-black/30'
+                      : 'bg-gradient-to-t from-black/90 via-black/60 to-black/35 group-hover:via-black/50'
+                  }`}
+                />
+
+                {/* Subtle highlight sheen for active slice */}
+                {isActive && (
+                  <div className="absolute inset-0 bg-white/10 pointer-events-none transition-opacity duration-300" />
+                )}
+              </div>
 
               {/* Content Box */}
               <div className="relative z-10 text-left w-full">
@@ -96,7 +114,7 @@ export default function LogisticsSplitSection() {
                   </span>
                   <div
                     className={`h-[2px] rounded-full transition-all duration-300 ${
-                      isActive ? 'w-6 bg-orange-500' : 'w-3 bg-orange-400/50'
+                      isActive ? 'w-6 bg-orange-500' : 'w-3 bg-orange-400/60'
                     }`}
                   />
                 </div>
@@ -106,8 +124,8 @@ export default function LogisticsSplitSection() {
                   <h3
                     className={`font-bold font-heading text-white leading-snug transition-all duration-300 ${
                       isActive
-                        ? 'text-base sm:text-lg lg:text-xl text-white'
-                        : 'text-sm sm:text-base lg:text-sm text-slate-100'
+                        ? 'text-base sm:text-lg lg:text-xl text-white drop-shadow-sm'
+                        : 'text-sm sm:text-base lg:text-sm text-slate-100 group-hover:text-white'
                     }`}
                   >
                     {item.title}
@@ -146,7 +164,7 @@ export default function LogisticsSplitSection() {
                       : 'max-h-0 opacity-0 mt-0 pointer-events-none'
                   }`}
                 >
-                  <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal max-w-xl">
+                  <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal max-w-xl drop-shadow-xs">
                     {item.description}
                   </p>
                 </div>
@@ -160,7 +178,7 @@ export default function LogisticsSplitSection() {
                     className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-all duration-300 shadow-md ${
                       isActive
                         ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-orange-500/40 scale-105'
-                        : 'bg-white/20 backdrop-blur-xs text-white/90 border border-white/30 hover:bg-white/30'
+                        : 'bg-white/20 backdrop-blur-xs text-white/90 border border-white/30 group-hover:bg-white/30'
                     }`}
                   >
                     <svg
