@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { COSMETIC_COLORS } from '../../constants/cosmeticColorsData'
+import ProductHero from '../../components/product/ProductHero'
 import CosmeticFilterBar from '../../components/product/cosmetic/CosmeticFilterBar'
 import CosmeticCard from '../../components/product/cosmetic/CosmeticCard'
 
@@ -32,7 +33,16 @@ export default function CosmeticColours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Cosmetic & Personal Care Colours"
+        subtitle="Dermatologically certified pigments and lake colorants formulated to stringent international US-FDA and EU cosmetic safety directives for luxury beauty and personal care."
+        badge="DERMATOLOGICALLY SAFE"
+        category="Cosmetic Colours"
+        trustTags={['EU 1223/2009 Compliant', 'US-FDA 21 CFR', 'Heavy Metal Tested', 'Cruelty Free']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <CosmeticFilterBar
         activeFilter={activeFilter}

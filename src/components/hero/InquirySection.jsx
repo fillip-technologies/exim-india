@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import bgTelephoneImg from '../../assets/support-bg-telephone.jpg'
+import { submitContact } from '../../api'
 
 export default function InquirySection() {
   const [formData, setFormData] = useState({
@@ -8,34 +9,48 @@ export default function InquirySection() {
     phone: '',
     purpose: '',
     message: '',
-    file: null,
+    website: '', // Honeypot field for anti-spam
   })
 
-  const [submitted, setSubmitted] = useState(false)
+  const [submitted, setSubmitted]   = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError]           = useState('')
 
   const handleChange = (e) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+    if (error) setError('')
   }
 
-  const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData((prev) => ({ ...prev, file: e.target.files[0] }))
-    }
-  }
-
-  const handleRemoveFile = () => {
-    setFormData((prev) => ({ ...prev, file: null }))
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
     setSubmitting(true)
-    setTimeout(() => {
-      setSubmitting(false)
+
+    try {
+      await submitContact({
+        name:             formData.fullName.trim(),
+        email:            formData.email.trim(),
+        phone:            formData.phone.trim() || undefined,
+        product_interest: formData.purpose || undefined,
+        message:          formData.message.trim(),
+        website:          formData.website || undefined,
+      })
+
       setSubmitted(true)
-    }, 600)
+    } catch (err) {
+      console.error('Support inquiry submission failed:', err)
+      const msg =
+        err?.errors?.message?.[0] ||
+        err?.errors?.email?.[0] ||
+        err?.errors?.name?.[0] ||
+        err?.errors?.phone?.[0] ||
+        err?.message ||
+        'Unable to send your inquiry. Please verify your details and try again.'
+      setError(msg)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const resetForm = () => {
@@ -45,8 +60,9 @@ export default function InquirySection() {
       phone: '',
       purpose: '',
       message: '',
-      file: null,
+      website: '',
     })
+    setError('')
     setSubmitted(false)
   }
 
@@ -72,14 +88,14 @@ export default function InquirySection() {
             <img
               src={bgTelephoneImg}
               alt="Need support? Direct contact telephone"
-              className="w-full h-full object-cover object-left lg:object-center"
+              className="w-full h-full object-cover object-left"
             />
-            {/* Subtle soft gradient that keeps the left phone 100% vivid while providing a clean white canvas for the form */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent via-40% to-white/90 to-75%" />
+            {/* Soft gradient that keeps the left telephone vivid while providing a clean canvas for the form */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent via-35% to-white/95 to-65%" />
           </div>
 
           {/* Mobile Telephone Header Banner */}
-          <div className="md:hidden relative h-52 sm:h-64 w-full overflow-hidden bg-white border-b border-slate-100">
+          <div className="md:hidden relative h-48 sm:h-56 w-full overflow-hidden bg-white border-b border-slate-100">
             <img
               src={bgTelephoneImg}
               alt="Need support? Direct contact telephone"
@@ -89,13 +105,13 @@ export default function InquirySection() {
           </div>
 
           {/* Card Content Grid */}
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-center min-h-[560px]">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-12 items-center min-h-[540px]">
             
-            {/* Left Spacer on Desktop: Completely clean to let the telephone handset and cord shine */}
-            <div className="hidden md:block md:col-span-5 lg:col-span-5" aria-hidden="true" />
+            {/* Left Spacer on Desktop: Clean space to showcase the telephone handset and cord */}
+            <div className="hidden md:block md:col-span-5" aria-hidden="true" />
 
             {/* Right Side: Form Container */}
-            <div className="md:col-span-7 lg:col-span-7 p-6 sm:p-9 lg:p-12 text-left bg-white/95 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none">
+            <div className="md:col-span-7 p-6 sm:p-9 lg:p-11 text-left bg-white/95 md:bg-transparent backdrop-blur-xs md:backdrop-blur-none">
               
               {/* Header */}
               <div className="mb-6">
@@ -108,26 +124,50 @@ export default function InquirySection() {
               </div>
 
               {submitted ? (
-                <div className="py-12 text-center space-y-3.5 bg-white/95 backdrop-blur-md rounded-2xl p-6 border border-emerald-100 shadow-sm">
+                /* Success State */
+                <div className="py-10 text-center space-y-4 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-emerald-100 shadow-sm animate-fadeIn">
                   <div className="w-14 h-14 bg-emerald-100 text-[#0a3622] rounded-full flex items-center justify-center mx-auto text-2xl font-bold shadow-xs">
                     ✓
                   </div>
-                  <h4 className="text-lg font-bold font-heading text-slate-900">
+                  <h4 className="text-xl font-bold font-heading text-slate-900">
                     Message Sent Successfully!
                   </h4>
-                  <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto">
-                    Thank you, <span className="font-semibold text-slate-900">{formData.fullName}</span>. Our support team will get in touch with you shortly.
+                  <p className="text-xs sm:text-sm text-slate-600 max-w-sm mx-auto leading-relaxed">
+                    Thank you, <span className="font-semibold text-slate-900">{formData.fullName}</span>. Your inquiry has been delivered directly to our team. We will get back to you shortly.
                   </p>
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="mt-4 px-6 py-2.5 rounded-xl bg-[#eb4738] hover:bg-[#d83c2e] text-white font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md shadow-[#eb4738]/25 cursor-pointer"
-                  >
-                    Send Another Message
-                  </button>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="px-6 py-2.5 rounded-xl bg-[#eb4738] hover:bg-[#d83c2e] text-white font-bold text-xs sm:text-sm tracking-wider uppercase transition-all shadow-md shadow-[#eb4738]/25 cursor-pointer active:scale-95"
+                    >
+                      Send Another Message
+                    </button>
+                  </div>
                 </div>
               ) : (
+                /* Contact / Inquiry Form */
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Error Alert */}
+                  {error && (
+                    <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs sm:text-sm flex items-start gap-2.5">
+                      <span className="font-bold text-red-500 text-base leading-none">⚠</span>
+                      <span className="flex-1">{error}</span>
+                    </div>
+                  )}
+
+                  {/* Honeypot field (hidden from real users) */}
+                  <input
+                    type="text"
+                    name="website"
+                    value={formData.website}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    style={{ display: 'none' }}
+                  />
+
                   {/* Name and surname */}
                   <div>
                     <label htmlFor="fullName" className="block text-xs font-semibold text-slate-700 mb-1.5">
@@ -138,10 +178,11 @@ export default function InquirySection() {
                       name="fullName"
                       type="text"
                       required
+                      disabled={submitting}
                       value={formData.fullName}
                       onChange={handleChange}
                       placeholder="Your full name"
-                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs"
+                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs disabled:opacity-60"
                     />
                   </div>
 
@@ -156,10 +197,11 @@ export default function InquirySection() {
                         name="email"
                         type="email"
                         required
+                        disabled={submitting}
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="you@company.com"
-                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs"
+                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs disabled:opacity-60"
                       />
                     </div>
 
@@ -172,10 +214,11 @@ export default function InquirySection() {
                         name="phone"
                         type="tel"
                         required
+                        disabled={submitting}
                         value={formData.phone}
                         onChange={handleChange}
                         placeholder="+91 / International"
-                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs"
+                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs disabled:opacity-60"
                       />
                     </div>
                   </div>
@@ -189,9 +232,10 @@ export default function InquirySection() {
                       id="purpose"
                       name="purpose"
                       required
+                      disabled={submitting}
                       value={formData.purpose}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all text-slate-900 cursor-pointer shadow-xs"
+                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all text-slate-900 cursor-pointer shadow-xs disabled:opacity-60"
                     >
                       <option value="" disabled>Select your requirement</option>
                       {purposeOptions.map((opt) => (
@@ -212,60 +256,41 @@ export default function InquirySection() {
                       name="message"
                       rows={3}
                       required
+                      disabled={submitting}
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Write your request details here..."
-                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 resize-none shadow-xs"
+                      className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 resize-none shadow-xs disabled:opacity-60"
                     />
                   </div>
 
-                  {/* Bottom Row: File Attachment (Optional) & SUBMIT Button */}
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3.5 pt-2">
-                    {/* Optional File Attachment */}
-                    <div className="shrink-0">
-                      {formData.file ? (
-                        <div className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-emerald-300 text-xs shadow-xs">
-                          <span className="truncate max-w-[160px] text-slate-800 font-medium">
-                            {formData.file.name}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={handleRemoveFile}
-                            className="text-red-600 hover:text-red-700 font-bold cursor-pointer"
-                          >
-                            ✕
-                          </button>
-                        </div>
-                      ) : (
-                        <label
-                          htmlFor="document-upload"
-                          className="inline-flex items-center gap-2 px-3.5 py-2.5 border border-dashed border-slate-300 hover:border-[#eb4738] rounded-xl bg-white hover:bg-slate-50 transition-colors cursor-pointer text-xs font-medium text-slate-600 shadow-xs"
-                        >
-                          <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                  {/* Bottom Row: Clean and fitted SUBMIT button (Attach document removed) */}
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <p className="text-[11px] sm:text-xs text-slate-400 font-medium order-2 sm:order-1 text-center sm:text-left">
+                      Direct inquiry to Exim India Corporation
+                    </p>
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full sm:w-auto px-10 py-3.5 rounded-xl bg-[#eb4738] hover:bg-[#d83c2e] text-white font-extrabold uppercase tracking-wider text-xs sm:text-sm shadow-xl shadow-[#eb4738]/30 hover:shadow-[#eb4738]/50 active:scale-95 transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 order-1 sm:order-2 shrink-0"
+                    >
+                      {submitting ? (
+                        <>
+                          <svg className="w-4 h-4 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
                           </svg>
-                          <span>Attach Document (Optional)</span>
-                          <input
-                            id="document-upload"
-                            type="file"
-                            accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
-                            onChange={handleFileChange}
-                            className="hidden"
-                          />
-                        </label>
+                          <span>SENDING...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>SUBMIT</span>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </>
                       )}
-                    </div>
-
-                    {/* SUBMIT Button */}
-                    <div className="sm:ml-auto">
-                      <button
-                        type="submit"
-                        disabled={submitting}
-                        className="w-full sm:w-auto px-10 py-3.5 rounded-xl bg-[#eb4738] hover:bg-[#d83c2e] text-white font-extrabold uppercase tracking-wider text-xs sm:text-sm shadow-xl shadow-[#eb4738]/30 hover:shadow-[#eb4738]/50 active:scale-95 transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
-                      >
-                        {submitting ? 'SENDING...' : 'SUBMIT'}
-                      </button>
-                    </div>
+                    </button>
                   </div>
                 </form>
               )}

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { FRUIT_FRAGRANCE_PRODUCTS, FRAGRANCE_APPLICATIONS } from '../../constants/fruitFragranceData'
+import ProductHero from '../../components/product/ProductHero'
 import FruitFragranceFilterBar from '../../components/product/fruit-fragrance/FruitFragranceFilterBar'
 import FruitFragranceCard from '../../components/product/fruit-fragrance/FruitFragranceCard'
 
@@ -28,7 +29,16 @@ export default function FruitFragrance() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Fruit & Aromatic Fragrances"
+        subtitle="Captivating fruity and floral fragrance oils engineered to international IFRA standards for personal care, detergents, perfumes, and home care."
+        badge="IFRA COMPLIANT ESSENCES"
+        category="Fruit Fragrance"
+        trustTags={['IFRA Certified Safe', 'Long-Lasting Diffusion', 'Cosmetic & Detergent Ready', 'Custom Olfactory Notes']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <FruitFragranceFilterBar
         activeFilter={activeFilter}

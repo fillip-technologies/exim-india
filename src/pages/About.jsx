@@ -1,7 +1,7 @@
 import AboutHeroSection from '../components/about/AboutHeroSection'
 import AboutStorySection from '../components/about/AboutStorySection'
+import WhyEximSection from '../components/about/WhyEximSection'
 import AboutValuesSection from '../components/about/AboutValuesSection'
-import AboutServicesSection from '../components/about/AboutServicesSection'
 import InquirySection from '../components/hero/InquirySection'
 
 export default function About() {
@@ -13,11 +13,11 @@ export default function About() {
       {/* 2. Our Story: Connecting India to Global Opportunities */}
       <AboutStorySection />
 
-      {/* 3. Core Values & Quality Assurance Pillars */}
-      <AboutValuesSection />
+      {/* 3. Why Exim India - 6 Strategic Core Pillars (User Reference UI) */}
+      <WhyEximSection />
 
-      {/* 4. Logistics Built Around Your Business */}
-      <AboutServicesSection />
+      {/* 4. Core Values & Quality Assurance Pillars */}
+      <AboutValuesSection />
 
       {/* 5. Export Inquiry Form */}
       <InquirySection />

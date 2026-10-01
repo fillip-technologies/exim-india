@@ -4,6 +4,12 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Certifications from './pages/Certifications'
 import Contact from './pages/Contact'
+import LoginPage from './login/LoginPage'
+import ProtectedRoute from './components/common/ProtectedRoute'
+import DashboardLayout from './dashboard/DashboardLayout'
+import DashboardOverview from './dashboard/pages/DashboardOverview'
+import ContactsPage from './dashboard/pages/ContactsPage'
+import ContactDetailPage from './dashboard/pages/ContactDetailPage'
 
 // Product Pages (wrapped inside src/pages/product/)
 import Products from './pages/product/Products'
@@ -95,6 +101,19 @@ export default function App() {
         <Route path="/quality" element={<About />} />
         <Route path="/global-network" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin/login" element={<LoginPage />} />
+
+        {/* Protected Admin Dashboard */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardLayout />}>
+            <Route index element={<DashboardOverview />} />
+            <Route path="contacts" element={<ContactsPage />} />
+            <Route path="contacts/:id" element={<ContactDetailPage />} />
+            {/* Future: categories, products pages go here */}
+          </Route>
+        </Route>
+
         {/* Fallback route */}
         <Route path="*" element={<Home />} />
       </Routes>

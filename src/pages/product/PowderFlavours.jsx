@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { POWDER_FLAVOUR_PRODUCTS } from '../../constants/powderFlavoursData'
+import ProductHero from '../../components/product/ProductHero'
 import PowderFlavourCard from '../../components/product/powder-flavours/PowderFlavourCard'
 
 export default function PowderFlavours() {
@@ -28,7 +29,16 @@ export default function PowderFlavours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Powder Food Flavours"
+        subtitle="Encapsulated dry powder flavours delivering shelf-stable aroma release for bakery mixes, drink powders, nutraceuticals, and snack seasonings."
+        badge="SPRAY-DRIED FLAVOURS"
+        category="Powder Flavours"
+        trustTags={['Encapsulated Aroma', 'High Heat Retention', 'Free-Flowing Granules', 'Extended Shelf Life']}
+      />
+
       {/* Filter & Search Toolbar */}
       <div className="bg-slate-50/90 backdrop-blur-md border-y border-slate-200 sticky top-16 z-30 py-3.5 px-4 sm:px-6 lg:px-8 transition-all">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">

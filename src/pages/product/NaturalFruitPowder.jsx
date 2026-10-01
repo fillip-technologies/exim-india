@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { NATURAL_FRUIT_POWDERS, FRUIT_POWDER_APPLICATIONS } from '../../constants/naturalFruitPowderData'
+import ProductHero from '../../components/product/ProductHero'
 import FruitPowderFilterBar from '../../components/product/fruit-powder/FruitPowderFilterBar'
 import FruitPowderCard from '../../components/product/fruit-powder/FruitPowderCard'
 
@@ -28,7 +29,16 @@ export default function NaturalFruitPowder() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Natural Fruit Powders"
+        subtitle="Pure spray-dried natural fruit powders capturing true fruit taste, vibrant aroma, and natural nutrition for beverage mixes, dairy, and baking."
+        badge="SPRAY-DRIED REAL FRUIT"
+        category="Natural Fruit Powder"
+        trustTags={['100% Real Fruit Source', 'Nutrient Preserved', 'Instant Solubility', 'Zero Preservatives']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <FruitPowderFilterBar
         activeFilter={activeFilter}

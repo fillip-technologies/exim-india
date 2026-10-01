@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { EMULSION_FLAVOURS, SPECIALTY_EMULSION_PROFILES } from '../../constants/emulsionFlavoursData'
+import ProductHero from '../../components/product/ProductHero'
 import EmulsionFlavourFilterBar from '../../components/product/emulsion-flavour/EmulsionFlavourFilterBar'
 import EmulsionFlavourCard from '../../components/product/emulsion-flavour/EmulsionFlavourCard'
 
@@ -29,7 +30,16 @@ export default function EmulsionFlavours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Flavour Emulsions & Clouding Agents"
+        subtitle="Precision-formulated beverage clouding emulsions and tropical fruit concentrates designed for soft drinks, juices, and syrups."
+        badge="BEVERAGE CLOUDING AGENTS"
+        category="Emulsion Flavours"
+        trustTags={['Stable Clouding Effect', 'No Ring Formation', 'Citrus & Fruit Profiles', 'Beverage Ready']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <EmulsionFlavourFilterBar
         activeFilter={activeFilter}

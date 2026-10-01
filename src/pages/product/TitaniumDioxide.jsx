@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { TITANIUM_DIOXIDE_PRODUCTS, TIO2_COMPARISON_MATRIX } from '../../constants/titaniumDioxideData'
+import ProductHero from '../../components/product/ProductHero'
 import TitaniumDioxideFilterBar from '../../components/product/titanium-dioxide/TitaniumDioxideFilterBar'
 import TitaniumDioxideCard from '../../components/product/titanium-dioxide/TitaniumDioxideCard'
 
@@ -29,7 +30,16 @@ export default function TitaniumDioxide() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Titanium Dioxide (TiO2)"
+        subtitle="Ultra-pure rutile and anatase titanium dioxide powders delivering exceptional whiteness, opacity, and UV resistance for food, pharma, and cosmetics."
+        badge="HIGH OPACITY WHITE PIGMENT"
+        category="Titanium Dioxide"
+        trustTags={['Food & Pharma Grades', 'High Tinting Strength', '99.5%+ Pure Rutile/Anatase', 'EP / USP Compliant']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <TitaniumDioxideFilterBar
         activeFilter={activeFilter}

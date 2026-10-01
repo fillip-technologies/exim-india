@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { FLUORESCENT_PRODUCTS } from '../../constants/fluorescentData'
+import ProductHero from '../../components/product/ProductHero'
 import FluorescentFilterBar from '../../components/product/fluorescent/FluorescentFilterBar'
 import FluorescentCard from '../../components/product/fluorescent/FluorescentCard'
 
@@ -28,7 +29,16 @@ export default function FluorescentColours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Fluorescent Colours"
+        subtitle="Ultra-bright, eye-catching fluorescent pigments engineered for specialty applications demanding maximum chromatic intensity and radiance."
+        badge="HIGH-VISIBILITY NEON SHADES"
+        category="Fluorescent Colours"
+        trustTags={['Vivid Neon Brilliance', 'UV Reactive Formulations', 'Specialty Applications', 'Global Export Compliance']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <FluorescentFilterBar
         activeFilter={activeFilter}

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { MANGO_PULPS, MANGO_PULP_STANDARDS } from '../../constants/mangoPulpData'
+import ProductHero from '../../components/product/ProductHero'
 import MangoPulpFilterBar from '../../components/product/mango-pulp/MangoPulpFilterBar'
 import MangoPulpCard from '../../components/product/mango-pulp/MangoPulpCard'
 
@@ -28,7 +29,16 @@ export default function MangoPulp() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Indian Mango Pulp & Purees"
+        subtitle="Aseptic and canned Alphonso, Kesar, and Totapuri mango purees processed under strict sterile conditions from hand-picked Indian orchards."
+        badge="100% PURE NATURAL"
+        category="Mango Pulp"
+        trustTags={['Alphonso, Kesar & Totapuri', 'Aseptic Sterile Packaging', 'APEDA Registered', 'Export Grade Brix']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <MangoPulpFilterBar
         activeFilter={activeFilter}

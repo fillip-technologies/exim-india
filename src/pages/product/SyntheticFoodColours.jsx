@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { SYNTHETIC_FOOD_COLORS } from '../../constants/syntheticFoodColorsData'
+import ProductHero from '../../components/product/ProductHero'
 import ProductFilterBar from '../../components/product/synthesis-food/ProductFilterBar'
 import ProductCard from '../../components/product/synthesis-food/ProductCard'
 
@@ -33,7 +34,16 @@ export default function SyntheticFoodColours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Synthetic Food Colours"
+        subtitle="High-purity primary synthetic food dyes delivering intense coloration, exceptional heat and light stability, and complete batch-to-batch consistency."
+        badge="PRIMARY FOOD DYES"
+        category="Synthetic Food Colours"
+        trustTags={['US-FDA & EU Compliant', 'FSSAI & BIS Certified', 'Halal & Kosher Approved', 'Port: JNPT Mumbai']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <ProductFilterBar
         activeFilter={activeFilter}

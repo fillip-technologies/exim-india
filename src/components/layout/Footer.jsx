@@ -235,6 +235,10 @@ export default function Footer() {
             <Link to="/quality" className="hover:text-emerald-300 transition-colors">
               Quality Assurance
             </Link>
+            <span>&bull;</span>
+            <Link to="/login" className="text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1">
+              <span>Portal Sign In</span>
+            </Link>
           </div>
         </div>
       </div>

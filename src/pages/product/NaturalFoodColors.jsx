@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { NATURAL_FOOD_COLORS, NATURAL_COLOR_STABILITY_SPECS } from '../../constants/naturalFoodColorsData'
+import ProductHero from '../../components/product/ProductHero'
 import NaturalFoodColorFilterBar from '../../components/product/natural-food-color/NaturalFoodColorFilterBar'
 import NaturalFoodColorCard from '../../components/product/natural-food-color/NaturalFoodColorCard'
 
@@ -30,7 +31,16 @@ export default function NaturalFoodColors() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Natural Food Colours"
+        subtitle="Sustainably sourced botanical extracts, plant pigments, curcumin, chlorophyll, and annatto formulated for clean-label international compliance."
+        badge="PLANT-BASED & CLEAN-LABEL"
+        category="Natural Food Colors"
+        trustTags={['100% Plant Sourced', 'Clean-Label Formulation', 'Vegan & Vegetarian', 'Non-GMO Certified']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <NaturalFoodColorFilterBar
         activeFilter={activeFilter}

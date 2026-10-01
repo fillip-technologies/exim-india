@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { LAKE_COLORS } from '../../constants/lakeColorsData'
+import ProductHero from '../../components/product/ProductHero'
 import LakeFilterBar from '../../components/product/lake/LakeFilterBar'
 import LakeCard from '../../components/product/lake/LakeCard'
 
@@ -31,7 +32,16 @@ export default function LakeColours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Aluminium Lake Colours"
+        subtitle="High-opacity insoluble aluminium lake pigments engineered for oil-based confectionery, compound coatings, dry mixes, cosmetics, and pharmaceutical tablets."
+        badge="INSOLUBLE OIL-DISPERSIBLE"
+        category="Lake Colours"
+        trustTags={['Oil Dispersible', 'High Tinting Strength', 'Non-Bleeding', 'US-FDA & EU Standard']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <LakeFilterBar
         activeFilter={activeFilter}

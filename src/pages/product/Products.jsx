@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import ProductHero from '../../components/product/ProductHero'
 
 
 export default function Products() {
@@ -54,22 +55,15 @@ export default function Products() {
   ]
 
   return (
-    <div className="pt-28 sm:pt-36 pb-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#b45309] bg-amber-50 border border-amber-200 px-3.5 py-1 rounded-full">
-              Export Catalog
-            </span>
-            <h1 className="text-3xl sm:text-5xl font-extrabold font-heading text-slate-900 mt-4 tracking-tight">
-              Our Ingredients &amp; Formulations
-            </h1>
-            <p className="text-sm sm:text-base text-slate-600 mt-3 max-w-2xl mx-auto leading-relaxed">
-              Explore our laboratory-tested food colors, flavours, aromatic fragrances, essential oils, and botanical extracts delivered to 50+ countries.
-            </p>
-          </div>
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Our Ingredients & Formulations"
+        subtitle="Explore our laboratory-tested food colors, flavours, aromatic fragrances, essential oils, and botanical extracts delivered to 50+ countries worldwide."
+      />
 
-          <div className="space-y-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+        <div className="space-y-8">
             {items.map((prod) => (
               <div
                 key={prod.category}

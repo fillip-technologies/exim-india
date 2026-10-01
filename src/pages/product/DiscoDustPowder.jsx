@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { DISCO_DUST_POWDERS, DISCO_DUST_VARIETY_SHADES } from '../../constants/discoDustData'
+import ProductHero from '../../components/product/ProductHero'
 import DiscoDustFilterBar from '../../components/product/disco-dust/DiscoDustFilterBar'
 import DiscoDustCard from '../../components/product/disco-dust/DiscoDustCard'
 
@@ -37,7 +38,16 @@ export default function DiscoDustPowder() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Disco Dust & Glitter Powder"
+        subtitle="Ultra-sparkling decorative glitter powders formulated to add dazzling visual shimmer to artisan cakes, sugar flowers, and celebration desserts."
+        badge="CAKE DECORATING GLITTER"
+        category="Disco Dust Powder"
+        trustTags={['Ultra-Sparkle Finish', 'Non-Toxic Decorative', 'Cake & Sugar Flowers', 'Multiple Shades']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <DiscoDustFilterBar
         activeFilter={activeFilter}

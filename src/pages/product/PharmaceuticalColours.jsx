@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { PHARMACEUTICAL_COLORS } from '../../constants/pharmaceuticalColorsData'
+import ProductHero from '../../components/product/ProductHero'
 import PharmaceuticalFilterBar from '../../components/product/pharmaceutical/PharmaceuticalFilterBar'
 import PharmaceuticalCard from '../../components/product/pharmaceutical/PharmaceuticalCard'
 
@@ -33,7 +34,16 @@ export default function PharmaceuticalColours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Pharmaceutical Grade Colours"
+        subtitle="High-purity pharmaceutical colorants and lakes manufactured under strict GMP compliance for tablet coatings, hard gelatin capsules, and oral syrups."
+        badge="IP / BP / USP COMPLIANT"
+        category="Pharmaceutical Colours"
+        trustTags={['IP / BP / USP Standard', 'WHO-GMP Compliant', 'Ultra-Low Heavy Metals', 'Microbiologically Tested']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <PharmaceuticalFilterBar
         activeFilter={activeFilter}

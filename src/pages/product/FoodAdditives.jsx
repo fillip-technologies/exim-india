@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { FOOD_ADDITIVES, EXTENDED_FOOD_ADDITIVES } from '../../constants/foodAdditivesData'
+import ProductHero from '../../components/product/ProductHero'
 import FoodAdditiveFilterBar from '../../components/product/food-additive/FoodAdditiveFilterBar'
 import FoodAdditiveCard from '../../components/product/food-additive/FoodAdditiveCard'
 
@@ -29,7 +30,16 @@ export default function FoodAdditives() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Food Additives & Functional Ingredients"
+        subtitle="Essential food-grade acidulants, texturizers, gelling agents, and emulsifiers meeting international FCC, FSSAI, and USP specifications."
+        badge="FUNCTIONAL INGREDIENTS"
+        category="Food Additives"
+        trustTags={['FCC & USP Standards', 'FSSAI Approved', 'Clean Formulation', 'Aseptic Bulk Packaging']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <FoodAdditiveFilterBar
         activeFilter={activeFilter}

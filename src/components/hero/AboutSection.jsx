@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
-import mapImg from '../../assets/img/map.PNG'
 import syntheticColoursImg from '../../assets/img/efc/synthethic.jpg'
-import emulsionFlavoursImg from '../../assets/img/ef/Mango-Emulsion.jpg'
-import essentialOilsImg from '../../assets/img/essential-oil/lemon-grass-oil.jpg'
-import { CONTACT_INFO } from '../../constants/navigation'
+import pharmaColoursImg from '../../assets/home/medicine-image.jpg'
+import flavoursImg from '../../assets/home/bakery-image.png'
+import productHeroImg from '../../assets/product-hero.png'
 
 export default function AboutSection() {
   const sectionRef = useRef(null)
@@ -19,16 +18,16 @@ export default function AboutSection() {
       link: '/products/synthetic-food-colours',
     },
     {
-      title: 'Flavours & Emulsions',
-      subtitle: 'Liquid & Powder Beverage Formulations',
-      image: emulsionFlavoursImg,
-      link: '/products/liquid-flavours',
+      title: 'Pharmaceutical Colours',
+      subtitle: 'High-Purity Tablet & Capsule Formulations',
+      image: pharmaColoursImg,
+      link: '/products/pharmaceutical-colours',
     },
     {
-      title: 'Botanicals & Essential Oils',
-      subtitle: '100% Pure Indian Steam-Distilled Extracts',
-      image: essentialOilsImg,
-      link: '/products/essential-oils',
+      title: 'Flavours & Emulsions',
+      subtitle: 'Liquid & Powder Bakery Formulations',
+      image: flavoursImg,
+      link: '/products/liquid-flavours',
     },
   ]
 
@@ -50,14 +49,6 @@ export default function AboutSection() {
                 '.about-header-text',
                 { opacity: 0, y: 35 },
                 { opacity: 1, y: 0, duration: 0.75, stagger: 0.15 }
-              )
-
-              // Direct phone badge spring pop
-              tl.fromTo(
-                '.about-phone-badge',
-                { opacity: 0, scale: 0.88, y: 20 },
-                { opacity: 1, scale: 1, y: 0, duration: 0.65, ease: 'back.out(1.5)' },
-                '-=0.45'
               )
 
               // 3 Overlapping cards staggered entrance
@@ -82,93 +73,56 @@ export default function AboutSection() {
 
   return (
     <section ref={sectionRef} className="bg-white relative overflow-hidden">
-      {/* Top Banner Container - Exim Brand Forest Green with Map Watermark & Wave Divider */}
-      <div className="relative bg-gradient-to-br from-[#072417] via-[#0a3622] to-[#062014] text-white pt-14 sm:pt-18 pb-32 sm:pb-40 lg:pb-44 overflow-hidden">
-        {/* Subtle Tech Grid Pattern */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.06] bg-repeat bg-center"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)`,
-            backgroundSize: '28px 28px',
-          }}
-        />
-
-        {/* Full Bleed Worldwide Export Map Watermark (100% Width & Height, Clearly Visible) */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+      {/* Top Banner Container - Natural Product Hero Colors with High-Contrast Typography */}
+      <div className="relative bg-[#fedc02] text-slate-900 pt-14 sm:pt-18 pb-32 sm:pb-40 lg:pb-44 overflow-hidden">
+        {/* Background Image: product-hero.png with slightly decreased opacity for clear text visibility */}
+        <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
           <img
-            src={mapImg}
-            alt="Worldwide export network map"
-            className="w-full h-full object-cover object-center filter invert opacity-30 sm:opacity-35 mix-blend-screen"
+            src={productHeroImg}
+            alt="Exim India Product Formulations"
+            className="w-full h-full object-cover object-[center_84%] opacity-50"
           />
-          {/* Soft ambient tint to ensure optimal contrast and readability */}
-          <div className="absolute inset-0 bg-[#072417]/30" />
+          {/* Subtle soft white wash behind top text area to guarantee 100% effortless readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/30 via-white/10 to-transparent pointer-events-none" />
         </div>
-
-        {/* Ambient glow orbs */}
-        <div className="pointer-events-none absolute -top-24 left-1/4 w-96 h-96 bg-emerald-400/10 rounded-full blur-3xl" />
-        <div className="pointer-events-none absolute top-1/3 right-10 w-80 h-80 bg-amber-400/10 rounded-full blur-3xl" />
 
         {/* Main Content Area */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
             {/* Left Side: Overline & Bold Headline */}
-            <div className="lg:col-span-4 text-left about-header-text">
+            <div className="lg:col-span-5 text-left about-header-text">
               {/* Overline with Dash */}
               <div className="flex items-center gap-2.5 mb-3">
-                <span className="w-8 h-[2px] bg-emerald-400 rounded-full inline-block" />
-                <span className="text-xs font-black tracking-[0.25em] text-emerald-300 uppercase">
+                <span className="w-8 h-[2.5px] bg-[#0a3622] rounded-full inline-block" />
+                <span className="text-xs font-black tracking-[0.25em] text-[#0a3622] uppercase">
                   WHO WE ARE
                 </span>
               </div>
 
               {/* Bold 2-3 Line Headline */}
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight leading-[1.2] text-white">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight leading-[1.2] text-slate-950 drop-shadow-[0_1px_1px_rgba(255,255,255,0.8)]">
                 About EXIM India Corporation
               </h2>
 
-              <p className="mt-2 text-xs sm:text-sm font-semibold text-emerald-200/90 tracking-wide">
+              <p className="mt-2 text-xs sm:text-sm font-extrabold text-[#0a3622] tracking-wide">
                 Research-Based Export House • Mumbai, India
               </p>
             </div>
 
-            {/* Middle: Corporate Narrative Paragraph */}
-            <div className="lg:col-span-5 text-left space-y-3 about-header-text">
-              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
-                <strong className="text-white font-extrabold">EXIM INDIA CORPORATION</strong> is a leading professionally managed Export House based in <strong className="text-emerald-300 font-bold">MUMBAI</strong>, the financial capital of <strong className="text-amber-300 font-bold">INDIA</strong>, economically the most emerging Country in the world today.
+            {/* Right Side: Corporate Narrative Paragraph */}
+            <div className="lg:col-span-7 text-left space-y-3 about-header-text">
+              <p className="text-xs sm:text-sm text-slate-950 font-bold leading-relaxed drop-shadow-[0_1px_1px_rgba(255,255,255,0.7)]">
+                <strong className="text-black font-black">EXIM INDIA CORPORATION</strong> is a leading professionally managed Export House based in <strong className="text-[#0a3622] font-black underline decoration-emerald-700/50">MUMBAI</strong>, the financial capital of <strong className="text-[#c2410c] font-black underline decoration-amber-700/50">INDIA</strong>, economically the most emerging Country in the world today.
               </p>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-slate-950 font-bold leading-relaxed drop-shadow-[0_1px_1px_rgba(255,255,255,0.7)]">
                 Welcoming you to the world of food Colors, Flavours, Emulsions, Fragrances, Essential Oils, Botanical extracts and many more related products. The one &amp; only research-based export house managed by a team of highly qualified export and import professionals.
               </p>
-            </div>
-
-            {/* Right Side: Direct Contact / Toll-Free Phone Badge */}
-            <div className="lg:col-span-3 flex lg:justify-end about-phone-badge">
-              <a
-                href="tel:+917977523176"
-                className="group inline-flex items-center gap-3.5 bg-white/10 hover:bg-white/15 backdrop-blur-md border border-white/20 hover:border-emerald-400/50 px-4 py-3 rounded-2xl transition-all shadow-lg hover:shadow-emerald-900/30 active:scale-95"
-              >
-                {/* Circular Call Icon */}
-                <div className="w-11 h-11 rounded-full bg-emerald-500 group-hover:bg-emerald-400 text-[#072417] flex items-center justify-center shrink-0 shadow-md transition-transform group-hover:scale-105">
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-                    <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.24 1.01l-2.21 2.2z" />
-                  </svg>
-                </div>
-
-                <div className="text-left">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">
-                    EXPORT INQUIRY (24/7)
-                  </div>
-                  <div className="text-sm sm:text-base font-extrabold text-white group-hover:text-emerald-200 transition-colors">
-                    +91 79775 23176
-                  </div>
-                </div>
-              </a>
             </div>
           </div>
         </div>
 
         {/* Bottom Curved Wave Divider - Transitions into Crisp White Page Surface */}
-        <div className="absolute bottom-0 inset-x-0 w-full overflow-hidden leading-none pointer-events-none">
+        <div className="absolute bottom-0 inset-x-0 w-full overflow-hidden leading-none pointer-events-none z-10">
           <svg
             className="relative block w-full h-14 sm:h-20 lg:h-24 text-white"
             viewBox="0 0 1440 120"

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { PEARL_PIGMENT_PRODUCTS, PEARL_EFFECTS_GUIDE } from '../../constants/pearlPigmentData'
+import ProductHero from '../../components/product/ProductHero'
 import PearlPigmentFilterBar from '../../components/product/pearl-pigment/PearlPigmentFilterBar'
 import PearlPigmentCard from '../../components/product/pearl-pigment/PearlPigmentCard'
 
@@ -30,7 +31,16 @@ export default function PearlPigmentPowder() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Pearlescent Pigment Powder"
+        subtitle="Multi-reflective mica-based effect powders delivering luxurious metallic luster, satin touch, and prismatic shimmer for beauty and cosmetic applications."
+        badge="LUMINOUS MICA POWDERS"
+        category="Pearl Pigments"
+        trustTags={['Natural & Synthetic Mica', 'Multi-Angle Luster', 'Heavy Metal Free', 'Cosmetic Grade 100%']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <PearlPigmentFilterBar
         activeFilter={activeFilter}

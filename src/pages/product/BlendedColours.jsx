@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { BLENDED_COLORS } from '../../constants/blendedColorsData'
+import ProductHero from '../../components/product/ProductHero'
 import BlendedFilterBar from '../../components/product/blended/BlendedFilterBar'
 import BlendedCard from '../../components/product/blended/BlendedCard'
 
@@ -28,7 +29,16 @@ export default function BlendedColours() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Blended Food Colours"
+        subtitle="Custom engineered secondary and tertiary food color blends crafted to achieve distinctive brand shades across confectionery, beverages, and dairy."
+        badge="CUSTOM COLOR SHADES"
+        category="Blended Colours"
+        trustTags={['Custom Match Blends', 'US-FDA & EU Standard', 'Batch Consistency', 'High Solubility']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <BlendedFilterBar
         activeFilter={activeFilter}

@@ -7,7 +7,7 @@ export default function ProductDetailHeader({
   totalCount,
 }) {
   return (
-    <div className="bg-gradient-to-r from-sky-900 via-cyan-900 to-emerald-900 py-6 sm:py-8 text-white relative overflow-hidden mb-6 shadow-sm">
+    <div className="-mt-20 sm:-mt-24 bg-gradient-to-r from-sky-900 via-cyan-900 to-emerald-900 pt-28 sm:pt-32 pb-8 sm:pb-9 text-white relative overflow-hidden mb-6 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-black font-heading tracking-wide italic">

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
-import hero5 from '../../assets/hero-7.png'
+import hero5 from '../../assets/hero-section-5.png'
 import hero6 from '../../assets/hero-6.png'
 import hero7 from '../../assets/hero-5.png'
 import fdaImg from '../../assets/FDA-Maharashtra.jpg'
@@ -45,42 +45,33 @@ const HERO_SLIDES = [
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true)
-  const [textFade, setTextFade] = useState(true)
   const [touchStartX, setTouchStartX] = useState(null)
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
   const heroRef = useRef(null)
 
-  // Smooth slide change with text crossfade
-  const changeSlide = (newIndex) => {
-    setTextFade(false)
-    setTimeout(() => {
-      setCurrentSlide(newIndex)
-      setTextFade(true)
-    }, 180)
+  // Direct slide change - 100% synchronized with image transition
+  const changeSlide = (target) => {
+    setCurrentSlide((prev) => (typeof target === 'function' ? target(prev) : target))
   }
 
-  // Autoplay Slider Timer (pauses on hover)
-  useEffect(() => {
-    if (!isAutoPlaying) return
-    const timer = setInterval(() => {
-      changeSlide((currentSlide + 1) % HERO_SLIDES.length)
-    }, 5500)
-    return () => clearInterval(timer)
-  }, [isAutoPlaying, currentSlide])
-
   const nextSlide = () => {
-    changeSlide((currentSlide + 1) % HERO_SLIDES.length)
+    changeSlide((prev) => (prev + 1) % HERO_SLIDES.length)
   }
 
   const prevSlide = () => {
-    changeSlide((currentSlide - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)
+    changeSlide((prev) => (prev - 1 + HERO_SLIDES.length) % HERO_SLIDES.length)
   }
 
   const goToSlide = (idx) => {
-    if (idx === currentSlide) return
     changeSlide(idx)
   }
+
+  // Reliable Autoplay Slider Timer (changes every 5 seconds)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      changeSlide((prev) => (prev + 1) % HERO_SLIDES.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
 
   // Mobile Touch Swipe Handlers
   const handleTouchStart = (e) => {
@@ -118,34 +109,18 @@ export default function HeroSection() {
 
       // 1. Subtle entrance on hero background
       tl.fromTo(
-        '.hero-slide-strip',
+        '.hero-bg-container',
         { opacity: 0.7 },
         { opacity: 1, duration: 1.2, ease: 'power2.out' },
         0
       )
 
-      // 2. Overline accent line & label
+      // 2. Text container entrance on initial load
       tl.fromTo(
-        '.hero-overline',
-        { x: -30, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.7 },
-        0.2
-      )
-
-      // 3. 3-Tier Headline staggered cascade
-      tl.fromTo(
-        '.hero-headline-line',
-        { y: 35, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, stagger: 0.12 },
-        0.35
-      )
-
-      // 4. Subtitle paragraph fade-up
-      tl.fromTo(
-        '.hero-subtitle',
-        { y: 25, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7 },
-        0.65
+        '.hero-text-entrance',
+        { y: 30, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.85, ease: 'power2.out' },
+        0.25
       )
 
       // 5. Action CTA buttons pop and rise
@@ -153,7 +128,7 @@ export default function HeroSection() {
         '.hero-cta-btn',
         { y: 20, opacity: 0, scale: 0.94 },
         { y: 0, opacity: 1, scale: 1, duration: 0.6, stagger: 0.12, ease: 'back.out(1.4)' },
-        0.8
+        0.55
       )
 
       // 6. Bottom Frosted Bar slide up
@@ -161,7 +136,7 @@ export default function HeroSection() {
         '.hero-bottom-bar',
         { y: 40, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.85 },
-        0.7
+        0.65
       )
 
       // 7. Certification logo cards pop in
@@ -169,7 +144,7 @@ export default function HeroSection() {
         '.hero-cert-card',
         { scale: 0.88, opacity: 0 },
         { scale: 1, opacity: 1, duration: 0.55, stagger: 0.1, ease: 'back.out(1.4)' },
-        0.95
+        0.85
       )
 
       // 8. Stats items stagger
@@ -177,86 +152,94 @@ export default function HeroSection() {
         '.hero-stat-item',
         { y: 18, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.55, stagger: 0.08 },
-        1.05
+        0.95
       )
     }, heroRef)
 
     return () => ctx.revert()
   }, [])
 
-  const activeSlide = HERO_SLIDES[currentSlide]
-
   return (
     <section
       ref={heroRef}
-      onMouseEnter={() => setIsAutoPlaying(false)}
-      onMouseLeave={() => setIsAutoPlaying(true)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       className="relative min-h-[100dvh] sm:min-h-[105vh] lg:min-h-[112vh] flex flex-col justify-between overflow-hidden"
     >
-      {/* Full-Bleed Sliding Image Strip: hero-5, hero-6, hero-7 */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <div
-          className="hero-slide-strip flex w-full h-full will-change-transform"
-          style={{
-            transform: `translate3d(-${currentSlide * 100}%, 0, 0)`,
-            transition: 'transform 1000ms cubic-bezier(0.25, 1, 0.5, 1)',
-          }}
-        >
-          {HERO_SLIDES.map((slide, idx) => (
-            <div key={slide.id} className="w-full h-full shrink-0 relative overflow-hidden">
+      {/* Full-Bleed Cinematic Crossfade Transition: hero-5, hero-6, hero-7 */}
+      <div className="hero-bg-container absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {HERO_SLIDES.map((slide, idx) => {
+          const isActive = currentSlide === idx
+          return (
+            <div
+              key={slide.id}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-700 ease-in-out will-change-transform ${
+                isActive ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
+              }`}
+            >
               <img
                 src={slide.image}
                 alt={slide.alt}
-                className={`w-full h-full object-cover object-[52%_18%] sm:object-right lg:object-center origin-center transition-transform duration-[6000ms] ease-out ${currentSlide === idx ? 'scale-100' : 'scale-105'
-                  }`}
+                className={`w-full h-full object-cover object-[52%_18%] sm:object-right lg:object-center origin-center transition-transform duration-[6000ms] ease-out ${
+                  isActive ? 'scale-105' : 'scale-100'
+                }`}
               />
             </div>
-          ))}
-        </div>
+          )
+        })}
 
         {/* Master Light Theme Wash Overlay:
-            - Positioned above the sliding photos to remain completely smooth & stable
+            - Positioned above the photos to remain completely smooth & stable
             - Preserves crystal clear visibility of planes, ships, flasks and vibrant colors
             - Guarantees razor-sharp readability of the text */}
-        <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-b from-white/65 via-white/35 via-35% to-transparent sm:bg-gradient-to-r sm:from-white/90 sm:via-white/55 sm:via-25% sm:to-transparent sm:to-38%" />
+        <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-b from-white/65 via-white/35 via-35% to-transparent sm:bg-gradient-to-r sm:from-white/90 sm:via-white/55 sm:via-25% sm:to-transparent sm:to-38%" />
       </div>
 
       {/* Hero Content Area */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-36 pb-8 sm:pb-12 w-full flex-1 flex flex-col justify-center">
         <div className="max-w-md lg:max-w-[490px] space-y-3 sm:space-y-4 text-left">
 
-          {/* Smooth Crossfading Text Area (Single Element: Zero Overlap) */}
-          <div
-            className={`space-y-3 sm:space-y-4 transition-opacity duration-300 ${textFade ? 'opacity-100' : 'opacity-0'
-              }`}
-          >
-            {/* Accent Line & Overline */}
-            <div className="hero-overline flex items-center gap-2">
-              <span className="w-5 h-[2px] bg-[#c2410c] inline-block shrink-0" />
-              <span className="text-[11px] sm:text-xs font-black sm:font-bold tracking-[0.16em] text-slate-950 sm:text-[#0f172a] uppercase drop-shadow-[0_1px_4px_rgba(255,255,255,1)]">
-                {activeSlide.overline}
-              </span>
-            </div>
+          {/* Synchronized Crossfading Text Area (CSS Grid: 100% Timing Parity with Background Image) */}
+          <div className="hero-text-entrance grid grid-cols-1 grid-rows-1">
+            {HERO_SLIDES.map((slide, idx) => {
+              const isActive = currentSlide === idx
+              return (
+                <div
+                  key={slide.id}
+                  className={`col-start-1 row-start-1 space-y-3 sm:space-y-4 transition-all duration-700 ease-in-out will-change-transform ${
+                    isActive
+                      ? 'opacity-100 translate-y-0 pointer-events-auto z-10'
+                      : 'opacity-0 translate-y-1 pointer-events-none z-0'
+                  }`}
+                >
+                  {/* Accent Line & Overline */}
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-[2px] bg-[#c2410c] inline-block shrink-0" />
+                    <span className="text-[11px] sm:text-xs font-black sm:font-bold tracking-[0.16em] text-slate-950 sm:text-[#0f172a] uppercase drop-shadow-[0_1px_4px_rgba(255,255,255,1)]">
+                      {slide.overline}
+                    </span>
+                  </div>
 
-            {/* Main 3-Tier Headline */}
-            <h1 className="text-xl sm:text-3xl lg:text-[40px] font-black sm:font-extrabold font-heading tracking-tight leading-[1.12] text-slate-950 sm:text-[#0f172a] drop-shadow-[0_2px_8px_rgba(255,255,255,1)] drop-shadow-[0_0_12px_rgba(255,255,255,0.95)]">
-              <span className="hero-headline-line block">
-                {activeSlide.headline1}
-              </span>
-              <span className="hero-headline-line block text-slate-950 sm:text-[#0f172a]">
-                {activeSlide.headline2}
-              </span>
-              <span className="hero-headline-line block text-[#a14304] sm:text-[#b45309] mt-0.5">
-                {activeSlide.headline3}
-              </span>
-            </h1>
+                  {/* Main 3-Tier Headline */}
+                  <h1 className="text-xl sm:text-3xl lg:text-[40px] font-black sm:font-extrabold font-heading tracking-tight leading-[1.12] text-slate-950 sm:text-[#0f172a] drop-shadow-[0_2px_8px_rgba(255,255,255,1)] drop-shadow-[0_0_12px_rgba(255,255,255,0.95)]">
+                    <span className="block">
+                      {slide.headline1}
+                    </span>
+                    <span className="block text-slate-950 sm:text-[#0f172a]">
+                      {slide.headline2}
+                    </span>
+                    <span className="block text-[#a14304] sm:text-[#b45309] mt-0.5">
+                      {slide.headline3}
+                    </span>
+                  </h1>
 
-            {/* Subtitle Description */}
-            <p className="hero-subtitle text-xs sm:text-xs lg:text-[13px] font-bold sm:font-normal text-slate-950 sm:text-slate-800 max-w-sm sm:max-w-md leading-relaxed drop-shadow-[0_1px_4px_rgba(255,255,255,1)] drop-shadow-[0_0_8px_rgba(255,255,255,0.95)] min-h-[48px] sm:min-h-[54px]">
-              {activeSlide.description}
-            </p>
+                  {/* Subtitle Description */}
+                  <p className="text-xs sm:text-xs lg:text-[13px] font-bold sm:font-normal text-slate-950 sm:text-slate-800 max-w-sm sm:max-w-md leading-relaxed drop-shadow-[0_1px_4px_rgba(255,255,255,1)] drop-shadow-[0_0_8px_rgba(255,255,255,0.95)] min-h-[48px] sm:min-h-[54px]">
+                    {slide.description}
+                  </p>
+                </div>
+              )
+            })}
           </div>
 
           {/* CTA Action Buttons */}
@@ -269,21 +252,6 @@ export default function HeroSection() {
               <span>Explore Our Products</span>
               <span className="text-sm">&rarr;</span>
             </Link>
-
-            {/* Secondary Video Story Play Button */}
-            <button
-              type="button"
-              onClick={() => setIsVideoModalOpen(true)}
-              className="hero-cta-btn inline-flex items-center gap-2 text-slate-950 hover:text-[#b45309] font-bold sm:font-semibold text-xs sm:text-sm group cursor-pointer transition-colors drop-shadow-[0_1px_3px_rgba(255,255,255,1)]"
-            >
-              <span className="w-8 h-8 rounded-full border border-slate-400 group-hover:border-[#b45309] flex items-center justify-center text-slate-900 group-hover:text-[#b45309] transition-colors shadow-sm bg-white backdrop-blur-sm">
-                <svg className="w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </span>
-              <span>Watch Our Story</span>
-              <span className="w-4 h-[1.5px] bg-slate-500 group-hover:bg-[#b45309] transition-colors" />
-            </button>
           </div>
 
           {/* Slide Navigation Controls: Previous / Next & Active Pill Dots */}
@@ -431,40 +399,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Watch Story Video Modal */}
-      {isVideoModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md animate-fadeIn">
-          <div className="relative w-full max-w-2xl rounded-3xl bg-white p-6 shadow-2xl border border-slate-200">
-            <button
-              type="button"
-              onClick={() => setIsVideoModalOpen(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-2 rounded-full hover:bg-slate-100 transition-colors"
-            >
-              ✕
-            </button>
-            <div className="space-y-4 text-left">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#c2410c] bg-orange-50 px-3 py-1 rounded-full">
-                Exim India Corporate Story
-              </span>
-              <h3 className="text-2xl font-bold font-heading text-slate-900">
-                Research-Driven Indian Excellence in Global Markets
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                From standardized food color formulations to pure steam-distilled essential oils and certified botanical extracts, discover how Exim India Corporation guarantees international purity, strict regulatory compliance, and seamless export shipments to over 50 countries.
-              </p>
-              <div className="pt-2 flex justify-end">
-                <Link
-                  to="/about"
-                  onClick={() => setIsVideoModalOpen(false)}
-                  className="rounded-lg bg-[#0a3622] hover:bg-[#0f4d30] text-white px-5 py-2.5 text-sm font-semibold transition-all"
-                >
-                  Read Full Company Profile &rarr;
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </section>
   )
 }

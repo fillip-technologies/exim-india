@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { EDIBLE_LUSTRE_PRODUCTS, LUSTRE_APPLICATION_TECHNIQUES } from '../../constants/edibleLustreData'
+import ProductHero from '../../components/product/ProductHero'
 import EdibleLustreFilterBar from '../../components/product/edible-lustre/EdibleLustreFilterBar'
 import EdibleLustreCard from '../../components/product/edible-lustre/EdibleLustreCard'
 
@@ -30,7 +31,16 @@ export default function EdibleLustre() {
   }, [activeFilter, searchQuery])
 
   return (
-    <div className="bg-white min-h-screen text-slate-900 pt-20 sm:pt-24">
+    <div className="bg-white min-h-screen text-slate-900 pb-16">
+      {/* Product Hero Banner with product-hero.png */}
+      <ProductHero
+        title="Edible Lustre Dust"
+        subtitle="100% edible metallic dusting powders engineered to impart high-gloss gold, silver, and jewel finishes to luxury confectionery and chocolates."
+        badge="FOOD-GRADE SHIMMER"
+        category="Edible Lustre"
+        trustTags={['100% Edible Safe', 'Brilliant Metallic Glaze', 'Dry Dusting & Wet Painting', 'FSSAI & US-FDA']}
+      />
+
       {/* Interactive Sticky Filter & Search Toolbar */}
       <EdibleLustreFilterBar
         activeFilter={activeFilter}
