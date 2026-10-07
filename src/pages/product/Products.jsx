@@ -17,16 +17,10 @@ export default function Products() {
       items: ['Mango & Tropical Fruit Emulsions', 'Vanilla Oleoresin', 'Chocolate & Toffee Aromas', 'Citrus Clouding Agents'],
     },
     {
-      category: 'Fragrances & Aromas',
-      description: 'Fine aromatic blends engineered for soaps, personal care, perfumes, and laundry detergents.',
-      badge: 'IFRA Standard Compliant',
-      items: ['Floral & Rose Otto Blends', 'Oud & Sandalwood Accords', 'Fresh Citrus & Aquatic Notes', 'Herbal Lavender Bases'],
-    },
-    {
-      category: 'Essential Oils',
-      description: '100% pure steam-distilled and cold-pressed Indian essential oils with GC-MS certificate of analysis.',
-      badge: 'Therapeutic Grade',
-      items: ['Lemongrass Oil (Cochin)', 'Peppermint Oil (Mentha Piperita)', 'Eucalyptus Globulus Oil', 'Ginger & Cardamom Oils'],
+      category: 'Bakery Decorations & Lustre',
+      description: 'Artistic food-grade lustre dusts, sparkling disco powders, non-pareils, and premium sugar pearls.',
+      badge: '100% Edible & Halal/Kosher',
+      items: ['Edible Gold & Silver Lustre Dust', 'Disco Dust Powder (Sparkle Colors)', 'Silver Dragees & Sugar Balls', 'Confectionery Vermicelli'],
     },
     {
       category: 'Botanical Extracts',
@@ -41,12 +35,6 @@ export default function Products() {
       items: ['Citric Acid (Anhydrous/Mono)', 'Soya Lecithin (Fluid & Powder)', 'Edible Gelatin Bloom 160-260', 'Cornstarch', 'Sucrose Pharma Grade', 'Pure Natural Saffron'],
     },
     {
-      category: 'Mango Pulp & Purees',
-      description: '100% natural, hand-picked Indian mango pulps processed under sterile aseptic conditions for global export.',
-      badge: 'Aseptic Sterile & Canned',
-      items: ['Alphonso Mango Pulp (24° Brix)', 'Totapuri Mango Puree (14° Brix)', 'Kesar Mango Pulp (16-18° Brix)', 'Bulk 215 Kg Drums & A10 Cans'],
-    },
-    {
       category: 'Chemicals & Intermediates',
       description: 'Comprehensive portfolio of 120+ high-purity industrial, food, pharmaceutical, and veterinary chemical compounds.',
       badge: 'ISO & WHO-GMP Compliant',
@@ -59,7 +47,7 @@ export default function Products() {
       {/* Product Hero Banner with product-hero.png */}
       <ProductHero
         title="Our Ingredients & Formulations"
-        subtitle="Explore our laboratory-tested food colors, flavours, aromatic fragrances, essential oils, and botanical extracts delivered to 50+ countries worldwide."
+        subtitle="Explore our laboratory-tested food colors, flavours, bakery decorations, botanical extracts, and chemicals delivered to 50+ countries worldwide."
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
@@ -211,13 +199,20 @@ export default function Products() {
                         <span>&rarr;</span>
                       </Link>
                     </div>
-                  ) : prod.category === 'Fragrances & Aromas' ? (
+                  ) : prod.category === 'Bakery Decorations & Lustre' ? (
                     <div className="flex flex-wrap items-center gap-2.5">
                       <Link
-                        to="/products/fruit-fragrance"
-                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-violet-800 hover:text-violet-950 bg-violet-50 px-3 py-1.5 rounded-lg border border-violet-200 transition-colors"
+                        to="/products/edible-lustre"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-800 hover:text-amber-950 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 transition-colors"
                       >
-                        <span>Explore 13 Premium Fruit Fragrances (IFRA Certified)</span>
+                        <span>Explore Edible Lustre Dusts</span>
+                        <span>&rarr;</span>
+                      </Link>
+                      <Link
+                        to="/products/disco-dust-powder"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-purple-800 hover:text-purple-950 bg-purple-50 px-3 py-1.5 rounded-lg border border-purple-200 transition-colors"
+                      >
+                        <span>Explore Disco Dust Powders</span>
                         <span>&rarr;</span>
                       </Link>
                     </div>
@@ -228,16 +223,6 @@ export default function Products() {
                         className="inline-flex items-center gap-1.5 text-xs font-extrabold text-blue-800 hover:text-blue-950 bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 transition-colors"
                       >
                         <span>Explore 7 Essential Food Additives &amp; Extended Portfolio</span>
-                        <span>&rarr;</span>
-                      </Link>
-                    </div>
-                  ) : prod.category === 'Mango Pulp & Purees' ? (
-                    <div className="flex flex-wrap items-center gap-2.5">
-                      <Link
-                        to="/products/mango-pulp"
-                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-800 hover:text-amber-950 bg-amber-50 px-3 py-1.5 rounded-lg border border-amber-200 transition-colors"
-                      >
-                        <span>Explore 3 Authentic Indian Mango Pulps</span>
                         <span>&rarr;</span>
                       </Link>
                     </div>

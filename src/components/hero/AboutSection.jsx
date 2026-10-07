@@ -115,7 +115,7 @@ export default function AboutSection() {
                 <strong className="text-black font-black">EXIM INDIA CORPORATION</strong> is a leading professionally managed Export House based in <strong className="text-[#0a3622] font-black underline decoration-emerald-700/50">MUMBAI</strong>, the financial capital of <strong className="text-[#c2410c] font-black underline decoration-amber-700/50">INDIA</strong>, economically the most emerging Country in the world today.
               </p>
               <p className="text-xs sm:text-sm text-slate-950 font-bold leading-relaxed drop-shadow-[0_1px_1px_rgba(255,255,255,0.7)]">
-                Welcoming you to the world of food Colors, Flavours, Emulsions, Fragrances, Essential Oils, Botanical extracts and many more related products. The one &amp; only research-based export house managed by a team of highly qualified export and import professionals.
+                Welcoming you to the world of food Colors, Flavours, Emulsions, Bakery Decorations, Botanical extracts and many more related products. The one &amp; only research-based export house managed by a team of highly qualified export and import professionals.
               </p>
             </div>
           </div>

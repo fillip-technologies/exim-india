@@ -8,10 +8,9 @@ This document serves as the project source of truth and architectural reference 
 **Exim India Corporation** is a leading research-based export house delivering high-quality:
 - **Food Colors**
 - **Flavours & Emulsions**
-- **Fragrances**
-- **Essential Oils**
+- **Bakery Decorations & Lustre**
 - **Botanical Extracts**
-- **Natural Ingredients & Global Solutions**
+- **Food Additives & Chemicals**
 
 Exporting premium Indian ingredients to 50+ countries worldwide across 100+ product formulations.
 

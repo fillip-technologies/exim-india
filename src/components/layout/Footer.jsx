@@ -19,7 +19,7 @@ export default function Footer() {
     },
     {
       left: { name: 'Cosmetic Colours', path: '/products/cosmetic-colours' },
-      right: { name: 'Mango Pulp', path: '/products/mango-pulp' },
+      right: { name: 'Chemicals', path: '/products/chemicals' },
     },
     {
       left: { name: 'Liquid Flavours', path: '/products/liquid-flavours' },
@@ -27,14 +27,14 @@ export default function Footer() {
     },
     {
       left: { name: 'Emulsion Flavours', path: '/products/emulsion-flavours' },
-      right: { name: 'Essential Oils', path: '/products/essential-oils' },
+      right: { name: 'Pearl Pigment Powder', path: '/products/pearl-pigment-powder' },
     },
     {
       left: { name: 'Powder Flavours', path: '/products/powder-flavours' },
       right: { name: 'Edible Lustre', path: '/products/edible-lustre' },
     },
     {
-      left: { name: 'Fruit Fragrance', path: '/products/fruit-fragrance' },
+      left: { name: 'Fluorescent Colours', path: '/products/fluorescent-colours' },
       right: { name: 'Disco Dust Powder', path: '/products/disco-dust-powder' },
     },
   ]

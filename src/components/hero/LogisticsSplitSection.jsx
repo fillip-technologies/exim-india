@@ -31,12 +31,12 @@ export default function LogisticsSplitSection() {
     },
     {
       id: '03',
-      title: 'Essential Oils & Botanical Extracts',
+      title: 'Botanical Extracts & Phytochemicals',
       description:
-        '100% pure steam-distilled Indian essential oils, standardized botanical extracts, and natural herbal ingredients preserved under controlled storage.',
-      link: '/products/essential-oils',
+        'Standardized herbal bioactives, botanical extracts, and natural active ingredients preserved under controlled warehouse conditions for global buyers.',
+      link: '/products/botanical-extracts',
       image: oilProductImg,
-      alt: 'Essential Oils and Botanical Extracts',
+      alt: 'Botanical Extracts and Natural Bioactives',
     },
     {
       id: '04',

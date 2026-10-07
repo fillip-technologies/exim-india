@@ -2,6 +2,7 @@ import AboutHeroSection from '../components/about/AboutHeroSection'
 import AboutStorySection from '../components/about/AboutStorySection'
 import WhyEximSection from '../components/about/WhyEximSection'
 import AboutValuesSection from '../components/about/AboutValuesSection'
+import GlobalReachSection from '../components/about/GlobalReachSection'
 import InquirySection from '../components/hero/InquirySection'
 
 export default function About() {
@@ -19,7 +20,10 @@ export default function About() {
       {/* 4. Core Values & Quality Assurance Pillars */}
       <AboutValuesSection />
 
-      {/* 5. Export Inquiry Form */}
+      {/* 5. Global Reach & Destinations Map */}
+      <GlobalReachSection />
+
+      {/* 6. Export Inquiry Form */}
       <InquirySection />
     </>
   )

@@ -69,8 +69,8 @@ export default function InquirySection() {
   const purposeOptions = [
     'Food Colors & Lake Dyes',
     'Food Flavours & Emulsions',
-    'Fragrances & Aroma Compounds',
-    'Essential Oils & Extracts',
+    'Bakery Decorations & Lustre',
+    'Botanical Extracts & Additives',
     'Cosmetic Colours & Pigments',
     'Sample Request / Quotation',
     'General Inquiry',

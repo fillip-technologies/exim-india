@@ -29,24 +29,24 @@ export default function AboutStorySection() {
 
             {/* Narrative Body text with User's Exact Company Story */}
             <div className="mt-6 space-y-4 text-sm sm:text-base text-slate-600 leading-relaxed font-normal font-body">
-              <p>
-                <strong className="text-slate-900 font-semibold">EXIM INDIA CORPORATION</strong> is a leading professionally managed Export House based in Mumbai, the financial capital of India, economically the most emerging Country in the world today.
+              <p className="text-base sm:text-lg text-slate-800 font-semibold leading-relaxed border-l-4 border-[#0a3622] pl-4 bg-emerald-50/60 py-2.5 rounded-r-xl">
+                Welcome to EXIM India Corporation, where the art of bakery decoration comes to life! Established in the year 2011, we have emerged as an eminent exporter of food colours, flavours and bakery decorations.
               </p>
               <p>
-                EXIM INDIA CORPORATION Welcomes you to the world of Food Colors, Flavours, Emulsions, Fragrances, Essential Oils, Botanical extracts and many more related products.
+                We are blessed with an adept team of professionals, who are experienced and trained in their respective field of specialisation, thereby providing complete business solutions in importing Indian products. We understand that every celebration is unique, and that’s why we offer a wide range of customisation options.
               </p>
               <p>
-                The One and only research based export house, Exim India Corporation, is managed by a team of highly qualified professionals in the field of Export and Import. This is indeed a unique concept and perhaps is so much relevant in today’s vast global competitive market. Our team, highly qualified professionals in this field are always at your disposal to help you in your Import and Export business, thereby providing complete business solutions in importing Indian products.
+                We also have a commodious warehouse unit for safe and systematic storage of our products. Over the years we have expanded and diversified our Product Portfolio by investing in technology, people and product innovations.
               </p>
               <p>
-                This unique concept in export has made our eight years most successful journey a memorable one and certainly made Exim India Corporation a most respected export house in India. Thanks to all our customers all over the world for believing and showing confidence on us.
+                Assuring quality products and expeditious delivery is our top priority and we take utmost care right from handling, storage, transportation & delivery.
               </p>
-              <p>
-                We are one of the market leaders in exporting our high standard products across the countries. The USP of Exim India Corporation is to make sure that all our clients get the best out of our expert marketing and research teams who always work in tandem to understand the need of our customers.
-              </p>
-              <p>
-                Exim India Corporation is an exporter of full bouquet of above mentioned products throughout the World. All our research based incredible products have been highly accepted and appreciated by our clients across the countries. Given a chance we will be happy to associate with your esteemed organisation for a long standing, trustful and credible business relationship.
-              </p>
+              <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 text-slate-900 font-semibold text-sm sm:text-base flex items-start gap-3 shadow-xs">
+                <span className="text-xl shrink-0">✨</span>
+                <p>
+                  We have the best minds at work, tell us your challenges and we assure to meet your expectations.
+                </p>
+              </div>
             </div>
 
             {/* "Our Journey" Pill CTA Button */}
@@ -62,13 +62,30 @@ export default function AboutStorySection() {
           </div>
 
           {/* Right Column: Clean Corporate Building Image */}
-          <div className="lg:col-span-5 lg:sticky lg:top-28">
+          <div className="lg:col-span-5 lg:sticky lg:top-28 space-y-4">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-slate-900/10 border border-slate-200/80 group">
               <img
                 src={buildingImg}
                 alt="EXIM India Corporate Headquarters & Global Trade Facility"
                 className="w-full h-auto object-cover object-center group-hover:scale-102 transition-transform duration-700 block"
               />
+            </div>
+            {/* Quick Credential Highlights */}
+            <div className="p-4 rounded-2xl bg-slate-900 text-white flex items-center justify-between shadow-lg">
+              <div>
+                <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Established</p>
+                <p className="text-xl font-bold font-heading text-amber-400">2011</p>
+              </div>
+              <div className="h-8 w-px bg-slate-700" />
+              <div>
+                <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Global Reach</p>
+                <p className="text-xl font-bold font-heading text-emerald-400">50+ Nations</p>
+              </div>
+              <div className="h-8 w-px bg-slate-700" />
+              <div>
+                <p className="text-[11px] text-slate-400 uppercase tracking-wider font-semibold">Warehouse</p>
+                <p className="text-xl font-bold font-heading text-sky-400">Safe & Systematic</p>
+              </div>
             </div>
           </div>
 

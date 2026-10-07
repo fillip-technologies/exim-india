@@ -58,10 +58,10 @@ export default function ProductAccordionSection() {
     {
       id: 4,
       number: '04',
-      verticalTitle: 'ESSENTIAL OILS',
+      verticalTitle: 'BOTANICAL EXTRACTS',
       primaryImage: oilProductImg,
       altImages: [
-        { label: 'Botanical Oils', src: oilProductImg },
+        { label: 'Botanical Extracts', src: oilProductImg },
       ],
       gradient: 'from-[#059669] via-[#047857] to-[#022c22]',
       accentColor: '#34d399',

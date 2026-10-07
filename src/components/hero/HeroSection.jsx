@@ -17,7 +17,7 @@ const HERO_SLIDES = [
     headline2: 'INDIAN EXCELLENCE',
     headline3: 'TO THE WORLD',
     description:
-      'A leading research based export house delivering high quality Food Colors, Flavours, Emulsions, Fragrances, Essential Oils, Botanical Extracts and many more products to global markets.',
+      'A leading research based export house delivering high quality Food Colors, Flavours, Emulsions, Bakery Decorations, Botanical Extracts and many more products to global markets.',
   },
   {
     id: 2,
