@@ -10,6 +10,7 @@ import DashboardLayout from './dashboard/DashboardLayout'
 import DashboardOverview from './dashboard/pages/DashboardOverview'
 import ContactsPage from './dashboard/pages/ContactsPage'
 import ContactDetailPage from './dashboard/pages/ContactDetailPage'
+import TestimonialsPage from './dashboard/pages/TestimonialsPage'
 
 // Product Pages (wrapped inside src/pages/product/)
 import Products from './pages/product/Products'
@@ -108,6 +109,7 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardOverview />} />
+            <Route path="testimonials" element={<TestimonialsPage />} />
             <Route path="contacts" element={<ContactsPage />} />
             <Route path="contacts/:id" element={<ContactDetailPage />} />
             {/* Future: categories, products pages go here */}

@@ -113,36 +113,38 @@ export default function ContactsPage() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto">
-      {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Contacts & Inquiries</h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
-          {meta.total} total {meta.total === 1 ? 'inquiry' : 'inquiries'}
-        </p>
-      </div>
+      {/* Header with Title on Left, Filters on Right */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Contacts & Inquiries</h1>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            {meta.total} total {meta.total === 1 ? 'inquiry' : 'inquiries'}
+          </p>
+        </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-3 mb-5">
-        <FilterSelect
-          label="All Types"
-          value={filterType}
-          onChange={handleFilterChange(setFilterType)}
-          options={TYPES}
-        />
-        <FilterSelect
-          label="All Statuses"
-          value={filterStatus}
-          onChange={handleFilterChange(setFilterStatus)}
-          options={STATUSES}
-        />
-        {(filterType || filterStatus) && (
-          <button
-            onClick={() => { setFilterType(''); setFilterStatus(''); setPage(1) }}
-            className="px-3 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg border border-red-100 transition-colors cursor-pointer"
-          >
-            Clear filters
-          </button>
-        )}
+        {/* Filters on Right Side */}
+        <div className="flex flex-wrap items-center gap-2.5 sm:justify-end">
+          <FilterSelect
+            label="All Types"
+            value={filterType}
+            onChange={handleFilterChange(setFilterType)}
+            options={TYPES}
+          />
+          <FilterSelect
+            label="All Statuses"
+            value={filterStatus}
+            onChange={handleFilterChange(setFilterStatus)}
+            options={STATUSES}
+          />
+          {(filterType || filterStatus) && (
+            <button
+              onClick={() => { setFilterType(''); setFilterStatus(''); setPage(1) }}
+              className="px-3 py-2 text-xs sm:text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg border border-red-200 transition-colors cursor-pointer"
+            >
+              Clear filters
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Error */}
@@ -153,17 +155,18 @@ export default function ContactsPage() {
       )}
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-slate-100">
             <thead className="bg-slate-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider hidden sm:table-cell">Email / Phone</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider hidden md:table-cell">Type</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                <th className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider hidden lg:table-cell">Date</th>
-                <th className="px-4 py-3 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
+                <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
+                <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th>
+                <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Phone</th>
+                <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Type</th>
+                <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
+                <th className="px-4 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
 
@@ -171,8 +174,8 @@ export default function ContactsPage() {
               {loading ? (
                 Array.from({ length: 8 }).map((_, i) => (
                   <tr key={i}>
-                    {[...Array(6)].map((__, j) => (
-                      <td key={j} className="px-4 py-3">
+                    {[...Array(7)].map((__, j) => (
+                      <td key={j} className="px-4 py-3.5">
                         <div className="h-4 bg-slate-100 rounded animate-pulse w-full" />
                       </td>
                     ))}
@@ -180,7 +183,7 @@ export default function ContactsPage() {
                 ))
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-16 text-center">
+                  <td colSpan={7} className="px-4 py-16 text-center">
                     <div className="flex flex-col items-center gap-2 text-slate-400">
                       <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"
@@ -201,42 +204,48 @@ export default function ContactsPage() {
                     className="hover:bg-slate-50 cursor-pointer transition-colors"
                   >
                     {/* Name */}
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs font-bold shrink-0">
+                    <td className="px-4 py-3.5 whitespace-nowrap">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-xs font-bold shrink-0">
                           {contact.name?.[0]?.toUpperCase() || '?'}
                         </div>
-                        <span className="text-sm font-medium text-slate-800 truncate max-w-[120px] sm:max-w-[180px]">
+                        <span className="text-sm font-medium text-slate-800">
                           {contact.name}
                         </span>
                       </div>
                     </td>
 
-                    {/* Email / Phone */}
-                    <td className="px-4 py-3 hidden sm:table-cell">
-                      <p className="text-sm text-slate-700 truncate max-w-[180px]">{contact.email}</p>
-                      {contact.phone && (
-                        <p className="text-xs text-slate-400 mt-0.5">{contact.phone}</p>
-                      )}
+                    {/* Email */}
+                    <td className="px-4 py-3.5 whitespace-nowrap">
+                      <span className="text-sm text-slate-700">
+                        {contact.email || '—'}
+                      </span>
+                    </td>
+
+                    {/* Phone */}
+                    <td className="px-4 py-3.5 whitespace-nowrap">
+                      <span className="text-sm text-slate-600 font-mono">
+                        {contact.phone || '—'}
+                      </span>
                     </td>
 
                     {/* Type */}
-                    <td className="px-4 py-3 hidden md:table-cell">
+                    <td className="px-4 py-3.5 whitespace-nowrap">
                       <Badge label={contact.type} styleMap={TYPE_STYLES} />
                     </td>
 
                     {/* Status */}
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3.5 whitespace-nowrap">
                       <Badge label={contact.status} styleMap={STATUS_STYLES} />
                     </td>
 
                     {/* Date */}
-                    <td className="px-4 py-3 text-sm text-slate-500 hidden lg:table-cell">
+                    <td className="px-4 py-3.5 whitespace-nowrap text-sm text-slate-500">
                       {formatDate(contact.created_at)}
                     </td>
 
                     {/* Actions */}
-                    <td className="px-4 py-3 text-right" onClick={e => e.stopPropagation()}>
+                    <td className="px-4 py-3.5 whitespace-nowrap text-right" onClick={e => e.stopPropagation()}>
                       <button
                         onClick={() => setDeleteTarget(contact)}
                         className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"

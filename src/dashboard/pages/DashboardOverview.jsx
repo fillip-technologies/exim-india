@@ -22,10 +22,11 @@ export default function DashboardOverview() {
   const navigate = useNavigate()
 
   const [stats, setStats] = useState({
-    categories: null,
-    products:   null,
-    contacts:   null,
-    newCount:   0,
+    categories:   null,
+    products:     null,
+    contacts:     null,
+    testimonials: null,
+    newCount:     0,
   })
   const [recentContacts, setRecentContacts] = useState([])
   const [loading, setLoading]               = useState(true)
@@ -34,20 +35,23 @@ export default function DashboardOverview() {
   const fetchStats = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true)
     try {
-      const [categories, products, contacts] = await Promise.all([
-        http.get('/admin/categories'),
-        http.get('/admin/products'),
-        http.get('/admin/contacts'),
+      const [categories, products, contacts, testimonials] = await Promise.all([
+        http.get('/admin/categories').catch(() => []),
+        http.get('/admin/products').catch(() => ({ total: 0 })),
+        http.get('/admin/contacts').catch(() => ({ data: [] })),
+        http.get('/admin/testimonials').catch(() => []),
       ])
 
-      const contactsList = contacts?.data || []
-      const newItems     = contactsList.filter(c => c.status === 'new').length
+      const contactsList     = contacts?.data || []
+      const newItems         = contactsList.filter(c => c.status === 'new').length
+      const testimonialsList = Array.isArray(testimonials) ? testimonials : testimonials?.data || []
 
       setStats({
-        categories: Array.isArray(categories) ? categories.length : categories?.length ?? 0,
-        products:   products?.total ?? products?.data?.length ?? 0,
-        contacts:   contacts?.total ?? contactsList.length ?? 0,
-        newCount:   newItems,
+        categories:   Array.isArray(categories) ? categories.length : categories?.length ?? 0,
+        products:     products?.total ?? products?.data?.length ?? 0,
+        contacts:     contacts?.total ?? contactsList.length ?? 0,
+        testimonials: testimonialsList.length,
+        newCount:     newItems,
       })
 
       setRecentContacts(contactsList.slice(0, 5))
@@ -106,83 +110,9 @@ export default function DashboardOverview() {
       </div>
 
       {/* ── 2. Stat Cards Grid ─────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         
-        {/* Categories & Products will be integrated in future phases:
-        <Link
-          to="/dashboard/categories"
-          className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-100 group-hover:scale-105 transition-transform">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-            </div>
-            <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
-              Active
-            </span>
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Categories
-            </p>
-            {loading ? (
-              <div className="h-8 w-20 bg-slate-100 rounded animate-pulse" />
-            ) : (
-              <p className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                {stats.categories ?? '—'}
-              </p>
-            )}
-            <p className="text-[11px] text-slate-400 font-medium mt-1">
-              Product classifications
-            </p>
-          </div>
-          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold group-hover:text-emerald-700">
-            <span>Browse Categories</span>
-            <span className="group-hover:translate-x-1 transition-transform">→</span>
-          </div>
-        </Link>
-
-        <Link
-          to="/dashboard/products"
-          className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col justify-between"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-100 group-hover:scale-105 transition-transform">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                  d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-            </div>
-            <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
-              In Stock
-            </span>
-          </div>
-          <div>
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Catalog Products
-            </p>
-            {loading ? (
-              <div className="h-8 w-20 bg-slate-100 rounded animate-pulse" />
-            ) : (
-              <p className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-                {stats.products ?? '—'}
-              </p>
-            )}
-            <p className="text-[11px] text-slate-400 font-medium mt-1">
-              Food dyes & chemicals
-            </p>
-          </div>
-          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold group-hover:text-blue-700">
-            <span>View All Products</span>
-            <span className="group-hover:translate-x-1 transition-transform">→</span>
-          </div>
-        </Link>
-        */}
-
-        {/* Card 3: Total Inquiries */}
+        {/* Card 1: Total Inquiries */}
         <Link
           to="/dashboard/contacts"
           className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-amber-300 transition-all duration-300 flex flex-col justify-between"
@@ -219,7 +149,7 @@ export default function DashboardOverview() {
           </div>
         </Link>
 
-        {/* Card 4: New / Pending Leads */}
+        {/* Card 2: New / Pending Leads */}
         <Link
           to="/dashboard/contacts?status=new"
           className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-red-300 transition-all duration-300 flex flex-col justify-between"
@@ -252,6 +182,40 @@ export default function DashboardOverview() {
           </div>
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold group-hover:text-red-600">
             <span>Filter New Leads</span>
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </Link>
+
+        {/* Card 3: Client Testimonials */}
+        <Link
+          to="/dashboard/testimonials"
+          className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-800 flex items-center justify-center border border-emerald-100 group-hover:scale-105 transition-transform text-lg">
+              💬
+            </div>
+            <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100">
+              Homepage
+            </span>
+          </div>
+          <div>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Client Testimonials
+            </p>
+            {loading ? (
+              <div className="h-8 w-20 bg-slate-100 rounded animate-pulse" />
+            ) : (
+              <p className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {stats.testimonials ?? '—'}
+              </p>
+            )}
+            <p className="text-[11px] text-slate-400 font-medium mt-1">
+              Reviews & global endorsements
+            </p>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold group-hover:text-emerald-800">
+            <span>Manage Testimonials</span>
             <span className="group-hover:translate-x-1 transition-transform">→</span>
           </div>
         </Link>
@@ -365,6 +329,13 @@ export default function DashboardOverview() {
                   path: '/dashboard/contacts',
                   icon: '✉',
                   color: 'bg-emerald-50 text-[#0a3622] border-emerald-100',
+                },
+                {
+                  title: 'Client Testimonials',
+                  desc: 'Add, edit & review customer quotes',
+                  path: '/dashboard/testimonials',
+                  icon: '💬',
+                  color: 'bg-teal-50 text-teal-800 border-teal-100',
                 },
                 // Categories & Products will be integrated later:
                 // {

@@ -1,10 +1,64 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { getTestimonials } from '../../api'
+
+// Static fallback avatars (used when the API testimonial has no avatar URL)
 import avatar1 from '../../assets/avatar-1.jpg'
 import avatar2 from '../../assets/avatar-2.jpg'
 import avatar3 from '../../assets/avatar-3.jpg'
 import avatar4 from '../../assets/avatar-4.jpg'
 import avatar5 from '../../assets/avatar-5.jpg'
+
+const FALLBACK_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5]
+
+/** Static seed — shown while the API is loading or if it fails */
+const STATIC_TESTIMONIALS = [
+  {
+    id: 0,
+    name: 'Marcus Vance',
+    role: 'Director of Global Procurement',
+    company: 'BevTech Innovations Europe (Frankfurt, Germany)',
+    avatar: avatar1,
+    quote:
+      'We have sourced synthetic food colours and aluminium lake pigments from Exim India for over six years. Their batch consistency and fast regulatory dossiers make EU customs clearance completely seamless.',
+  },
+  {
+    id: 1,
+    name: 'Dr. Amira El-Sayed',
+    role: 'Head of Quality & Formulations',
+    company: 'Gulf Confectionery & Bakery Ltd. (Dubai, UAE)',
+    avatar: avatar2,
+    quote:
+      "We tested Exim India's cloud emulsions and lake colours across our gummy lines. The color stability under high heat exceeded our benchmark, and express evaluation samples always arrive within 48 hours.",
+  },
+  {
+    id: 2,
+    name: 'Robert M. Davies',
+    role: 'VP of Supply Chain & QA',
+    company: 'Apex Health & Pharma Formulations (Toronto, Canada)',
+    avatar: avatar3,
+    quote:
+      "Our pharmaceutical operations demand strict USP/EP certified purity for tablet coatings. Exim India's airtight fiber drums and detailed COA heavy-metal screening give our QA audit team complete confidence.",
+  },
+  {
+    id: 3,
+    name: 'Kenji Takahashi',
+    role: 'Chief Formulation Chemist',
+    company: 'Nippon Flavours & Ingredients (Osaka, Japan)',
+    avatar: avatar4,
+    quote:
+      'We audited dozens of colour suppliers before qualifying Exim India. Their Lake Tartrazine and botanical extracts consistently match Japan\'s strict Food Sanitation Law standards with zero batch variance.',
+  },
+  {
+    id: 4,
+    name: 'Claire Harrington',
+    role: 'Head of Ingredients Sourcing',
+    company: 'Britannia Food & Beverage Group (London, UK)',
+    avatar: avatar5,
+    quote:
+      'From water-soluble FD&C dyes to custom spray-dried fruit flavour compounds, Exim India provides prompt sea-freight dispatch and flawless documentation. By far our most dependable export partner.',
+  },
+]
 
 export default function TestimonialsSection() {
   const [activeIndex, setActiveIndex] = useState(0) // Top visible item index (0..4)
@@ -12,53 +66,39 @@ export default function TestimonialsSection() {
   const [isPaused, setIsPaused] = useState(false)
   const autoPlayRef = useRef(null)
 
-  const testimonials = [
-    {
-      id: 0,
-      name: 'Marcus Vance',
-      role: 'Director of Global Procurement',
-      company: 'BevTech Innovations Europe (Frankfurt, Germany)',
-      avatar: avatar1,
-      quote:
-        'We have sourced synthetic food colours and aluminium lake pigments from Exim India for over six years. Their batch consistency and fast regulatory dossiers make EU customs clearance completely seamless.',
-    },
-    {
-      id: 1,
-      name: 'Dr. Amira El-Sayed',
-      role: 'Head of Quality & Formulations',
-      company: 'Gulf Confectionery & Bakery Ltd. (Dubai, UAE)',
-      avatar: avatar2,
-      quote:
-        'We tested Exim India’s cloud emulsions and lake colours across our gummy lines. The color stability under high heat exceeded our benchmark, and express evaluation samples always arrive within 48 hours.',
-    },
-    {
-      id: 2,
-      name: 'Robert M. Davies',
-      role: 'VP of Supply Chain & QA',
-      company: 'Apex Health & Pharma Formulations (Toronto, Canada)',
-      avatar: avatar3,
-      quote:
-        'Our pharmaceutical operations demand strict USP/EP certified purity for tablet coatings. Exim India’s airtight fiber drums and detailed COA heavy-metal screening give our QA audit team complete confidence.',
-    },
-    {
-      id: 3,
-      name: 'Kenji Takahashi',
-      role: 'Chief Formulation Chemist',
-      company: 'Nippon Flavours & Ingredients (Osaka, Japan)',
-      avatar: avatar4,
-      quote:
-        'We audited dozens of colour suppliers before qualifying Exim India. Their Lake Tartrazine and botanical extracts consistently match Japan’s strict Food Sanitation Law standards with zero batch variance.',
-    },
-    {
-      id: 4,
-      name: 'Claire Harrington',
-      role: 'Head of Ingredients Sourcing',
-      company: 'Britannia Food & Beverage Group (London, UK)',
-      avatar: avatar5,
-      quote:
-        'From water-soluble FD&C dyes to custom spray-dried fruit flavour compounds, Exim India provides prompt sea-freight dispatch and flawless documentation. By far our most dependable export partner.',
-    },
-  ]
+  // ── API-driven testimonials (falls back to static seed on error) ────
+  const [testimonials, setTestimonials] = useState(STATIC_TESTIMONIALS)
+
+  useEffect(() => {
+    let cancelled = false
+
+    getTestimonials()
+      .then(({ data }) => {
+        if (cancelled || !data?.length) return
+
+        // Normalise API shape → component shape.
+        // API resource: { id, name, role, company, avatar (URL|null), quote }
+        const mapped = data.map((t, i) => ({
+          id:      t.id,
+          name:    t.name,
+          role:    t.role    ?? '',
+          company: t.company ?? '',
+          // Use API avatar URL when present; fall back to a bundled local asset
+          avatar:  t.avatar  ?? FALLBACK_AVATARS[i % FALLBACK_AVATARS.length],
+          quote:   t.quote,
+        }))
+
+        setTestimonials(mapped)
+        setActiveIndex(0) // reset carousel position after fresh data
+      })
+      .catch(() => {
+        // Backend unavailable — silently keep the static seed
+        if (!cancelled) setTestimonials(STATIC_TESTIMONIALS)
+      })
+
+    return () => { cancelled = true }
+  }, [])
+
 
   // Clone first 3 items at the end to allow seamless infinite upward slide
   const displayItems = [...testimonials, ...testimonials.slice(0, 3)]

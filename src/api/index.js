@@ -37,3 +37,15 @@ export {
   updateContactStatus,
   deleteContact,
 }                                               from './contacts'
+
+// Testimonials endpoints
+export {
+  getTestimonials,
+  adminGetTestimonials,
+  adminGetTestimonial,
+  adminCreateTestimonial,
+  adminUpdateTestimonial,
+  adminPatchTestimonial,
+  adminDeleteTestimonial,
+  adminUploadImage,
+}                                               from './testimonials'

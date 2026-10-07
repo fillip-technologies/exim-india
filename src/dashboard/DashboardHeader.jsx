@@ -31,6 +31,7 @@ export default function DashboardHeader({ onOpenSidebar = () => {} }) {
     if (path === '/dashboard') return { title: 'Dashboard Overview', subtitle: 'Real-time platform metrics & activity' }
     if (path.startsWith('/dashboard/contacts/')) return { title: 'Inquiry Details', subtitle: 'View customer request' }
     if (path === '/dashboard/contacts') return { title: 'Contacts & Inquiries', subtitle: 'Manage received export leads' }
+    if (path === '/dashboard/testimonials') return { title: 'Client Testimonials', subtitle: 'Manage customer quotes & homepage reviews' }
     if (path === '/dashboard/categories') return { title: 'Product Categories', subtitle: 'Manage catalogue classifications' }
     if (path === '/dashboard/products') return { title: 'Products Directory', subtitle: 'Browse active chemical & color listings' }
     return { title: 'Admin Console', subtitle: 'Exim India Corporation' }
