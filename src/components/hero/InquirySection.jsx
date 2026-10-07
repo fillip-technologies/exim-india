@@ -121,6 +121,21 @@ export default function InquirySection() {
                 <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
                   Contact us if you need further assistance.
                 </p>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2.5 text-xs text-slate-600">
+                  <div className="flex items-center gap-1.5 font-semibold text-slate-800">
+                    <span>📞</span>
+                    <a href="tel:+917977523176" className="hover:text-[#eb4738] transition-colors">+91 79775 23176</a>
+                    <span className="text-slate-400">/</span>
+                    <a href="tel:+919892364600" className="hover:text-[#eb4738] transition-colors">+91 98923 64600</a>
+                  </div>
+                  <span className="text-slate-300 hidden sm:inline">•</span>
+                  <div className="flex items-center gap-1.5 text-slate-600">
+                    <span>✉</span>
+                    <a href="mailto:info@eximindiacorporation.com" className="hover:text-[#eb4738] transition-colors">info@eximindiacorporation.com</a>
+                    <span className="text-slate-400">/</span>
+                    <a href="mailto:eximindiacorp@gmail.com" className="hover:text-[#eb4738] transition-colors">eximindiacorp@gmail.com</a>
+                  </div>
+                </div>
               </div>
 
               {submitted ? (

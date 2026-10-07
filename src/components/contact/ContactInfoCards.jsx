@@ -8,10 +8,8 @@ export default function ContactInfoCards() {
       address:
         'San Mamede Cottage, Flat No. 1, 1st Floor, Cross Road No. 4, I. C. Colony, Borivali West, Mumbai, Maharashtra 400103, India.',
       phones: [
-        { label: 'Mr. Sanjay Shenoy (Partner)', number: '+91 98927 00271', wa: '919892700271' },
-        { label: "Mr. Clifford D'Souza (Partner)", number: '+91 98923 64600', wa: '919892364600' },
-        { label: 'Mr. Narayan Tari (General Manager)', number: '+91 98673 42704', wa: '919867342704' },
-        { label: 'Board Line Tel', number: '+91 22 2892 5032' },
+        { label: 'Mobile / WhatsApp', number: '+91 79775 23176', wa: '917977523176' },
+        { label: 'Direct Line / WhatsApp', number: '+91 98923 64600', wa: '919892364600' },
       ],
       emails: ['info@eximindiacorporation.com', 'eximindiacorp@gmail.com'],
       badgeColor: 'bg-emerald-50 text-emerald-800 border-emerald-200',
@@ -26,7 +24,7 @@ export default function ContactInfoCards() {
       phones: [
         { label: 'Direct UAE Liaison Line', number: '+971 50 802 7804', wa: '971508027804' },
       ],
-      emails: ['info@eximindiacorporation.com'],
+      emails: ['info@eximindiacorporation.com', 'eximindiacorp@gmail.com'],
       badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
       note: 'Serving GCC, Levant, Middle Eastern & African trade partners with regional coordination.',
     },
@@ -42,7 +40,7 @@ export default function ContactInfoCards() {
       phones: [
         { label: 'Logistics Dispatch Desk', number: '+91 22 2892 5032' },
       ],
-      emails: ['exports@eximindiacorp.com'],
+      emails: ['info@eximindiacorporation.com', 'eximindiacorp@gmail.com'],
       badgeColor: 'bg-blue-50 text-blue-800 border-blue-200',
       note: 'Prime transit corridors connected directly to JNPT Nhava Sheva Sea Port and Mumbai Air Cargo.',
     },

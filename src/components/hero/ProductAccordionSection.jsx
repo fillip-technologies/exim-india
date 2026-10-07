@@ -4,8 +4,9 @@ import { useState } from 'react'
 import colorProductImg from '../../assets/home/color-product.jpg'
 import cosmeticProductImg from '../../assets/home/coesmtic-product.jpg'
 import makeupProductImg from '../../assets/home/makeup-product.jpg'
-import bakeryProductImg from '../../assets/home/bakery-decorations-products.jpg'
-import sprinklesProductImg from '../../assets/home/sprinkles-color.jpg'
+import medicineImg2 from '../../assets/home/medicine-image-2.jpg'
+import medicineImg1 from '../../assets/home/medicine-image-1.jpg'
+import medicineImg from '../../assets/home/medicine-image.jpg'
 import oilProductImg from '../../assets/home/oil-product.jpg'
 import pearlsProductImg from '../../assets/home/edible-pearls-non-pareils-dragees-sugar-ball-silver.jpg'
 import sugarCraftsImg from '../../assets/home/sugar-crafts-vermacili.jpg'
@@ -44,11 +45,12 @@ export default function ProductAccordionSection() {
     {
       id: 3,
       number: '03',
-      verticalTitle: 'BAKERY & SPRINKLES',
-      primaryImage: bakeryProductImg,
+      verticalTitle: 'PHARMACEUTICAL COLOURS',
+      primaryImage: medicineImg2,
       altImages: [
-        { label: 'Bakery', src: bakeryProductImg },
-        { label: 'Sprinkles', src: sprinklesProductImg },
+        { label: 'Capsules', src: medicineImg2 },
+        { label: 'Tablets', src: medicineImg1 },
+        { label: 'Medicine', src: medicineImg },
       ],
       gradient: 'from-[#ea580c] via-[#c2410c] to-[#431407]',
       accentColor: '#fb923c',

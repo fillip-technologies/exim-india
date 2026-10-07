@@ -47,10 +47,13 @@ export default function OrderModal({ isOpen, onClose, product }) {
             <p className="text-xs text-slate-600">
               Thank you, <span className="font-bold text-slate-900">{orderForm.name}</span>. Our export specialist will contact you with shipment schedules for {product.name}.
             </p>
+            <p className="text-[11px] text-slate-500 pt-1">
+              For urgent inquiries, call <a href="tel:+917977523176" className="font-semibold text-slate-800 hover:text-emerald-700">+91 79775 23176</a> / <a href="tel:+919892364600" className="font-semibold text-slate-800 hover:text-emerald-700">+91 98923 64600</a> or email <a href="mailto:info@eximindiacorporation.com" className="font-semibold text-slate-800 hover:text-emerald-700">info@eximindiacorporation.com</a> / <a href="mailto:eximindiacorp@gmail.com" className="font-semibold text-slate-800 hover:text-emerald-700">eximindiacorp@gmail.com</a>.
+            </p>
             <button
               type="button"
               onClick={handleClose}
-              className="mt-3 px-5 py-2 rounded-xl bg-[#337ab7] text-white text-xs font-bold transition-all cursor-pointer"
+              className="mt-3 px-5 py-2 rounded-xl bg-[#0a3622] text-white text-xs font-bold transition-all cursor-pointer"
             >
               Close
             </button>
@@ -106,7 +109,7 @@ export default function OrderModal({ isOpen, onClose, product }) {
                 <input
                   type="tel"
                   required
-                  placeholder="+91 98765 43210"
+                  placeholder="+91 79775 23176 / +91 98923 64600"
                   value={orderForm.phone}
                   onChange={(e) => setOrderForm({ ...orderForm, phone: e.target.value })}
                   className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:border-emerald-600 focus:outline-none"
@@ -139,20 +142,25 @@ export default function OrderModal({ isOpen, onClose, product }) {
               ></textarea>
             </div>
 
-            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
-              <button
-                type="button"
-                onClick={handleClose}
-                className="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-800 cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-5 py-2 rounded-lg bg-[#0a3622] hover:bg-[#0f4d30] text-white text-xs font-bold shadow-xs cursor-pointer transition-all"
-              >
-                Submit Inquiry
-              </button>
+            <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-100">
+              <span className="text-[11px] text-slate-500">
+                Helpline: <a href="tel:+917977523176" className="font-semibold text-slate-700 hover:text-emerald-700">+91 79775 23176</a> / <a href="tel:+919892364600" className="font-semibold text-slate-700 hover:text-emerald-700">+91 98923 64600</a>
+              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="px-4 py-2 text-xs font-bold text-slate-600 hover:text-slate-800 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 rounded-lg bg-[#0a3622] hover:bg-[#0f4d30] text-white text-xs font-bold shadow-xs cursor-pointer transition-all"
+                >
+                  Submit Inquiry
+                </button>
+              </div>
             </div>
           </form>
         )}

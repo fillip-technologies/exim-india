@@ -231,7 +231,7 @@ export default function ProductDetailModal({ product, isOpen, onClose, initialMo
                         required
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+971 50 123 4567"
+                        placeholder="+91 79775 23176 / +91 98923 64600"
                         className="w-full px-3 py-2 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-700/30"
                       />
                     </div>

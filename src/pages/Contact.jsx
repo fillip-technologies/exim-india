@@ -51,24 +51,18 @@ export default function Contact() {
                   <div>
                     <h3 className="font-bold text-slate-900 text-base">Call Us Directly</h3>
                     <div className="mt-1 space-y-1 text-xs sm:text-sm">
-                      <p className="text-slate-700">
-                        <span className="text-slate-500">Board Line: </span>
-                        <a href="tel:+912228925032" className="font-semibold text-slate-900 hover:text-[#0a3622]">
-                          +91 22 2892 5032
-                        </a>
-                      </p>
-                      <p className="text-slate-700">
-                        <span className="text-slate-500">Mr. Sanjay Shenoy: </span>
-                        <a href="tel:+919892700271" className="font-semibold text-slate-900 hover:text-[#0a3622]">
-                          +91 98927 00271
-                        </a>
-                      </p>
-                      <p className="text-slate-700">
-                        <span className="text-slate-500">Mr. Clifford D&apos;Souza: </span>
-                        <a href="tel:+919892364600" className="font-semibold text-slate-900 hover:text-[#0a3622]">
-                          +91 98923 64600
-                        </a>
-                      </p>
+                      <a
+                        href="tel:+917977523176"
+                        className="block font-semibold text-slate-900 hover:text-[#0a3622]"
+                      >
+                        +91 79775 23176
+                      </a>
+                      <a
+                        href="tel:+919892364600"
+                        className="block font-semibold text-slate-900 hover:text-[#0a3622]"
+                      >
+                        +91 98923 64600
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -89,7 +83,7 @@ export default function Contact() {
                       </a>
                       <a
                         href="mailto:eximindiacorp@gmail.com"
-                        className="block text-slate-600 hover:text-[#0a3622]"
+                        className="block font-semibold text-slate-900 hover:text-[#0a3622]"
                       >
                         eximindiacorp@gmail.com
                       </a>
@@ -99,16 +93,30 @@ export default function Contact() {
               </div>
 
               {/* WhatsApp Quick Chat */}
-              <div className="pt-4 border-t border-slate-100">
-                <a
-                  href="https://wa.me/919892700271?text=Hello%20Exim%20India,%20I%20am%20interested%20in%20your%20products."
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-[#0a3622] hover:bg-[#15803d] text-white text-xs font-bold transition-all shadow-xs"
-                >
-                  <span>💬</span>
-                  <span>Chat with Us on WhatsApp</span>
-                </a>
+              <div className="pt-4 border-t border-slate-100 space-y-2">
+                <span className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  Instant WhatsApp Chat
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <a
+                    href="https://wa.me/917977523176?text=Hello%20Exim%20India,%20I%20am%20interested%20in%20your%20products."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#0a3622] hover:bg-[#15803d] text-white text-xs font-bold transition-all shadow-xs"
+                  >
+                    <span>💬</span>
+                    <span>+91 79775 23176</span>
+                  </a>
+                  <a
+                    href="https://wa.me/919892364600?text=Hello%20Exim%20India,%20I%20am%20interested%20in%20your%20products."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#0a3622] hover:bg-[#15803d] text-white text-xs font-bold transition-all shadow-xs"
+                  >
+                    <span>💬</span>
+                    <span>+91 98923 64600</span>
+                  </a>
+                </div>
               </div>
             </div>
 

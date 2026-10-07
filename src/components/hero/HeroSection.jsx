@@ -244,14 +244,21 @@ export default function HeroSection() {
 
           {/* CTA Action Buttons */}
           <div className="flex flex-wrap items-center gap-2.5 sm:gap-3.5 pt-1">
-            {/* Primary Green Button using React Router Link */}
-            <Link
-              to="/products"
-              className="hero-cta-btn inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#0a3622] hover:bg-[#0f4d30] text-white px-4.5 sm:px-5.5 py-2.5 sm:py-2.5 text-xs sm:text-sm font-bold sm:font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+            {/* Primary Green Button: Smooth scroll to homepage products section */}
+            <a
+              href="#products-section"
+              onClick={(e) => {
+                e.preventDefault()
+                const target = document.getElementById('products-section')
+                if (target) {
+                  target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                }
+              }}
+              className="hero-cta-btn inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#0a3622] hover:bg-[#0f4d30] text-white px-4.5 sm:px-5.5 py-2.5 sm:py-2.5 text-xs sm:text-sm font-bold sm:font-semibold shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 cursor-pointer"
             >
               <span>Explore Our Products</span>
               <span className="text-sm">&rarr;</span>
-            </Link>
+            </a>
           </div>
 
           {/* Slide Navigation Controls: Previous / Next & Active Pill Dots */}

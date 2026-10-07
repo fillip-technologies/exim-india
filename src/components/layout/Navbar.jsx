@@ -156,7 +156,7 @@ export default function Navbar() {
               to="/contact"
               className="nav-cta-btn hidden sm:inline-flex items-center justify-center rounded-full bg-[#0a3622] hover:bg-[#0f4d30] text-white px-5 py-2 text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all active:scale-95"
             >
-              Export Inquiry &rarr;
+              Enquire Now &rarr;
             </Link>
 
             {/* Mobile Menu Toggle Button */}
@@ -210,13 +210,31 @@ export default function Navbar() {
             ))}
           </div>
 
-          <div className="pt-3 border-t border-slate-100 mt-3">
+          <div className="pt-3 border-t border-slate-100 mt-3 space-y-2.5">
+            {/* Quick Contact Info */}
+            <div className="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-100/80 text-[11px] text-slate-700 space-y-1">
+              <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                <span>📞</span>
+                <a href="tel:+917977523176" className="hover:text-emerald-800">+91 79775 23176</a>
+                <span className="text-slate-400">/</span>
+                <a href="tel:+919892364600" className="hover:text-emerald-800">+91 98923 64600</a>
+              </div>
+              <div className="flex flex-col gap-0.5 text-slate-600">
+                <a href="mailto:info@eximindiacorporation.com" className="hover:text-emerald-800 truncate">
+                  ✉ info@eximindiacorporation.com
+                </a>
+                <a href="mailto:eximindiacorp@gmail.com" className="hover:text-emerald-800 truncate">
+                  ✉ eximindiacorp@gmail.com
+                </a>
+              </div>
+            </div>
+
             <Link
               to="/contact"
               onClick={() => setMobileMenuOpen(false)}
               className="block w-full text-center rounded-xl bg-[#0a3622] hover:bg-[#0f4d30] text-white py-3 text-xs sm:text-sm font-bold shadow-md transition-all active:scale-95"
             >
-              Export Inquiry &rarr;
+              Enquire Now &rarr;
             </Link>
           </div>
         </div>

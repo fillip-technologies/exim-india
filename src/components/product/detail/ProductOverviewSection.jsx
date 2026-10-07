@@ -75,12 +75,20 @@ export default function ProductOverviewSection({ product, onOrderClick }) {
               WA
             </a>
             <a
-              href="mailto:eximindiacorp@gmail.com"
-              title="Send Email"
+              href={`mailto:info@eximindiacorporation.com?cc=eximindiacorp@gmail.com&subject=${encodeURIComponent('Inquiry: ' + product.name)}`}
+              title="Email: info@eximindiacorporation.com / eximindiacorp@gmail.com"
               className="w-8 h-8 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-800 hover:text-white flex items-center justify-center transition-colors font-bold text-xs"
             >
               ✉
             </a>
+          </div>
+
+          {/* Quick Contact Helpline */}
+          <div className="pt-1 text-[11px] text-slate-500">
+            <span>Direct helpline: </span>
+            <a href="tel:+917977523176" className="font-semibold text-slate-700 hover:text-[#0a3622]">+91 79775 23176</a>
+            <span> / </span>
+            <a href="tel:+919892364600" className="font-semibold text-slate-700 hover:text-[#0a3622]">+91 98923 64600</a>
           </div>
         </div>
 

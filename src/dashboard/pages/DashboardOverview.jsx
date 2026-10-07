@@ -106,9 +106,9 @@ export default function DashboardOverview() {
       </div>
 
       {/* ── 2. Stat Cards Grid ─────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         
-        {/* Card 1: Categories */}
+        {/* Categories & Products will be integrated in future phases:
         <Link
           to="/dashboard/categories"
           className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between"
@@ -145,7 +145,6 @@ export default function DashboardOverview() {
           </div>
         </Link>
 
-        {/* Card 2: Products */}
         <Link
           to="/dashboard/products"
           className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col justify-between"
@@ -181,6 +180,7 @@ export default function DashboardOverview() {
             <span className="group-hover:translate-x-1 transition-transform">→</span>
           </div>
         </Link>
+        */}
 
         {/* Card 3: Total Inquiries */}
         <Link
@@ -366,20 +366,21 @@ export default function DashboardOverview() {
                   icon: '✉',
                   color: 'bg-emerald-50 text-[#0a3622] border-emerald-100',
                 },
-                {
-                  title: 'Product Catalog',
-                  desc: 'Browse food colors & formulations',
-                  path: '/dashboard/products',
-                  icon: '📦',
-                  color: 'bg-blue-50 text-blue-700 border-blue-100',
-                },
-                {
-                  title: 'Categories',
-                  desc: 'Manage product group listings',
-                  path: '/dashboard/categories',
-                  icon: '📂',
-                  color: 'bg-purple-50 text-purple-700 border-purple-100',
-                },
+                // Categories & Products will be integrated later:
+                // {
+                //   title: 'Product Catalog',
+                //   desc: 'Browse food colors & formulations',
+                //   path: '/dashboard/products',
+                //   icon: '📦',
+                //   color: 'bg-blue-50 text-blue-700 border-blue-100',
+                // },
+                // {
+                //   title: 'Categories',
+                //   desc: 'Manage product group listings',
+                //   path: '/dashboard/categories',
+                //   icon: '📂',
+                //   color: 'bg-purple-50 text-purple-700 border-purple-100',
+                // },
                 {
                   title: 'Live Storefront',
                   desc: 'View public customer experience',
@@ -417,28 +418,7 @@ export default function DashboardOverview() {
             </div>
           </div>
 
-          {/* System Health Card */}
-          <div className="bg-gradient-to-br from-[#0a3622] to-[#0f4d30] rounded-3xl p-5 sm:p-6 text-white shadow-md space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-200 bg-white/10 px-2.5 py-0.5 rounded-full">
-                Security & Health
-              </span>
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-300" />
-              </span>
-            </div>
-            <h3 className="text-base font-bold">
-              Protected Admin Session
-            </h3>
-            <p className="text-xs text-emerald-100/90 leading-relaxed">
-              Your Sanctum auth token is securely stored and authenticated for all API requests.
-            </p>
-            <div className="pt-1 border-t border-emerald-700/50 flex items-center justify-between text-[11px] text-emerald-200">
-              <span>Database: MySQL Connected</span>
-              <span>API: RESTful v1</span>
-            </div>
-          </div>
+
 
         </div>
 

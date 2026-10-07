@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, useLocation } from 'react-router-dom'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import WhatsAppButton from './components/common/WhatsAppButton'
 import './index.css'
 import App from './App.jsx'
 
@@ -24,6 +25,7 @@ function MainLayout() {
         <App />
       </main>
       <Footer />
+      <WhatsAppButton />
     </div>
   )
 }

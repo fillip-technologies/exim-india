@@ -33,7 +33,7 @@ export default function ContactLogisticsFaq() {
       sub: 'Corporate Headquarters & Commercial Directorate',
       address: 'San Mamede Cottage, Flat No. 1, 1st Floor, Cross Road No. 4, I. C. Colony, Borivali West, Mumbai - 400103, Maharashtra, India',
       hours: 'Mon – Sat: 09:30 AM – 06:30 PM IST (GMT +5:30)',
-      phone: '+91 22 2892 5032 / +91 98927 00271',
+      phone: '+91 79775 23176 / +91 98923 64600',
       mapQuery: 'https://maps.google.com/maps?q=I.+C.+Colony+Borivali+West+Mumbai+400103&t=&z=15&ie=UTF8&iwloc=&output=embed',
     },
     dubai: {
@@ -218,7 +218,7 @@ export default function ContactLogisticsFaq() {
 
             <div className="pt-6 border-t border-slate-200 mt-6 flex flex-wrap gap-2.5">
               <a
-                href={`https://wa.me/919892700271?text=Hello%20Exim%20India,%20I%20am%20inquiring%20about%20${encodeURIComponent(
+                href={`https://wa.me/917977523176?text=Hello%20Exim%20India,%20I%20am%20inquiring%20about%20${encodeURIComponent(
                   currentLoc.name
                 )}`}
                 target="_blank"
@@ -228,10 +228,10 @@ export default function ContactLogisticsFaq() {
                 Connect on WhatsApp ↗
               </a>
               <a
-                href="mailto:info@eximindiacorporation.com"
+                href="mailto:info@eximindiacorporation.com?cc=eximindiacorp@gmail.com"
                 className="px-4 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-200 text-xs font-bold transition-all shadow-xs"
               >
-                Send Direct Email
+                Email: info / eximindiacorp
               </a>
             </div>
           </div>

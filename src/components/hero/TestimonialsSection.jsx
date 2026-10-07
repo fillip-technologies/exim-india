@@ -15,48 +15,48 @@ export default function TestimonialsSection() {
   const testimonials = [
     {
       id: 0,
-      name: 'Liam Reynolds',
-      role: 'Procurement Director',
-      company: 'BevTech Global Innovations (Germany)',
+      name: 'Marcus Vance',
+      role: 'Director of Global Procurement',
+      company: 'BevTech Innovations Europe (Frankfurt, Germany)',
       avatar: avatar1,
       quote:
-        'Exim India has been our primary research partner for synthetic food colors and lake pigments. Their batch-to-batch consistency and fast regulatory dossiers make customs clearance in the EU seamless.',
+        'We have sourced synthetic food colours and aluminium lake pigments from Exim India for over six years. Their batch consistency and fast regulatory dossiers make EU customs clearance completely seamless.',
     },
     {
       id: 1,
-      name: 'Sarah Bennett',
-      role: 'Quality & Formulations Head',
-      company: 'Gulf Confectionery & Bakery (Dubai, UAE)',
+      name: 'Dr. Amira El-Sayed',
+      role: 'Head of Quality & Formulations',
+      company: 'Gulf Confectionery & Bakery Ltd. (Dubai, UAE)',
       avatar: avatar2,
       quote:
-        'Dear to say when we first tested their cloud emulsions and mango powders, the results exceeded our benchmark. Express evaluation samples always arrive within 48 hours without fail.',
+        'We tested Exim India’s cloud emulsions and lake colours across our gummy lines. The color stability under high heat exceeded our benchmark, and express evaluation samples always arrive within 48 hours.',
     },
     {
       id: 2,
-      name: 'Matthew Downs',
-      role: 'VP Supply Chain & Quality',
-      company: 'Apex Health Formulations (Canada)',
+      name: 'Robert M. Davies',
+      role: 'VP of Supply Chain & QA',
+      company: 'Apex Health & Pharma Formulations (Toronto, Canada)',
       avatar: avatar3,
       quote:
-        'Never at doubt on purity and weight. Our pharmaceutical operations demand IP/USP verified standards and Exim India’s airtight fiber drums provide zero moisture leakage.',
+        'Our pharmaceutical operations demand strict USP/EP certified purity for tablet coatings. Exim India’s airtight fiber drums and detailed COA heavy-metal screening give our QA audit team complete confidence.',
     },
     {
       id: 3,
-      name: 'Kenji Tanaka',
+      name: 'Kenji Takahashi',
       role: 'Chief Formulation Chemist',
-      company: 'Nippon Flavour & Beverage Labs (Tokyo, Japan)',
+      company: 'Nippon Flavours & Ingredients (Osaka, Japan)',
       avatar: avatar4,
       quote:
-        'We tested over a dozen international botanical extract suppliers before qualifying Exim India. Their analytical COA and heavy-metal screening match our strict Japanese food standards.',
+        'We audited dozens of colour suppliers before qualifying Exim India. Their Lake Tartrazine and botanical extracts consistently match Japan’s strict Food Sanitation Law standards with zero batch variance.',
     },
     {
       id: 4,
       name: 'Claire Harrington',
-      role: 'Global Sourcing Lead',
-      company: 'Britannia Ingredients & Oils (London, UK)',
+      role: 'Head of Ingredients Sourcing',
+      company: 'Britannia Food & Beverage Group (London, UK)',
       avatar: avatar5,
       quote:
-        'From cold-pressed citrus oils to custom spray-dried fruit powders, Exim India provides prompt sea-freight booking and flawless documentation. An outstanding and dependable partner.',
+        'From water-soluble FD&C dyes to custom spray-dried fruit flavour compounds, Exim India provides prompt sea-freight dispatch and flawless documentation. By far our most dependable export partner.',
     },
   ]
 

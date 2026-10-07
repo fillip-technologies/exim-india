@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import colorProductImg from '../../assets/home/color-product.jpg'
-import makeupProductImg from '../../assets/home/makeup-product.jpg'
+import medicineImg3 from '../../assets/home/medicine-image-3.webp'
 import oilProductImg from '../../assets/home/oil-product.jpg'
 import cosmeticProductImg from '../../assets/home/coesmtic-product.jpg'
 
@@ -22,12 +22,12 @@ export default function LogisticsSplitSection() {
     },
     {
       id: '02',
-      title: 'Cosmetic & Personal Care Emulsions',
+      title: 'Pharmaceutical Colours & Coatings',
       description:
-        'Dermatologically tested cosmetic bases, stabilizing emulsions, and active formulation ingredients engineered for luxury skincare, lotions, and personal care.',
-      link: '/products/emulsion-flavours',
-      image: makeupProductImg,
-      alt: 'Cosmetic and Personal Care Emulsions',
+        'High-purity pharmaceutical colorants, lake pigments, and tablet coatings compliant with strict IP, BP, and USP pharmacopeia standards for solid and liquid oral dosages.',
+      link: '/products/pharmaceutical-colours',
+      image: medicineImg3,
+      alt: 'Pharmaceutical Colours and Tablet Coatings',
     },
     {
       id: '03',

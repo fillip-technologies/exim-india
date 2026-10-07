@@ -185,7 +185,7 @@ export default function ContactForm() {
                 disabled={loading}
                 value={formData.phone}
                 onChange={handleChange}
-                placeholder="+91 98927 00271"
+                placeholder="+91 79775 23176 / +91 98923 64600"
                 className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0a3622] focus:ring-1 focus:ring-[#0a3622] transition-colors disabled:bg-slate-50 disabled:opacity-60"
               />
             </div>
