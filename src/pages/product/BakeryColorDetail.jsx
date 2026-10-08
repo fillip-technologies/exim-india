@@ -22,6 +22,15 @@ export default function BakeryColorDetail() {
       (id === 'sprinkles-6mm'
         ? BAKERY_PRODUCTS.find((p) => p.id === 'dazzling-sprinkles-6mm')
         : null) ||
+      (id === 'heart-sprinkles' || id === 'sprinkles-hearts' || id === 'hearts-sprinkles'
+        ? BAKERY_PRODUCTS.find((p) => p.id === 'dazzling-sprinkles-hearts')
+        : null) ||
+      (id === 'star-sprinkles' || id === 'sprinkles-stars' || id === 'stars-sprinkles'
+        ? BAKERY_PRODUCTS.find((p) => p.id === 'dazzling-sprinkles-stars')
+        : null) ||
+      (id === 'sprinkles-veremelli' || id === 'sprinkles-vermicelli' || id === 'vermicelli-sprinkles' || id === 'veremelli-sprinkles'
+        ? BAKERY_PRODUCTS.find((p) => p.id === 'dazzling-sprinkles-vermicelli')
+        : null) ||
       BAKERY_PRODUCTS[0]
     )
   }, [id])
@@ -122,34 +131,35 @@ export default function BakeryColorDetail() {
             {/* Gold Divider */}
             <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full" />
 
-            {/* Quick Ball Size Switcher when viewing Sprinkles products */}
+            {/* Quick Shape & Size Switcher when viewing Sprinkles products */}
             {product?.id?.includes('sprinkles') && (
-              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-900 flex items-center justify-center text-sm font-black shrink-0">
-                    ⚪
-                  </span>
-                  <div>
+              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/90 space-y-2.5 shadow-xs">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 border-b border-amber-200/60 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">✨</span>
                     <span className="text-xs font-black uppercase tracking-wider text-amber-950 block font-heading">
-                      Select Ball Diameter / Size
-                    </span>
-                    <span className="text-[11px] text-amber-800">
-                      Calibrated sphere diameters: 1.5mm, 4mm, and 6mm
+                      Dazzling Sprinkles Series &amp; Shapes
                     </span>
                   </div>
+                  <span className="text-[11px] text-amber-800 font-medium">
+                    Select shape, ball diameter or vermicelli strands
+                  </span>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
+                <div className="flex flex-wrap items-center gap-2">
                   {[
-                    { id: 'dazzling-sprinkles', label: '1.5mm Balls' },
-                    { id: 'dazzling-sprinkles-4mm', label: '4mm Balls' },
-                    { id: 'dazzling-sprinkles-6mm', label: '6mm Balls' },
+                    { id: 'dazzling-sprinkles', label: '⚪ Balls 1.5mm' },
+                    { id: 'dazzling-sprinkles-4mm', label: '⚪ Balls 4mm' },
+                    { id: 'dazzling-sprinkles-6mm', label: '⚪ Balls 6mm' },
+                    { id: 'dazzling-sprinkles-hearts', label: '❤️ Hearts' },
+                    { id: 'dazzling-sprinkles-stars', label: '⭐ Stars' },
+                    { id: 'dazzling-sprinkles-vermicelli', label: '🥢 Vermicelli' },
                   ].map((variant) => {
                     const isActive = product.id === variant.id
                     return (
                       <Link
                         key={variant.id}
                         to={`/products/bakery-colors/${variant.id}`}
-                        className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all border flex items-center gap-1.5 cursor-pointer ${
+                        className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all border flex items-center gap-1.5 cursor-pointer ${
                           isActive
                             ? 'bg-[#0a3622] text-white border-[#0a3622] shadow-sm ring-2 ring-emerald-500/30'
                             : 'bg-white hover:bg-amber-100 text-slate-800 border-amber-300 shadow-2xs'
