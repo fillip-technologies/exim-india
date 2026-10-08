@@ -43,7 +43,60 @@ const HERO_SLIDES = [
   },
 ]
 
+function StatCounter({ end, duration = 1800, suffix = '+' }) {
+  const [count, setCount] = useState(0)
+  const nodeRef = useRef(null)
+  const hasAnimated = useRef(false)
+
+  useEffect(() => {
+    const el = nodeRef.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasAnimated.current) {
+          hasAnimated.current = true
+
+          let startTime = null
+          const step = (timestamp) => {
+            if (!startTime) startTime = timestamp
+            const elapsed = timestamp - startTime
+            const progress = Math.min(elapsed / duration, 1)
+
+            // Smooth ease-out cubic curve for natural, premium deceleration
+            const eased = 1 - Math.pow(1 - progress, 3)
+            setCount(Math.round(eased * end))
+
+            if (progress < 1) {
+              requestAnimationFrame(step)
+            } else {
+              setCount(end)
+            }
+          }
+
+          requestAnimationFrame(step)
+        }
+      },
+      { threshold: 0.15 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [end, duration])
+
+  return (
+    <span ref={nodeRef} className="tabular-nums">
+      {count}
+      {suffix}
+    </span>
+  )
+}
+
 export default function HeroSection() {
+  const establishedYear = 2011
+  const currentYear = new Date().getFullYear()
+  const yearsOfExperience = Math.max(14, currentYear - establishedYear)
+
   const [currentSlide, setCurrentSlide] = useState(0)
   const [touchStartX, setTouchStartX] = useState(null)
   const heroRef = useRef(null)
@@ -343,7 +396,7 @@ export default function HeroSection() {
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-extrabold font-heading text-white leading-none">
-                  100+
+                  <StatCounter end={100} duration={1800} suffix="+" />
                 </div>
                 <div className="text-xs text-slate-300 font-medium mt-0.5">
                   Premium Products
@@ -360,7 +413,7 @@ export default function HeroSection() {
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-extrabold font-heading text-white leading-none">
-                  50+
+                  <StatCounter end={50} duration={1800} suffix="+" />
                 </div>
                 <div className="text-xs text-slate-300 font-medium mt-0.5">
                   Countries Worldwide
@@ -377,7 +430,7 @@ export default function HeroSection() {
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-extrabold font-heading text-white leading-none">
-                  1000+
+                  <StatCounter end={1000} duration={2000} suffix="+" />
                 </div>
                 <div className="text-xs text-slate-300 font-medium mt-0.5">
                   Satisfied Clients
@@ -385,7 +438,7 @@ export default function HeroSection() {
               </div>
             </div>
 
-            {/* 8+ Years */}
+            {/* Experience Years based on 2011 Establishment */}
             <div className="hero-stat-item flex items-center gap-3">
               <div className="text-white/80 shrink-0">
                 <svg className="w-7 h-7 sm:w-8 sm:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -394,10 +447,10 @@ export default function HeroSection() {
               </div>
               <div>
                 <div className="text-xl sm:text-2xl font-extrabold font-heading text-white leading-none">
-                  8+
+                  <StatCounter end={yearsOfExperience} duration={1800} suffix="+" />
                 </div>
                 <div className="text-xs text-slate-300 font-medium mt-0.5">
-                  Years of Excellence
+                  Years of Experience
                 </div>
               </div>
             </div>
