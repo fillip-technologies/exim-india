@@ -14,6 +14,8 @@ import TestimonialsPage from './dashboard/pages/TestimonialsPage'
 
 // Product Pages (wrapped inside src/pages/product/)
 import Products from './pages/product/Products'
+import BakeryColors from './pages/product/BakeryColors'
+import BakeryColorDetail from './pages/product/BakeryColorDetail'
 import SyntheticFoodColours from './pages/product/SyntheticFoodColours'
 import SyntheticFoodColorDetail from './pages/product/SyntheticFoodColorDetail'
 import BlendedColours from './pages/product/BlendedColours'
@@ -63,6 +65,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/products/bakery-colors" element={<BakeryColors />} />
+        <Route path="/products/bakery-colors/:id" element={<BakeryColorDetail />} />
         <Route path="/products/synthetic-food-colours" element={<SyntheticFoodColours />} />
         <Route path="/products/synthetic-food-colours/:id" element={<SyntheticFoodColorDetail />} />
         <Route path="/products/blended-colours" element={<BlendedColours />} />

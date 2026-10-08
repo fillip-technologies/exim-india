@@ -1,12 +1,13 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import colorProductImg from '../../assets/home/color-product.jpg'
 import medicineImg3 from '../../assets/home/medicine-image-3.webp'
-import oilProductImg from '../../assets/home/oil-product.jpg'
+import chocolateColorImg from '../../assets/bakery-colors/chocolate-color.png'
 import cosmeticProductImg from '../../assets/home/coesmtic-product.jpg'
 
 export default function LogisticsSplitSection() {
+  const navigate = useNavigate()
   // No slice active by default; only when hovered/tapped
   const [activeIndex, setActiveIndex] = useState(null)
 
@@ -31,12 +32,12 @@ export default function LogisticsSplitSection() {
     },
     {
       id: '03',
-      title: 'Botanical Extracts & Phytochemicals',
+      title: 'Bakery Colors',
       description:
-        'Standardized herbal bioactives, botanical extracts, and natural active ingredients preserved under controlled warehouse conditions for global buyers.',
-      link: '/products/botanical-extracts',
-      image: oilProductImg,
-      alt: 'Botanical Extracts and Natural Bioactives',
+        'Specialized food-grade metallic lustres, oil-based chocolate colours, bake-stable gel colours, and vibrant pastes engineered for professional confectionery and baking applications.',
+      link: '/products/bakery-colors',
+      image: chocolateColorImg,
+      alt: 'Bakery Colors, Chocolate Colours and Confectionery Lustres',
     },
     {
       id: '04',
@@ -49,8 +50,16 @@ export default function LogisticsSplitSection() {
     },
   ]
 
-  const handleToggle = (idx) => {
-    setActiveIndex((prev) => (prev === idx ? null : idx))
+  const handleCardClick = (idx, link) => {
+    if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+      navigate(link)
+    } else {
+      if (activeIndex === idx) {
+        navigate(link)
+      } else {
+        setActiveIndex(idx)
+      }
+    }
   }
 
   return (
@@ -71,7 +80,7 @@ export default function LogisticsSplitSection() {
                   setActiveIndex(idx)
                 }
               }}
-              onClick={() => handleToggle(idx)}
+              onClick={() => handleCardClick(idx, item.link)}
               className={`group relative flex flex-col justify-end p-5 sm:p-6 lg:p-6 border-b lg:border-b-0 lg:border-r border-white/20 last:border-b-0 last:border-r-0 cursor-pointer overflow-hidden transition-all duration-500 ease-out min-h-[220px] lg:min-h-0 ${
                 isActive
                   ? 'lg:flex-[1.6] shadow-2xl py-6 sm:py-7'

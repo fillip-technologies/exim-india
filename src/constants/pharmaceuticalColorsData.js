@@ -16,7 +16,6 @@ import lakeTartrazineImg from '../assets/img/lake/lake-tartrazine.jpg'
 import ponceau4rLakeImg from '../assets/img/lake/Ponceau-4R.jpg'
 import lakeAlluraRedImg from '../assets/img/lake/lake-allura-red.jpg'
 import sunsetYellowLakeImg from '../assets/img/efc/Sunset-Yellow-FCF-aluminum-lake.jpg'
-import carmoisineLakeImg from '../assets/img/efc/Food-Color-Carmoisine.jpg'
 import erythrosineLakeImg from '../assets/img/efc/food-grade-erythrosine.jpg'
 
 export const PHARMA_ANALYSIS_SPECS = [

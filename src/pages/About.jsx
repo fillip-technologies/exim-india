@@ -3,6 +3,7 @@ import AboutStorySection from '../components/about/AboutStorySection'
 import WhyEximSection from '../components/about/WhyEximSection'
 import AboutValuesSection from '../components/about/AboutValuesSection'
 import GlobalReachSection from '../components/about/GlobalReachSection'
+import CustomisationSection from '../components/about/CustomisationSection'
 import InquirySection from '../components/hero/InquirySection'
 
 export default function About() {
@@ -23,7 +24,10 @@ export default function About() {
       {/* 5. Global Reach & Destinations Map */}
       <GlobalReachSection />
 
-      {/* 6. Export Inquiry Form */}
+      {/* 6. Customisation (300+ Products, Custom Packaging & Third Party Labelling) */}
+      <CustomisationSection />
+
+      {/* 7. Export Inquiry Form */}
       <InquirySection />
     </>
   )

@@ -5,6 +5,7 @@ export const NAV_LINKS = [
     name: 'Products', 
     path: '/products',
     dropdown: [
+      { name: 'Bakery Colors', path: '/products/bakery-colors' },
       { name: 'Synthetic food colours', path: '/products/synthetic-food-colours' },
       { name: 'Lake colours', path: '/products/lake-colours' },
       { name: 'Blended Colours', path: '/products/blended-colours' },

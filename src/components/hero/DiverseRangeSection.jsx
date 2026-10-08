@@ -7,8 +7,6 @@ import lakeColoursImg from '../../assets/img/lake/lake-allura-red.jpg'
 import blendedColoursImg from '../../assets/img/efc/Allura-Red-colour.jpg'
 import cosmeticColoursImg from '../../assets/img/cosmetic-color/purple3.jpg'
 import pharmaColoursImg from '../../assets/img/to/pharma-food.jpg'
-import liquidFlavoursImg from '../../assets/img/lf/Orange-liquid-and-powder-food-grade-flavour.jpg'
-import emulsionFlavoursImg from '../../assets/img/ef/Mango-Emulsion.jpg'
 import powderFlavoursImg from '../../assets/img/pf/fruit-powder.jpg'
 import discoDustImg from '../../assets/img/dust-color/Gold-Disco-Dust.jpg'
 import foodAdditivesImg from '../../assets/img/fa/soya-lecithin-powder.jpeg'
@@ -20,6 +18,7 @@ import fluorescentImg from '../../assets/img/fc/yellow.jpg'
 import fruitPowderImg from '../../assets/img/nfp/mango-powder-250x250.jpg'
 import fruitFragranceImg from '../../assets/img/fruit-fragrance/strawberry-perfume.jpg'
 import chemicalsImg from '../../assets/img/chemicals.png'
+import bakeryColorsImg from '../../assets/home/bakery-image.png'
 
 export default function DiverseRangeSection() {
   const navigate = useNavigate()
@@ -40,14 +39,9 @@ export default function DiverseRangeSection() {
       link: '/products/pharmaceutical-colours',
     },
     {
-      title: 'Liquid Flavours',
-      image: liquidFlavoursImg,
-      link: '/products/liquid-flavours',
-    },
-    {
-      title: 'Emulsion Flavours',
-      image: emulsionFlavoursImg,
-      link: '/products/emulsion-flavours',
+      title: 'Bakery Colors',
+      image: bakeryColorsImg,
+      link: '/products/bakery-colors',
     },
     {
       title: 'Powder Flavours',

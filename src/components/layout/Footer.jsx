@@ -6,11 +6,15 @@ export default function Footer() {
 
   const productCategories = [
     {
-      left: { name: 'Synthetic food colours', path: '/products/synthetic-food-colours' },
-      right: { name: 'Food additives', path: '/products/food-additives' },
+      left: { name: 'Bakery Colors', path: '/products/bakery-colors' },
+      right: { name: 'Synthetic food colours', path: '/products/synthetic-food-colours' },
     },
     {
       left: { name: 'Lake colours', path: '/products/lake-colours' },
+      right: { name: 'Food additives', path: '/products/food-additives' },
+    },
+    {
+      left: { name: 'Blended Colours', path: '/products/blended-colours' },
       right: { name: 'Botanical Extracts', path: '/products/botanical-extracts' },
     },
     {

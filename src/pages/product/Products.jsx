@@ -5,6 +5,12 @@ import ProductHero from '../../components/product/ProductHero'
 export default function Products() {
   const items = [
     {
+      category: 'Bakery Colors',
+      description: 'Specialized high-performance food colorants engineered specifically for baking, pastry arts, and commercial confectionery. Heat-stable up to 220°C with zero fade.',
+      badge: 'Heat-Stable to 220°C • Non-Bleeding',
+      items: ['Heat-Resistant Sponge Dyes', 'Bake-Stable Gel Colours', 'Oil-Candy Bakery Pigments', 'Macaron Concentrates', 'Fondant & Sugarcraft Pastes'],
+    },
+    {
       category: 'Food Colors',
       description: 'Certified synthetic and natural food colorants, water-soluble dyes, and aluminum lakes.',
       badge: 'FSSAI, US-FDA & EU Compliant',
@@ -88,7 +94,17 @@ export default function Products() {
                 </div>
 
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-                  {prod.category === 'Food Colors' ? (
+                  {prod.category === 'Bakery Colors' ? (
+                    <div className="flex flex-wrap items-center gap-2.5">
+                      <Link
+                        to="/products/bakery-colors"
+                        className="inline-flex items-center gap-1.5 text-xs font-extrabold text-amber-900 hover:text-amber-950 bg-amber-50 hover:bg-amber-100 px-3.5 py-1.5 rounded-lg border border-amber-300 transition-colors shadow-xs"
+                      >
+                        <span>Explore Bakery Colors Collection (Bake-Stable Formulations)</span>
+                        <span>&rarr;</span>
+                      </Link>
+                    </div>
+                  ) : prod.category === 'Food Colors' ? (
                     <div className="flex flex-wrap items-center gap-2.5">
                       <Link
                         to="/products/synthetic-food-colours"
