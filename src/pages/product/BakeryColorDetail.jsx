@@ -9,9 +9,21 @@ export default function BakeryColorDetail() {
   const { id } = useParams()
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false)
 
-  // Find product by id (or fallback to first product)
+  // Find product by id (or fallback to first product, handling sprinkles aliases)
   const product = useMemo(() => {
-    return BAKERY_PRODUCTS.find((p) => p.id === id) || BAKERY_PRODUCTS[0]
+    return (
+      BAKERY_PRODUCTS.find((p) => p.id === id) ||
+      (id === 'sprinkles' || id === 'dazzling-sprinkles-1-5mm' || id === 'sprinkles-1-5mm'
+        ? BAKERY_PRODUCTS.find((p) => p.id === 'dazzling-sprinkles')
+        : null) ||
+      (id === 'sprinkles-4mm'
+        ? BAKERY_PRODUCTS.find((p) => p.id === 'dazzling-sprinkles-4mm')
+        : null) ||
+      (id === 'sprinkles-6mm'
+        ? BAKERY_PRODUCTS.find((p) => p.id === 'dazzling-sprinkles-6mm')
+        : null) ||
+      BAKERY_PRODUCTS[0]
+    )
   }, [id])
 
   const [selectedColorState, setSelectedColor] = useState(null)
@@ -110,6 +122,48 @@ export default function BakeryColorDetail() {
             {/* Gold Divider */}
             <div className="w-20 h-1 bg-gradient-to-r from-amber-500 to-yellow-300 rounded-full" />
 
+            {/* Quick Ball Size Switcher when viewing Sprinkles products */}
+            {product?.id?.includes('sprinkles') && (
+              <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+                <div className="flex items-center gap-2.5">
+                  <span className="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-900 flex items-center justify-center text-sm font-black shrink-0">
+                    ⚪
+                  </span>
+                  <div>
+                    <span className="text-xs font-black uppercase tracking-wider text-amber-950 block font-heading">
+                      Select Ball Diameter / Size
+                    </span>
+                    <span className="text-[11px] text-amber-800">
+                      Calibrated sphere diameters: 1.5mm, 4mm, and 6mm
+                    </span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  {[
+                    { id: 'dazzling-sprinkles', label: '1.5mm Balls' },
+                    { id: 'dazzling-sprinkles-4mm', label: '4mm Balls' },
+                    { id: 'dazzling-sprinkles-6mm', label: '6mm Balls' },
+                  ].map((variant) => {
+                    const isActive = product.id === variant.id
+                    return (
+                      <Link
+                        key={variant.id}
+                        to={`/products/bakery-colors/${variant.id}`}
+                        className={`px-3.5 py-1.5 rounded-xl text-xs font-black transition-all border flex items-center gap-1.5 cursor-pointer ${
+                          isActive
+                            ? 'bg-[#0a3622] text-white border-[#0a3622] shadow-sm ring-2 ring-emerald-500/30'
+                            : 'bg-white hover:bg-amber-100 text-slate-800 border-amber-300 shadow-2xs'
+                        }`}
+                      >
+                        <span>{variant.label}</span>
+                        {isActive && <span className="text-amber-400 font-bold">✓</span>}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Narrative Description */}
             <div className="space-y-3.5 text-xs sm:text-sm text-slate-600 leading-relaxed">
               <p className="text-slate-700 font-medium text-sm sm:text-base leading-relaxed">
@@ -178,16 +232,18 @@ export default function BakeryColorDetail() {
                       : 'border-slate-200 bg-white hover:border-amber-300 hover:shadow-md hover:-translate-y-0.5'
                   }`}
                 >
-                  {/* Metallic Shimmer Circle */}
+                  {/* Metallic Shimmer / Pearl Ball Circle */}
                   <div
-                    className="relative w-14 h-14 rounded-full shadow-md border border-black/10 flex items-center justify-center transition-transform group-hover:scale-110"
+                    className="relative w-14 h-14 rounded-full shadow-md border border-black/10 flex items-center justify-center transition-transform group-hover:scale-110 overflow-hidden"
                     style={{
                       backgroundColor: color.hex,
-                      backgroundImage: `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.15) 30%, transparent 65%)`,
+                      backgroundImage: color.bgGradient || `radial-gradient(circle at 35% 35%, rgba(255,255,255,0.75) 0%, rgba(255,255,255,0.15) 30%, transparent 65%)`,
                     }}
                   >
+                    {/* Pearlescent 3D sphere highlight sheen */}
+                    <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.7)_0%,rgba(255,255,255,0.15)_30%,transparent_65%)] pointer-events-none" />
                     {isSelected && (
-                      <span className="text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-sm font-black">
+                      <span className="relative z-10 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] text-sm font-black">
                         ✓
                       </span>
                     )}
@@ -294,6 +350,7 @@ export default function BakeryColorDetail() {
           </div>
         </div>
       </div>
+
 
       {/* ========================================================================= */}
       {/* 6. ORDER INQUIRY MODAL                                                    */}

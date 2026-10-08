@@ -1,14 +1,37 @@
 import { useState, useEffect, useRef } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import logoImg from '../../assets/logo.png'
 import { NAV_LINKS } from '../../constants/navigation'
 
 export default function Navbar() {
+  const location = useLocation()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [productsDropdownOpen, setProductsDropdownOpen] = useState(false)
   const navPillRef = useRef(null)
+  const dropdownRef = useRef(null)
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setProductsDropdownOpen(false)
+      }
+    }
+    if (productsDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [productsDropdownOpen])
+
+  // Close dropdown and mobile menu on route change
+  useEffect(() => {
+    setProductsDropdownOpen(false)
+    setMobileMenuOpen(false)
+  }, [location.pathname])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,14 +111,17 @@ export default function Navbar() {
                 return (
                   <div
                     key={link.name}
+                    ref={dropdownRef}
                     className="nav-link-item relative"
-                    onMouseEnter={() => setProductsDropdownOpen(true)}
-                    onMouseLeave={() => setProductsDropdownOpen(false)}
                   >
                     <button
                       type="button"
-                      className="flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 transition-colors"
-                      onClick={() => setProductsDropdownOpen(!productsDropdownOpen)}
+                      className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer ${
+                        productsDropdownOpen || location.pathname.startsWith('/products')
+                          ? 'bg-slate-100 text-emerald-800 font-semibold'
+                          : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100/80'
+                      }`}
+                      onClick={() => setProductsDropdownOpen((prev) => !prev)}
                     >
                       <span>{link.name}</span>
                       <svg
@@ -110,7 +136,7 @@ export default function Navbar() {
 
                     {/* 2-Column Products Mega Dropdown Menu */}
                     {productsDropdownOpen && (
-                      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[560px] sm:w-[620px] rounded-2xl bg-white/98 backdrop-blur-2xl border border-slate-200/90 shadow-2xl shadow-slate-900/15 p-4 z-50 animate-fadeIn">
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-[560px] sm:w-[620px] rounded-2xl bg-white/98 backdrop-blur-2xl border border-slate-200/90 shadow-2xl shadow-slate-900/15 p-4 z-50 animate-fadeIn max-h-[75vh] overflow-y-auto">
                         <div className="grid grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-1">
                           {link.dropdown.map((item) => (
                             <Link
