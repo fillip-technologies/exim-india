@@ -11,6 +11,13 @@ import DashboardOverview from './dashboard/pages/DashboardOverview'
 import ContactsPage from './dashboard/pages/ContactsPage'
 import ContactDetailPage from './dashboard/pages/ContactDetailPage'
 import TestimonialsPage from './dashboard/pages/TestimonialsPage'
+import OrdersPage from './dashboard/pages/OrdersPage'
+import OrderDetailPage from './dashboard/pages/OrderDetailPage'
+import {
+  ProductListingPage,
+  ProductAddPage,
+  ProductDetailPage,
+} from './dashboard/products'
 
 // Product Pages (wrapped inside src/pages/product/)
 import Products from './pages/product/Products'
@@ -64,7 +71,7 @@ export default function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products />} />
+        {/* <Route path="/products" element={<Products />} /> */}
         <Route path="/products/bakery-colors" element={<BakeryColors />} />
         <Route path="/products/bakery-colors/:id" element={<BakeryColorDetail />} />
         <Route path="/products/synthetic-food-colours" element={<SyntheticFoodColours />} />
@@ -116,7 +123,14 @@ export default function App() {
             <Route path="testimonials" element={<TestimonialsPage />} />
             <Route path="contacts" element={<ContactsPage />} />
             <Route path="contacts/:id" element={<ContactDetailPage />} />
-            {/* Future: categories, products pages go here */}
+            {/* Orders Dashboard Routes */}
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="orders/:id" element={<OrderDetailPage />} />
+            {/* Products Dashboard Routes */}
+            <Route path="products" element={<ProductListingPage />} />
+            <Route path="products/new" element={<ProductAddPage />} />
+            <Route path="products/:id" element={<ProductDetailPage />} />
+            <Route path="products/:id/edit" element={<ProductAddPage isEdit={true} />} />
           </Route>
         </Route>
 

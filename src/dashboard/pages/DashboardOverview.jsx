@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { http, getUser } from '../../api'
+import { productStore } from '../products/productStructure'
 
 const STATUS_STYLES = {
   new:      'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
@@ -25,6 +26,7 @@ export default function DashboardOverview() {
     categories:   null,
     products:     null,
     contacts:     null,
+    orders:       null,
     testimonials: null,
     newCount:     0,
   })
@@ -35,10 +37,11 @@ export default function DashboardOverview() {
   const fetchStats = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true)
     try {
-      const [categories, products, contacts, testimonials] = await Promise.all([
+      const [categories, products, contacts, orders, testimonials] = await Promise.all([
         http.get('/admin/categories').catch(() => []),
         http.get('/admin/products').catch(() => ({ total: 0 })),
         http.get('/admin/contacts').catch(() => ({ data: [] })),
+        http.get('/admin/contacts', { params: { type: 'order' } }).catch(() => ({ data: [] })),
         http.get('/admin/testimonials').catch(() => []),
       ])
 
@@ -46,10 +49,14 @@ export default function DashboardOverview() {
       const newItems         = contactsList.filter(c => c.status === 'new').length
       const testimonialsList = Array.isArray(testimonials) ? testimonials : testimonials?.data || []
 
+      const localProdStats = productStore.getStats()
+      const totalProductsCount = products?.total ?? (products?.data ? products.data.length : localProdStats.total)
+
       setStats({
         categories:   Array.isArray(categories) ? categories.length : categories?.length ?? 0,
-        products:     products?.total ?? products?.data?.length ?? 0,
+        products:     totalProductsCount,
         contacts:     contacts?.total ?? contactsList.length ?? 0,
+        orders:       orders?.total ?? (orders?.data ?? []).length ?? 0,
         testimonials: testimonialsList.length,
         newCount:     newItems,
       })
@@ -110,7 +117,7 @@ export default function DashboardOverview() {
       </div>
 
       {/* ── 2. Stat Cards Grid ─────────────────────────────────── */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         
         {/* Card 1: Total Inquiries */}
         <Link
@@ -216,6 +223,77 @@ export default function DashboardOverview() {
           </div>
           <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold group-hover:text-emerald-800">
             <span>Manage Testimonials</span>
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </Link>
+
+        {/* Card 4: Catalog Products */}
+        <Link
+          to="/dashboard/products"
+          className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center border border-blue-100 group-hover:scale-105 transition-transform text-lg">
+              📦
+            </div>
+            <span className="text-[11px] font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-100">
+              Live Catalog
+            </span>
+          </div>
+          <div>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Export Products
+            </p>
+            {loading ? (
+              <div className="h-8 w-20 bg-slate-100 rounded animate-pulse" />
+            ) : (
+              <p className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {stats.products ?? '—'}
+              </p>
+            )}
+            <p className="text-[11px] text-slate-400 font-medium mt-1">
+              Active formulations & dyes
+            </p>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold group-hover:text-blue-700">
+            <span>Manage Products</span>
+            <span className="group-hover:translate-x-1 transition-transform">→</span>
+          </div>
+        </Link>
+
+        {/* Card 5: Export Orders */}
+        <Link
+          to="/dashboard/orders"
+          className="group relative bg-white rounded-2xl border border-slate-200/90 p-5 shadow-xs hover:shadow-lg hover:border-indigo-300 transition-all duration-300 flex flex-col justify-between"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center border border-indigo-100 group-hover:scale-105 transition-transform">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+            </div>
+            <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
+              Export Orders
+            </span>
+          </div>
+          <div>
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
+              Order Inquiries
+            </p>
+            {loading ? (
+              <div className="h-8 w-20 bg-slate-100 rounded animate-pulse" />
+            ) : (
+              <p className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                {stats.orders ?? '—'}
+              </p>
+            )}
+            <p className="text-[11px] text-slate-400 font-medium mt-1">
+              Shipment &amp; bulk order requests
+            </p>
+          </div>
+          <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500 font-semibold group-hover:text-indigo-700">
+            <span>Manage Orders</span>
             <span className="group-hover:translate-x-1 transition-transform">→</span>
           </div>
         </Link>
@@ -331,20 +409,26 @@ export default function DashboardOverview() {
                   color: 'bg-emerald-50 text-[#0a3622] border-emerald-100',
                 },
                 {
+                  title: 'Export Orders',
+                  desc: 'Track & manage order inquiries',
+                  path: '/dashboard/orders',
+                  icon: '📋',
+                  color: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+                },
+                {
                   title: 'Client Testimonials',
                   desc: 'Add, edit & review customer quotes',
                   path: '/dashboard/testimonials',
                   icon: '💬',
                   color: 'bg-teal-50 text-teal-800 border-teal-100',
                 },
-                // Categories & Products will be integrated later:
-                // {
-                //   title: 'Product Catalog',
-                //   desc: 'Browse food colors & formulations',
-                //   path: '/dashboard/products',
-                //   icon: '📦',
-                //   color: 'bg-blue-50 text-blue-700 border-blue-100',
-                // },
+                {
+                  title: 'Product Catalog',
+                  desc: 'Browse food colors & formulations',
+                  path: '/dashboard/products',
+                  icon: '📦',
+                  color: 'bg-blue-50 text-blue-700 border-blue-100',
+                },
                 // {
                 //   title: 'Categories',
                 //   desc: 'Manage product group listings',

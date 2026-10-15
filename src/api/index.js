@@ -38,6 +38,15 @@ export {
   deleteContact,
 }                                               from './contacts'
 
+// Orders endpoints
+export {
+  submitOrder,
+  getOrders,
+  getOrder,
+  updateOrderStatus,
+  deleteOrder,
+}                                               from './orders'
+
 // Testimonials endpoints
 export {
   getTestimonials,

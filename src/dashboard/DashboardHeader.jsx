@@ -32,7 +32,12 @@ export default function DashboardHeader({ onOpenSidebar = () => {} }) {
     if (path.startsWith('/dashboard/contacts/')) return { title: 'Inquiry Details', subtitle: 'View customer request' }
     if (path === '/dashboard/contacts') return { title: 'Contacts & Inquiries', subtitle: 'Manage received export leads' }
     if (path === '/dashboard/testimonials') return { title: 'Client Testimonials', subtitle: 'Manage customer quotes & homepage reviews' }
+    if (path.startsWith('/dashboard/orders/')) return { title: 'Order Detail', subtitle: 'Review and manage export order inquiry' }
+    if (path === '/dashboard/orders') return { title: 'Export Order Inquiries', subtitle: 'Track and manage incoming export orders' }
     if (path === '/dashboard/categories') return { title: 'Product Categories', subtitle: 'Manage catalogue classifications' }
+    if (path === '/dashboard/products/new') return { title: 'Create Product', subtitle: 'Add export formulation & chemical specs' }
+    if (path.endsWith('/edit') && path.startsWith('/dashboard/products/')) return { title: 'Edit Formulation', subtitle: 'Update product parameters & trade terms' }
+    if (path.startsWith('/dashboard/products/')) return { title: 'Product Specification Sheet', subtitle: 'COA lab parameters, pricing & export terms' }
     if (path === '/dashboard/products') return { title: 'Products Directory', subtitle: 'Browse active chemical & color listings' }
     return { title: 'Admin Console', subtitle: 'Exim India Corporation' }
   }
