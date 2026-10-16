@@ -34,9 +34,9 @@ const CERTIFICATES = [
   { id: 8, src: chemexilCert, fileUrl: chemexilCert, alt: 'CHEMEXCIL Export Certificate' },
   { id: 9, src: gstCert, fileUrl: gstPdf, alt: 'GST Registration Certificate' },
   { id: 10, src: rofCert, fileUrl: rofPdf, alt: 'ROF Registration Certificate' },
-  { id: 11, src: spicesBoardCert, fileUrl: spicesBoardCert, alt: 'Spices Board Exporter Certificate' },
-  { id: 12, src: india5000Cert1, fileUrl: india5000Cert1, alt: 'India 5000 Business Award' },
-  { id: 13, src: india5000Cert2, fileUrl: india5000Cert2, alt: 'India 5000 Nomination Certificate' },
+  // { id: 11, src: spicesBoardCert, fileUrl: spicesBoardCert, alt: 'Spices Board Exporter Certificate' },
+  // { id: 12, src: india5000Cert1, fileUrl: india5000Cert1, alt: 'India 5000 Business Award' },
+  // { id: 13, src: india5000Cert2, fileUrl: india5000Cert2, alt: 'India 5000 Nomination Certificate' },
 ]
 
 export default function CertificationSection() {
