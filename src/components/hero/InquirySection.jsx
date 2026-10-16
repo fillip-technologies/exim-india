@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import bgTelephoneImg from '../../assets/support-bg-telephone.jpg'
 import { submitContact } from '../../api'
+import { useCategories } from '../../api/useCatalog'
 
 export default function InquirySection() {
+  const { categories } = useCategories()
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -66,12 +68,9 @@ export default function InquirySection() {
     setSubmitted(false)
   }
 
+  // Category names come from the API; the two generic purposes are always offered
   const purposeOptions = [
-    'Food Colors & Lake Dyes',
-    'Food Flavours & Emulsions',
-    'Bakery Decorations & Lustre',
-    'Botanical Extracts & Additives',
-    'Cosmetic Colours & Pigments',
+    ...categories.map((c) => c.name),
     'Sample Request / Quotation',
     'General Inquiry',
   ]

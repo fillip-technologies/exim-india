@@ -58,3 +58,32 @@ export {
   adminDeleteTestimonial,
   adminUploadImage,
 }                                               from './testimonials'
+
+// Catalog endpoints
+export {
+  getCategories,
+  getCategory,
+  getCategoryProducts,
+  getProduct,
+  getProducts,
+  adminGetCategories,
+  adminGetCategory,
+  adminCreateCategory,
+  adminUpdateCategory,
+  adminDeleteCategory,
+  adminGetProducts,
+  adminGetProduct,
+  adminCreateProduct,
+  adminUpdateProduct,
+  adminDeleteProduct,
+  adminGetAttributes,
+  adminGetAttributeValues,
+  adminUpdateProductOptions,
+  adminGenerateVariants,
+  adminGetProductVariants,
+  adminUpdateVariant,
+  adminDeleteVariant,
+  adminGetFields,
+  adminUpdateProductFields,
+}                                               from './catalog'
+

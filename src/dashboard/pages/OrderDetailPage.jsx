@@ -194,7 +194,7 @@ export default function OrderDetailPage() {
             )}
             {order?.email && (
               <a
-                href={`mailto:${order.email}?subject=Re: Export Order Inquiry - ${order.product_interest}`}
+                href={`mailto:${order.email}?subject=Re: Export Order Inquiry${order.product?.name || order.product_interest ? ` - ${order.product?.name || order.product_interest}` : ''}`}
                 className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-blue-50 border border-blue-200 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -226,7 +226,7 @@ export default function OrderDetailPage() {
               <InfoRow label="Email"            value={order?.email} />
               <InfoRow label="Phone"            value={order?.phone} />
               <InfoRow label="Company"          value={order?.company} />
-              <InfoRow label="Product Interest" value={order?.product_interest} />
+              <InfoRow label="Product" value={order?.product?.name || order?.product_interest} />
               <InfoRow label="Quantity"         value={order?.quantity} />
               <InfoRow label="Delivery Address" value={order?.address} />
               <InfoRow label="Status">
@@ -235,6 +235,24 @@ export default function OrderDetailPage() {
               <InfoRow label="Received"         value={formatDate(order?.created_at)} />
             </dl>
           </div>
+
+          {/* Ordered items (one row per product / variant) */}
+          {order?.items?.length > 0 && (
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-3">Items</h2>
+              <ul className="divide-y divide-slate-100 text-sm">
+                {order.items.map((item) => (
+                  <li key={item.id} className="py-2.5 flex items-start justify-between gap-4">
+                    <div className="min-w-0">
+                      <p className="font-semibold text-slate-900">{item.label}</p>
+                      {item.note && <p className="text-xs text-slate-500 mt-0.5">{item.note}</p>}
+                    </div>
+                    {item.quantity && <span className="shrink-0 font-semibold text-slate-700">{item.quantity}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Message / Additional Notes */}
           {order?.message && (

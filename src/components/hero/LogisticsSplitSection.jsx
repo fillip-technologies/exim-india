@@ -1,54 +1,29 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-import colorProductImg from '../../assets/home/color-product.jpg'
-import medicineImg3 from '../../assets/home/medicine-image-3.webp'
-import chocolateColorImg from '../../assets/bakery-colors/chocolate-color.png'
-import cosmeticProductImg from '../../assets/home/coesmtic-product.jpg'
+import { useCategories } from '../../api/useCatalog'
+
+const MAX_ITEMS = 4
 
 export default function LogisticsSplitSection() {
   const navigate = useNavigate()
   // No slice active by default; only when hovered/tapped
   const [activeIndex, setActiveIndex] = useState(null)
 
-  const items = [
-    {
-      id: '01',
-      title: 'Food Colors & Lake Dyes',
-      description:
-        'Certified synthetic food colors, lake pigments, and custom blended formulations exported to 50+ countries for food, beverage, and pharma applications.',
-      link: '/products/synthetic-food-colours',
-      image: colorProductImg,
-      alt: 'Food Colors and Lake Dyes export range',
-    },
-    {
-      id: '02',
-      title: 'Pharmaceutical Colours & Coatings',
-      description:
-        'High-purity pharmaceutical colorants, lake pigments, and tablet coatings compliant with strict IP, BP, and USP pharmacopeia standards for solid and liquid oral dosages.',
-      link: '/products/pharmaceutical-colours',
-      image: medicineImg3,
-      alt: 'Pharmaceutical Colours and Tablet Coatings',
-    },
-    {
-      id: '03',
-      title: 'Bakery Colors',
-      description:
-        'Specialized food-grade metallic lustres, oil-based chocolate colours, bake-stable gel colours, and vibrant pastes engineered for professional confectionery and baking applications.',
-      link: '/products/bakery-colors',
-      image: chocolateColorImg,
-      alt: 'Bakery Colors, Chocolate Colours and Confectionery Lustres',
-    },
-    {
-      id: '04',
-      title: 'Cosmetic Colours & Pigments',
-      description:
-        'High-purity cosmetic lake dyes, mica pearlescent pigments, and vibrant colorants certified to US FDA and EU standards for makeup, lipsticks, and beauty cosmetics.',
-      link: '/products/cosmetic-colours',
-      image: cosmeticProductImg,
-      alt: 'Cosmetic Colours, Makeup Pigments and Colorants',
-    },
-  ]
+  const { categories } = useCategories()
+
+  // Highlight the first categories that have an image; everything comes from the API
+  const items = categories
+    .filter((c) => c.image)
+    .slice(0, MAX_ITEMS)
+    .map((c, i) => ({
+      id: String(i + 1).padStart(2, '0'),
+      title: c.name,
+      description: c.description,
+      link: c.path || `/products/${c.slug}`,
+      image: c.image,
+      alt: c.name,
+    }))
 
   const handleCardClick = (idx, link) => {
     if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
@@ -61,6 +36,8 @@ export default function LogisticsSplitSection() {
       }
     }
   }
+
+  if (items.length === 0) return null
 
   return (
     <section className="relative w-full h-auto lg:h-[430px] overflow-hidden bg-slate-950">
@@ -173,9 +150,11 @@ export default function LogisticsSplitSection() {
                       : 'max-h-0 opacity-0 mt-0 pointer-events-none'
                   }`}
                 >
-                  <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal max-w-xl drop-shadow-xs">
-                    {item.description}
-                  </p>
+                  {item.description && (
+                    <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-normal max-w-xl drop-shadow-xs line-clamp-3">
+                      {item.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Bottom Circular Chevron Action Button (Desktop only) */}

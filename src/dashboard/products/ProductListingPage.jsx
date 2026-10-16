@@ -1,454 +1,327 @@
 /**
- * src/dashboard/products/ProductListingPage.jsx
- * ─────────────────────────────────────────────────────────────
- * Master Product Catalog Listing with KPI stats, bulk actions,
- * interactive filtering, table & grid toggles, and deletion flow.
+ * Admin product directory — every value comes from the admin API
+ * (GET /admin/products, GET /admin/categories).
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Link, useNavigate, useSearchParams } from 'react-router-dom'
-import { productStore, PRODUCT_CATEGORIES } from './productStructure'
-import ProductFilters from './components/ProductFilters'
-import ProductTable from './components/ProductTable'
-import ProductCard from './components/ProductCard'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import {
+  adminGetProducts,
+  adminGetCategories,
+  adminUpdateProduct,
+  adminDeleteProduct,
+} from '../../api'
 import ProductDeleteModal from './components/ProductDeleteModal'
 
+const PAGE_SIZE = 20
+
 export default function ProductListingPage() {
-  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
-
-  // State
-  const [products, setProducts] = useState([])
-  const [totalCount, setTotalCount] = useState(0)
-  const [stats, setStats] = useState({ total: 0, active: 0, draft: 0, lowStock: 0, featured: 0 })
-  const [loading, setLoading] = useState(true)
-
-  // Filters from URL or state
   const search = searchParams.get('search') || ''
-  const category = searchParams.get('category') || 'all'
-  const status = searchParams.get('status') || 'all'
-  const grade = searchParams.get('grade') || 'all'
-  const sort = searchParams.get('sort') || 'newest'
-  const page = parseInt(searchParams.get('page') || '1', 10)
-  const limit = 10
+  const category = searchParams.get('category') || ''
+  const status = searchParams.get('status') || ''
+  const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10))
 
-  // View mode (table or grid)
-  const [viewMode, setViewMode] = useState('table')
-
-  // Bulk selection
-  const [selectedIds, setSelectedIds] = useState([])
-
-  // Delete modal state
+  const [searchInput, setSearchInput] = useState(search)
+  const [products, setProducts] = useState([])
+  const [categories, setCategories] = useState([])
+  const [meta, setMeta] = useState({ total: 0, last_page: 1 })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
   const [deleteTarget, setDeleteTarget] = useState(null)
-  const [isBulkDelete, setIsBulkDelete] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
-
-  // Feedback Toast
   const [toast, setToast] = useState(null)
+  const toastTimer = useRef(null)
 
   const showToast = (message, type = 'success') => {
+    clearTimeout(toastTimer.current)
     setToast({ message, type })
-    setTimeout(() => setToast(null), 3500)
+    toastTimer.current = setTimeout(() => setToast(null), 3500)
   }
+  useEffect(() => () => clearTimeout(toastTimer.current), [])
 
-  // Update URL search parameters
-  const updateParams = (newParams) => {
-    const updated = new URLSearchParams(searchParams)
-    Object.entries(newParams).forEach(([key, val]) => {
-      if (val === null || val === '' || val === 'all') {
-        updated.delete(key)
-      } else {
-        updated.set(key, val)
-      }
-    })
-    setSearchParams(updated)
-  }
+  useEffect(() => {
+    document.title = 'Products | Exim India Admin'
+    adminGetCategories()
+      .then((res) => setCategories(Array.isArray(res) ? res : res?.data || []))
+      .catch(() => setCategories([]))
+  }, [])
 
-  // Fetch list
-  const loadProducts = useCallback(() => {
+  const updateParams = useCallback(
+    (next) => {
+      const params = new URLSearchParams(searchParams)
+      Object.entries(next).forEach(([k, v]) => (v ? params.set(k, v) : params.delete(k)))
+      setSearchParams(params)
+    },
+    [searchParams, setSearchParams],
+  )
+
+  // Debounce the search box into the URL
+  useEffect(() => {
+    if (searchInput === search) return undefined
+    const t = setTimeout(() => updateParams({ search: searchInput, page: '' }), 350)
+    return () => clearTimeout(t)
+  }, [searchInput, search, updateParams])
+
+  const loadProducts = useCallback(async () => {
     setLoading(true)
+    setError('')
     try {
-      const res = productStore.getAll({
-        search,
-        category,
-        status,
-        grade,
-        sort,
+      const res = await adminGetProducts({
         page,
-        limit,
+        per_page: PAGE_SIZE,
+        search: search || undefined,
+        category_id: category || undefined,
+        status: status || undefined,
       })
-      setProducts(res.data)
-      setTotalCount(res.total)
-      setStats(productStore.getStats())
+      setProducts(res?.data || [])
+      setMeta({ total: res?.total ?? 0, last_page: res?.last_page ?? 1 })
     } catch (err) {
-      console.error('Failed to load products:', err)
-      showToast('Failed to load products catalog.', 'error')
+      setError(err.message || 'Failed to load products.')
+      setProducts([])
     } finally {
       setLoading(false)
     }
-  }, [search, category, status, grade, sort, page])
+  }, [page, search, category, status])
 
   useEffect(() => {
-    document.title = 'Products Directory | Exim India Admin'
     loadProducts()
   }, [loadProducts])
 
-  // Clear selections when filters or page changes
-  useEffect(() => {
-    setSelectedIds([])
-  }, [search, category, status, grade, page])
-
-  // Handlers for filters
-  const handleSearchChange = (val) => updateParams({ search: val, page: 1 })
-  const handleCategoryChange = (val) => updateParams({ category: val, page: 1 })
-  const handleStatusChangeFilter = (val) => updateParams({ status: val, page: 1 })
-  const handleGradeChange = (val) => updateParams({ grade: val, page: 1 })
-  const handleSortChange = (val) => updateParams({ sort: val, page: 1 })
-  const handleResetFilters = () => setSearchParams({})
-
-  // Bulk Selection Handlers
-  const handleToggleSelect = (id) => {
-    setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    )
-  }
-
-  const handleSelectAll = () => {
-    if (selectedIds.length === products.length) {
-      setSelectedIds([])
-    } else {
-      setSelectedIds(products.map((p) => p.id))
-    }
-  }
-
-  // Row Quick Actions
-  const handleStatusToggle = (id, newStatus) => {
+  const toggleActive = async (product) => {
     try {
-      productStore.toggleStatus(id, newStatus)
-      showToast(`Product status updated to ${newStatus}.`)
+      await adminUpdateProduct(product.id, { is_active: !product.is_active })
+      showToast(`"${product.name}" is now ${product.is_active ? 'hidden' : 'published'}.`)
       loadProducts()
     } catch (err) {
-      showToast(err.message, 'error')
+      showToast(err.message || 'Could not update the product.', 'error')
     }
   }
 
-  const handleDuplicate = (id) => {
-    try {
-      const newProd = productStore.duplicate(id)
-      showToast(`Duplicated "${newProd.name}" as draft.`)
-      loadProducts()
-    } catch (err) {
-      showToast('Failed to duplicate product.', 'error')
-    }
-  }
-
-  // Deletion Flow
-  const handleOpenDelete = (product) => {
-    setDeleteTarget(product)
-    setIsBulkDelete(false)
-  }
-
-  const handleOpenBulkDelete = () => {
-    if (selectedIds.length === 0) return
-    setDeleteTarget(selectedIds)
-    setIsBulkDelete(true)
-  }
-
-  const handleConfirmDelete = () => {
+  const confirmDelete = async () => {
+    if (!deleteTarget) return
     setIsDeleting(true)
     try {
-      if (isBulkDelete) {
-        productStore.bulkDelete(selectedIds)
-        showToast(`Successfully deleted ${selectedIds.length} products.`)
-        setSelectedIds([])
-      } else if (deleteTarget?.id) {
-        productStore.delete(deleteTarget.id)
-        showToast(`Deleted "${deleteTarget.name}".`)
-      }
+      await adminDeleteProduct(deleteTarget.id)
+      showToast(`Deleted "${deleteTarget.name}".`)
       setDeleteTarget(null)
-      loadProducts()
+      // Step back a page when the last row of a page was removed
+      if (products.length === 1 && page > 1) updateParams({ page: String(page - 1) })
+      else loadProducts()
     } catch (err) {
-      showToast('Error during deletion.', 'error')
+      showToast(err.message || 'Could not delete the product.', 'error')
     } finally {
       setIsDeleting(false)
     }
   }
 
-  // Bulk Status Changes
-  const handleBulkStatusChange = (newStatus) => {
-    if (selectedIds.length === 0) return
-    productStore.bulkUpdateStatus(selectedIds, newStatus)
-    showToast(`Updated status for ${selectedIds.length} products to ${newStatus}.`)
-    setSelectedIds([])
-    loadProducts()
-  }
-
-  const totalPages = Math.ceil(totalCount / limit) || 1
+  const hasFilters = Boolean(search || category || status)
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
-      {/* ── Toast Notification ─────────────────────────────── */}
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-5">
       {toast && (
         <div
-          className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl shadow-xl border flex items-center gap-3 animate-in fade-in slide-in-from-bottom-5 duration-300 text-xs sm:text-sm font-semibold ${
-            toast.type === 'error'
-              ? 'bg-rose-50 border-rose-200 text-rose-800'
-              : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+          className={`fixed top-4 right-4 z-50 px-4 py-2.5 rounded-xl text-xs font-semibold shadow-lg ${
+            toast.type === 'error' ? 'bg-red-600 text-white' : 'bg-[#0a3622] text-white'
           }`}
         >
-          <span>{toast.type === 'error' ? '⚠️' : '✓'}</span>
-          <span>{toast.message}</span>
+          {toast.message}
         </div>
       )}
 
-      {/* ── 1. Page Header & Actions ───────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">
-              Products Directory
-            </h1>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#0a3622]/10 text-[#0a3622]">
-              {stats.total} Total
-            </span>
-          </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Manage food colours, chemicals, pigments, and export formulations.
+          <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Products</h1>
+          <p className="text-xs text-slate-500 mt-0.5">
+            {loading ? 'Loading…' : `${meta.total} ${meta.total === 1 ? 'product' : 'products'}`}
           </p>
         </div>
+        <Link
+          to="/dashboard/products/new"
+          className="self-start px-4 py-2 rounded-xl bg-[#0a3622] hover:bg-[#0f4d30] text-white text-xs font-bold shadow-sm transition-colors"
+        >
+          + Add Product
+        </Link>
+      </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
-          {/* Reset seeds button */}
+      {/* Filters */}
+      <div className="flex flex-col md:flex-row gap-3 bg-white border border-slate-200 rounded-2xl p-3">
+        <input
+          type="search"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="Search by name, CAS No. or model number…"
+          className="flex-1 text-sm px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#0a3622]"
+        />
+        <select
+          value={category}
+          onChange={(e) => updateParams({ category: e.target.value, page: '' })}
+          className="text-sm px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-[#0a3622]"
+        >
+          <option value="">All categories</option>
+          {categories.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.name}
+            </option>
+          ))}
+        </select>
+        <select
+          value={status}
+          onChange={(e) => updateParams({ status: e.target.value, page: '' })}
+          className="text-sm px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-[#0a3622]"
+        >
+          <option value="">Any status</option>
+          <option value="active">Published</option>
+          <option value="draft">Hidden</option>
+        </select>
+        {hasFilters && (
           <button
             type="button"
             onClick={() => {
-              if (window.confirm('Reset products database back to default sample records?')) {
-                productStore.resetToDefaults()
-                showToast('Products reset to defaults.')
-                loadProducts()
-              }
+              setSearchInput('')
+              setSearchParams({})
             }}
-            className="px-3 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 text-xs font-semibold shadow-xs transition-colors cursor-pointer"
-            title="Reset sample products"
+            className="text-xs font-semibold text-slate-500 hover:text-slate-800 px-2 cursor-pointer"
           >
-            ↻ Reset Sample Data
+            Reset
           </button>
-
-          {/* Add Product CTA */}
-          <Link
-            to="/dashboard/products/new"
-            className="px-4 py-2 rounded-xl bg-[#0a3622] hover:bg-[#0f4d30] text-white text-xs sm:text-sm font-bold shadow-sm shadow-[#0a3622]/20 hover:shadow-md transition-all flex items-center gap-2 cursor-pointer"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-            </svg>
-            <span>Add New Product</span>
-          </Link>
-        </div>
+        )}
       </div>
 
-      {/* ── 2. Top KPI Metric Cards ────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Total Catalog
-            </span>
-            <span className="text-base">📦</span>
-          </div>
-          <div className="text-2xl font-extrabold text-slate-900">{stats.total}</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Formulations & pigments</p>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs">
-          <div className="flex items-center justify-between text-emerald-600 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Active / Export
-            </span>
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          </div>
-          <div className="text-2xl font-extrabold text-emerald-700">{stats.active}</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Live on website & catalog</p>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs">
-          <div className="flex items-center justify-between text-amber-600 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Low Inventory
-            </span>
-            <span className="text-base">⚠️</span>
-          </div>
-          <div className="text-2xl font-extrabold text-amber-700">{stats.lowStock}</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Stock below threshold</p>
-        </div>
-
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-xs">
-          <div className="flex items-center justify-between text-slate-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-              Drafts / In Review
-            </span>
-            <span className="text-base">📝</span>
-          </div>
-          <div className="text-2xl font-extrabold text-slate-700">{stats.draft}</div>
-          <p className="text-[11px] text-slate-400 mt-0.5">Pending lab verification</p>
-        </div>
-      </div>
-
-      {/* ── 3. Filters Toolbar ─────────────────────────────── */}
-      <ProductFilters
-        search={search}
-        onSearchChange={handleSearchChange}
-        category={category}
-        onCategoryChange={handleCategoryChange}
-        status={status}
-        onStatusChange={handleStatusChangeFilter}
-        grade={grade}
-        onGradeChange={handleGradeChange}
-        sort={sort}
-        onSortChange={handleSortChange}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        onReset={handleResetFilters}
-        totalResults={totalCount}
-      />
-
-      {/* ── 4. Bulk Actions Bar (Sticky Floating) ─────────── */}
-      {selectedIds.length > 0 && (
-        <div className="bg-slate-900 text-white rounded-2xl px-4 py-3 shadow-xl flex flex-wrap items-center justify-between gap-3 animate-in fade-in slide-in-from-top-3 duration-200">
-          <div className="flex items-center gap-2">
-            <span className="w-5 h-5 rounded-full bg-emerald-500 text-slate-900 flex items-center justify-center text-[10px] font-extrabold">
-              {selectedIds.length}
-            </span>
-            <span className="text-xs font-semibold">
-              {selectedIds.length} {selectedIds.length === 1 ? 'product' : 'products'} selected
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => handleBulkStatusChange('active')}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-500 text-white transition-colors cursor-pointer"
-            >
-              Mark Active
-            </button>
-            <button
-              type="button"
-              onClick={() => handleBulkStatusChange('draft')}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-700 hover:bg-slate-600 text-slate-200 transition-colors cursor-pointer"
-            >
-              Move to Draft
-            </button>
-            <button
-              type="button"
-              onClick={handleOpenBulkDelete}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-medium bg-rose-600 hover:bg-rose-500 text-white transition-colors cursor-pointer"
-            >
-              Delete Selected
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedIds([])}
-              className="px-2 py-1.5 rounded-lg text-xs text-slate-400 hover:text-white transition-colors cursor-pointer"
-            >
-              Deselect
-            </button>
-          </div>
+      {error && (
+        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center justify-between">
+          <span>{error}</span>
+          <button type="button" onClick={loadProducts} className="font-bold underline cursor-pointer">
+            Retry
+          </button>
         </div>
       )}
 
-      {/* ── 5. Product Content (Table vs Grid) ─────────────── */}
-      {viewMode === 'table' ? (
-        <ProductTable
-          products={products}
-          selectedIds={selectedIds}
-          onToggleSelect={handleToggleSelect}
-          onSelectAll={handleSelectAll}
-          onStatusChange={handleStatusToggle}
-          onDuplicate={handleDuplicate}
-          onDelete={handleOpenDelete}
-        />
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {products.length === 0 ? (
-            <div className="col-span-full bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500">
-              <span className="text-3xl block mb-2">🔍</span>
-              <p className="text-sm font-semibold">No products found matching filters.</p>
-              <button
-                type="button"
-                onClick={handleResetFilters}
-                className="mt-3 text-xs font-bold text-[#0a3622] hover:underline cursor-pointer"
-              >
-                Clear all filters
-              </button>
-            </div>
-          ) : (
-            products.map((p) => (
-              <ProductCard
-                key={p.id}
-                product={p}
-                isSelected={selectedIds.includes(p.id)}
-                onToggleSelect={handleToggleSelect}
-                onDuplicate={handleDuplicate}
-                onDelete={handleOpenDelete}
-              />
-            ))
-          )}
-        </div>
-      )}
+      {/* Table */}
+      <div className="bg-white border border-slate-200 rounded-2xl overflow-x-auto">
+        <table className="w-full text-left text-xs">
+          <thead className="bg-slate-50 text-slate-500 uppercase tracking-wider text-[10px]">
+            <tr>
+              <th className="px-4 py-3 font-bold">Product</th>
+              <th className="px-4 py-3 font-bold">Category</th>
+              <th className="px-4 py-3 font-bold">Group</th>
+              <th className="px-4 py-3 font-bold">Status</th>
+              <th className="px-4 py-3 font-bold text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-slate-100">
+            {loading &&
+              [1, 2, 3, 4, 5].map((n) => (
+                <tr key={n}>
+                  <td colSpan={5} className="px-4 py-4">
+                    <div className="h-4 bg-slate-100 rounded animate-pulse" />
+                  </td>
+                </tr>
+              ))}
 
-      {/* ── 6. Pagination Footer ──────────────────────────── */}
-      {totalPages > 1 && (
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-          <p className="text-xs text-slate-500">
-            Showing Page <strong className="text-slate-800">{page}</strong> of{' '}
-            <strong className="text-slate-800">{totalPages}</strong> ({totalCount} total items)
-          </p>
+            {!loading && products.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-4 py-12 text-center text-slate-500">
+                  {hasFilters ? 'No products match these filters.' : 'No products yet.'}
+                </td>
+              </tr>
+            )}
 
-          <div className="flex items-center gap-1.5">
+            {!loading &&
+              products.map((p) => (
+                <tr key={p.id} className="hover:bg-slate-50/60">
+                  <td className="px-4 py-3">
+                    <Link to={`/dashboard/products/${p.id}`} className="flex items-center gap-3 group">
+                      <span className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center shrink-0">
+                        {p.image_url ? (
+                          <img src={p.image_url} alt="" className="w-full h-full object-cover" loading="lazy" />
+                        ) : (
+                          <span className="text-slate-400 font-black">{p.name?.charAt(0)}</span>
+                        )}
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block font-bold text-slate-900 group-hover:text-[#0a3622] truncate">
+                          {p.name}
+                        </span>
+                        <span className="block text-[11px] text-slate-400 truncate">
+                          {[p.slug, p.cas_no && `CAS ${p.cas_no}`].filter(Boolean).join(' · ')}
+                        </span>
+                      </span>
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 text-slate-700">{p.category?.name || '—'}</td>
+                  <td className="px-4 py-3 text-slate-600">{p.group_name || p.group_key || '—'}</td>
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      onClick={() => toggleActive(p)}
+                      title={p.is_active ? 'Click to hide' : 'Click to publish'}
+                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold ring-1 cursor-pointer ${
+                        p.is_active
+                          ? 'bg-emerald-50 text-emerald-700 ring-emerald-200'
+                          : 'bg-slate-100 text-slate-600 ring-slate-200'
+                      }`}
+                    >
+                      {p.is_active ? 'Published' : 'Hidden'}
+                    </button>
+                    {p.is_featured && (
+                      <span className="ml-1.5 px-2 py-1 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 ring-1 ring-amber-200">
+                        Featured
+                      </span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 text-right whitespace-nowrap">
+                    <Link
+                      to={`/dashboard/products/${p.id}/edit`}
+                      className="text-[#0a3622] font-bold hover:underline mr-3"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setDeleteTarget(p)}
+                      className="text-red-600 font-bold hover:underline cursor-pointer"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      </div>
+
+      {meta.last_page > 1 && (
+        <div className="flex items-center justify-between text-xs text-slate-500">
+          <span>
+            Page {page} of {meta.last_page}
+          </span>
+          <div className="flex gap-2">
             <button
               type="button"
               disabled={page <= 1}
-              onClick={() => updateParams({ page: page - 1 })}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              onClick={() => updateParams({ page: String(page - 1) })}
+              className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-semibold disabled:opacity-40 cursor-pointer"
             >
-              Previous
+              ← Prev
             </button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pNum) => (
-              <button
-                key={pNum}
-                type="button"
-                onClick={() => updateParams({ page: pNum })}
-                className={`w-8 h-8 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                  page === pNum
-                    ? 'bg-[#0a3622] text-white'
-                    : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
-                }`}
-              >
-                {pNum}
-              </button>
-            ))}
-
             <button
               type="button"
-              disabled={page >= totalPages}
-              onClick={() => updateParams({ page: page + 1 })}
-              className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+              disabled={page >= meta.last_page}
+              onClick={() => updateParams({ page: String(page + 1) })}
+              className="px-3 py-1.5 rounded-lg border border-slate-200 bg-white font-semibold disabled:opacity-40 cursor-pointer"
             >
-              Next
+              Next →
             </button>
           </div>
         </div>
       )}
 
-      {/* ── 7. Deletion Confirmation Modal ─────────────────── */}
       <ProductDeleteModal
         isOpen={Boolean(deleteTarget)}
         target={deleteTarget}
-        isBulk={isBulkDelete}
         onClose={() => setDeleteTarget(null)}
-        onConfirm={handleConfirmDelete}
+        onConfirm={confirmDelete}
         isDeleting={isDeleting}
       />
     </div>

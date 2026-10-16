@@ -29,7 +29,7 @@ export default function ProductDetailHeader({
           className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-white/15 hover:bg-white/25 px-4 py-2 rounded-xl backdrop-blur-xs transition-colors border border-white/20"
         >
           <span>&larr;</span>
-          <span>Back to All {totalCount} Colours</span>
+          <span>{totalCount > 1 ? `Back to All ${totalCount} Products` : "Back to Products"}</span>
         </Link>
       </div>
     </div>

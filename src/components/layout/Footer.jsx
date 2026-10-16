@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom'
 import footerBg from '../../assets/footer-bg.jpg'
+import { useCategories } from '../../api/useCatalog'
+
+const toLink = (cat) => ({
+  name: cat.navLabel || cat.name,
+  path: cat.path || `/products/${cat.slug}`,
+})
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
+  const { categories } = useCategories({ nav: true })
 
   const quickLinks = [
     { name: 'Home', path: '/' },
@@ -11,44 +18,14 @@ export default function Footer() {
     { name: 'Contact Us', path: '/contact' },
   ]
 
-  const productCategories = [
-    {
-      left: { name: 'Bakery Colors', path: '/products/bakery-colors' },
-      right: { name: 'Synthetic food colours', path: '/products/synthetic-food-colours' },
-    },
-    {
-      left: { name: 'Lake colours', path: '/products/lake-colours' },
-      right: { name: 'Food additives', path: '/products/food-additives' },
-    },
-    {
-      left: { name: 'Blended Colours', path: '/products/blended-colours' },
-      right: { name: 'Botanical Extracts', path: '/products/botanical-extracts' },
-    },
-    {
-      left: { name: 'Pharmaceutical Colours', path: '/products/pharmaceutical-colours' },
-      right: { name: 'Natural Food Colours', path: '/products/natural-food-colors' },
-    },
-    {
-      left: { name: 'Cosmetic Colours', path: '/products/cosmetic-colours' },
-      right: { name: 'Chemicals', path: '/products/chemicals' },
-    },
-    {
-      left: { name: 'Liquid Flavours', path: '/products/liquid-flavours' },
-      right: { name: 'Titanium Dioxide', path: '/products/titanium-dioxide' },
-    },
-    {
-      left: { name: 'Emulsion Flavours', path: '/products/emulsion-flavours' },
-      right: { name: 'Pearl Pigment Powder', path: '/products/pearl-pigment-powder' },
-    },
-    {
-      left: { name: 'Powder Flavours', path: '/products/powder-flavours' },
-      right: { name: 'Edible Lustre', path: '/products/edible-lustre' },
-    },
-    {
-      left: { name: 'Fluorescent Colours', path: '/products/fluorescent-colours' },
-      right: { name: 'Disco Dust Powder', path: '/products/disco-dust-powder' },
-    },
-  ]
+  // Pair the API categories up two per row for the 2-column grid
+  const productCategories = []
+  for (let i = 0; i < categories.length; i += 2) {
+    productCategories.push({
+      left: toLink(categories[i]),
+      right: categories[i + 1] ? toLink(categories[i + 1]) : null,
+    })
+  }
 
   return (
     <footer className="relative bg-gradient-to-br from-[#072417] via-[#0a3622] to-[#062014] text-white text-xs overflow-hidden">
@@ -187,7 +164,8 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Column 3: Product Categories (lg:col-span-5) */}
+          {/* Column 3: Product Categories (lg:col-span-5) — loaded from the API */}
+          {productCategories.length > 0 && (
           <div className="lg:col-span-5 space-y-4">
             <div>
               <h3 className="text-base sm:text-lg font-bold text-amber-400 font-heading tracking-wide">
@@ -198,9 +176,9 @@ export default function Footer() {
 
             {/* 2-Column Subgrid with Rows and Dashed Dividers */}
             <div className="space-y-1.5 text-xs">
-              {productCategories.map((item, idx) => (
+              {productCategories.map((item) => (
                 <div
-                  key={idx}
+                  key={item.left.path}
                   className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 pb-1.5 border-b border-white/10 border-dashed"
                 >
                   {/* Left Column Item */}
@@ -215,6 +193,7 @@ export default function Footer() {
                   </Link>
 
                   {/* Right Column Item */}
+                  {item.right && (
                   <Link
                     to={item.right.path}
                     className="flex items-center gap-2 text-slate-200 hover:text-amber-300 transition-colors group"
@@ -224,10 +203,12 @@ export default function Footer() {
                     </span>
                     <span className="truncate">{item.right.name}</span>
                   </Link>
+                  )}
                 </div>
               ))}
             </div>
           </div>
+          )}
 
         </div>
 
@@ -237,14 +218,6 @@ export default function Footer() {
             &copy; {currentYear} Exim India Corporation. All rights reserved.
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/privacy" className="hover:text-emerald-300 transition-colors">
-              Privacy Policy
-            </Link>
-            <span>&bull;</span>
-            <Link to="/terms" className="hover:text-emerald-300 transition-colors">
-              Terms of Export
-            </Link>
-            <span>&bull;</span>
             <Link to="/quality" className="hover:text-emerald-300 transition-colors">
               Quality Assurance
             </Link>

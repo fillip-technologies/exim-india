@@ -99,9 +99,11 @@ export default function AboutServicesSection({
                   </h3>
 
                   {/* Description */}
-                  <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed font-body flex-1">
-                    {item.description}
-                  </p>
+                  {item.description && (
+                    <p className="text-xs sm:text-sm text-slate-600 font-normal leading-relaxed font-body flex-1 line-clamp-4">
+                      {item.description}
+                    </p>
+                  )}
                 </div>
               </>
             )

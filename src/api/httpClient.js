@@ -61,9 +61,10 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       // Server replied with a non-2xx status
       const { status, data } = error.response
+      const firstFieldError = Object.values(data?.errors || {}).flat()[0]
       const message =
-        data?.errors?.email?.[0] || // 422 Laravel validation
-        data?.message ||             // General Laravel message
+        firstFieldError ||          // first Laravel validation message
+        data?.message ||            // General Laravel message
         `Request failed (${status})`
       const errors = data?.errors || {}
       return Promise.reject(new ApiError(message, status, errors))

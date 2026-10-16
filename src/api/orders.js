@@ -10,15 +10,12 @@ import { http } from './httpClient'
 
 /**
  * Public: submit an export order inquiry.
- * Sends to POST /contact with type = 'order'.
+ * Sends to POST /orders.
  *
- * @param {object} data  { name, email, phone, product, quantity, address, message }
+ * @param {object} data  { product_id, name, email, phone, quantity, address, message }
  */
 export function submitOrder(data) {
-  return http.post('/contact', {
-    ...data,
-    type: 'order',
-  })
+  return http.post('/orders', data)
 }
 
 /**

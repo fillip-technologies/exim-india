@@ -2,63 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { getTestimonials } from '../../api'
 
-// Static fallback avatars (used when the API testimonial has no avatar URL)
-import avatar1 from '../../assets/avatar-1.jpg'
-import avatar2 from '../../assets/avatar-2.jpg'
-import avatar3 from '../../assets/avatar-3.jpg'
-import avatar4 from '../../assets/avatar-4.jpg'
-import avatar5 from '../../assets/avatar-5.jpg'
-
-const FALLBACK_AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5]
-
-/** Static seed — shown while the API is loading or if it fails */
-const STATIC_TESTIMONIALS = [
-  {
-    id: 0,
-    name: 'Marcus Vance',
-    role: 'Director of Global Procurement',
-    company: 'BevTech Innovations Europe (Frankfurt, Germany)',
-    avatar: avatar1,
-    quote:
-      'We have sourced synthetic food colours and aluminium lake pigments from Exim India for over six years. Their batch consistency and fast regulatory dossiers make EU customs clearance completely seamless.',
-  },
-  {
-    id: 1,
-    name: 'Dr. Amira El-Sayed',
-    role: 'Head of Quality & Formulations',
-    company: 'Gulf Confectionery & Bakery Ltd. (Dubai, UAE)',
-    avatar: avatar2,
-    quote:
-      "We tested Exim India's cloud emulsions and lake colours across our gummy lines. The color stability under high heat exceeded our benchmark, and express evaluation samples always arrive within 48 hours.",
-  },
-  {
-    id: 2,
-    name: 'Robert M. Davies',
-    role: 'VP of Supply Chain & QA',
-    company: 'Apex Health & Pharma Formulations (Toronto, Canada)',
-    avatar: avatar3,
-    quote:
-      "Our pharmaceutical operations demand strict USP/EP certified purity for tablet coatings. Exim India's airtight fiber drums and detailed COA heavy-metal screening give our QA audit team complete confidence.",
-  },
-  {
-    id: 3,
-    name: 'Kenji Takahashi',
-    role: 'Chief Formulation Chemist',
-    company: 'Nippon Flavours & Ingredients (Osaka, Japan)',
-    avatar: avatar4,
-    quote:
-      'We audited dozens of colour suppliers before qualifying Exim India. Their Lake Tartrazine and botanical extracts consistently match Japan\'s strict Food Sanitation Law standards with zero batch variance.',
-  },
-  {
-    id: 4,
-    name: 'Claire Harrington',
-    role: 'Head of Ingredients Sourcing',
-    company: 'Britannia Food & Beverage Group (London, UK)',
-    avatar: avatar5,
-    quote:
-      'From water-soluble FD&C dyes to custom spray-dried fruit flavour compounds, Exim India provides prompt sea-freight dispatch and flawless documentation. By far our most dependable export partner.',
-  },
-]
+/** A carousel needs at least this many testimonials to loop without repeating one */
+const MIN_FOR_CAROUSEL = 3
 
 export default function TestimonialsSection() {
   const [activeIndex, setActiveIndex] = useState(0) // Top visible item index (0..4)
@@ -66,8 +11,8 @@ export default function TestimonialsSection() {
   const [isPaused, setIsPaused] = useState(false)
   const autoPlayRef = useRef(null)
 
-  // ── API-driven testimonials (falls back to static seed on error) ────
-  const [testimonials, setTestimonials] = useState(STATIC_TESTIMONIALS)
+  // ── API-driven testimonials ────
+  const [testimonials, setTestimonials] = useState([])
 
   useEffect(() => {
     let cancelled = false
@@ -76,15 +21,13 @@ export default function TestimonialsSection() {
       .then(({ data }) => {
         if (cancelled || !data?.length) return
 
-        // Normalise API shape → component shape.
         // API resource: { id, name, role, company, avatar (URL|null), quote }
-        const mapped = data.map((t, i) => ({
+        const mapped = data.map((t) => ({
           id:      t.id,
           name:    t.name,
-          role:    t.role    ?? '',
-          company: t.company ?? '',
-          // Use API avatar URL when present; fall back to a bundled local asset
-          avatar:  t.avatar  ?? FALLBACK_AVATARS[i % FALLBACK_AVATARS.length],
+          role:    t.role    || '',
+          company: t.company || '',
+          avatar:  t.avatar  || null,
           quote:   t.quote,
         }))
 
@@ -92,8 +35,7 @@ export default function TestimonialsSection() {
         setActiveIndex(0) // reset carousel position after fresh data
       })
       .catch(() => {
-        // Backend unavailable — silently keep the static seed
-        if (!cancelled) setTestimonials(STATIC_TESTIMONIALS)
+        // Backend unavailable — the section simply stays hidden
       })
 
     return () => { cancelled = true }
@@ -101,7 +43,8 @@ export default function TestimonialsSection() {
 
 
   // Clone first 3 items at the end to allow seamless infinite upward slide
-  const displayItems = [...testimonials, ...testimonials.slice(0, 3)]
+  const carousel = testimonials.length >= MIN_FOR_CAROUSEL
+  const displayItems = carousel ? [...testimonials, ...testimonials.slice(0, 3)] : testimonials
 
   // Height of each card (136px) + margin-bottom (16px) = 152px step
   const STEP_HEIGHT = 152
@@ -136,7 +79,7 @@ export default function TestimonialsSection() {
 
   // Auto-slide upwards every 3.8s, pausing when user hovers
   useEffect(() => {
-    if (isPaused) return
+    if (isPaused || !carousel) return
 
     autoPlayRef.current = setInterval(() => {
       handleNext()
@@ -145,10 +88,12 @@ export default function TestimonialsSection() {
     return () => {
       if (autoPlayRef.current) clearInterval(autoPlayRef.current)
     }
-  }, [activeIndex, isPaused])
+  }, [activeIndex, isPaused, carousel])
 
   // Current featured (middle) testimonial index (0..4)
-  const currentFeaturedIndex = (activeIndex + 1) % testimonials.length
+  const currentFeaturedIndex = testimonials.length ? (activeIndex + 1) % testimonials.length : 0
+
+  if (testimonials.length === 0) return null
 
   return (
     <section className="py-16 sm:py-20 lg:py-24 bg-[#f8fafc] border-t border-slate-200/80 font-body relative overflow-hidden">
@@ -194,6 +139,7 @@ export default function TestimonialsSection() {
               </Link>
 
               {/* Up & Down Manual Slide Buttons */}
+              {carousel && (
               <div className="flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl p-1 shadow-sm">
                 <button
                   type="button"
@@ -219,9 +165,11 @@ export default function TestimonialsSection() {
                   </svg>
                 </button>
               </div>
+              )}
             </div>
 
-            {/* Pagination Dots (5 Testimonials Indicator) */}
+            {/* Pagination Dots */}
+            {carousel && (
             <div className="flex items-center gap-2 pt-1">
               {testimonials.map((_, i) => (
                 <button
@@ -243,17 +191,13 @@ export default function TestimonialsSection() {
                 {currentFeaturedIndex + 1} / {testimonials.length}
               </span>
             </div>
+            )}
 
             {/* Subtle Trust Indicators */}
             <div className="pt-5 border-t border-slate-200/80 flex items-center gap-6 text-xs text-slate-500 font-medium">
               <div className="flex items-center gap-1.5">
                 <span className="text-emerald-700 font-black">✓</span>
                 <span>50+ Countries</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-slate-300" />
-              <div className="flex items-center gap-1.5">
-                <span className="text-amber-500 font-black">★</span>
-                <span>4.9 / 5 Client Rating</span>
               </div>
             </div>
           </div>
@@ -274,7 +218,7 @@ export default function TestimonialsSection() {
             <div
               onTransitionEnd={handleTransitionEnd}
               style={{
-                transform: `translateY(-${activeIndex * STEP_HEIGHT}px)`,
+                transform: carousel ? `translateY(-${activeIndex * STEP_HEIGHT}px)` : 'none',
                 transition: isTransitioning
                   ? 'transform 650ms cubic-bezier(0.25, 1, 0.5, 1)'
                   : 'none',
@@ -283,12 +227,13 @@ export default function TestimonialsSection() {
             >
               {displayItems.map((item, index) => {
                 // The item currently occupying the middle slot (index = activeIndex + 1) is active
-                const isMiddle = index === activeIndex + 1
+                const isMiddle = carousel && index === activeIndex + 1
 
                 return (
                   <div
                     key={`${item.id}-${index}`}
                     onClick={() => {
+                      if (!carousel) return
                       if (index === activeIndex) {
                         handlePrev()
                       } else if (index === activeIndex + 2) {
@@ -327,12 +272,18 @@ export default function TestimonialsSection() {
                               : 'ring-2 ring-slate-100'
                           }`}
                         >
-                          <img
-                            src={item.avatar}
-                            alt={item.name}
-                            className="w-full h-full object-cover object-center"
-                            loading="lazy"
-                          />
+                          {item.avatar ? (
+                            <img
+                              src={item.avatar}
+                              alt={item.name}
+                              className="w-full h-full object-cover object-center"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-emerald-50 text-[#0a3622] flex items-center justify-center font-heading font-black text-lg">
+                              {item.name.charAt(0)}
+                            </div>
+                          )}
                         </div>
                       </div>
 
@@ -344,7 +295,12 @@ export default function TestimonialsSection() {
                               {item.name}
                             </h3>
                             <p className="text-[11px] sm:text-xs text-slate-500 font-medium truncate mt-0.5">
-                              {item.role} • <span className="text-slate-700">{item.company}</span>
+                              {[item.role, item.company].filter(Boolean).map((part, i) => (
+                                <span key={part}>
+                                  {i > 0 && ' • '}
+                                  <span className={i > 0 ? 'text-slate-700' : undefined}>{part}</span>
+                                </span>
+                              ))}
                             </p>
                           </div>
 

@@ -1,122 +1,27 @@
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
-// High-resolution images from src/assets/img/ matching user's requested product list
-import syntheticColoursImg from '../../assets/img/efc/synthethic.jpg'
-import lakeColoursImg from '../../assets/img/lake/lake-allura-red.jpg'
-import blendedColoursImg from '../../assets/img/efc/Allura-Red-colour.jpg'
-import cosmeticColoursImg from '../../assets/img/cosmetic-color/purple3.jpg'
-import pharmaColoursImg from '../../assets/img/to/pharma-food.jpg'
-import powderFlavoursImg from '../../assets/img/pf/fruit-powder.jpg'
-import discoDustImg from '../../assets/img/dust-color/Gold-Disco-Dust.jpg'
-import foodAdditivesImg from '../../assets/img/fa/soya-lecithin-powder.jpeg'
-import titaniumImg from '../../assets/img/to/pharma-food.jpg'
-import naturalColorsImg from '../../assets/img/nfc/high-quality-annatto-nor-bixin-powder.jpg'
-import pearlPigmentImg from '../../assets/img/pearl/1.png'
-import edibleLustreImg from '../../assets/img/edible-lustre-dust/gold-lustre-dust.jpg'
-import fluorescentImg from '../../assets/img/fc/yellow.jpg'
-import fruitPowderImg from '../../assets/img/nfp/mango-powder-250x250.jpg'
-import fruitFragranceImg from '../../assets/img/fruit-fragrance/strawberry-perfume.jpg'
-import chemicalsImg from '../../assets/img/chemicals.png'
-import bakeryColorsImg from '../../assets/home/bakery-image.png'
+import { useCategories } from '../../api/useCatalog'
 
 export default function DiverseRangeSection() {
   const navigate = useNavigate()
+  const { categories } = useCategories()
   const [isReversed, setIsReversed] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
 
-  // Full product list mapping every homepage card directly to its active product page
-  const products = [
-    {
-      title: 'Cosmetic Colours',
-      image: cosmeticColoursImg,
-      link: '/products/cosmetic-colours',
-    },
-    {
-      title: 'Pharmaceutical Colours',
-      image: pharmaColoursImg,
-      link: '/products/pharmaceutical-colours',
-    },
-    {
-      title: 'Bakery Colors',
-      image: bakeryColorsImg,
-      link: '/products/bakery-colors',
-    },
-    {
-      title: 'Powder Flavours',
-      image: powderFlavoursImg,
-      link: '/products/powder-flavours',
-    },
-    {
-      title: 'Disco Dust Powder',
-      image: discoDustImg,
-      link: '/products/disco-dust-powder',
-    },
-    {
-      title: 'Synthetic Food Colours',
-      image: syntheticColoursImg,
-      link: '/products/synthetic-food-colours',
-    },
-    {
-      title: 'Lake Colours',
-      image: lakeColoursImg,
-      link: '/products/lake-colours',
-    },
-    {
-      title: 'Blended Colours',
-      image: blendedColoursImg,
-      link: '/products/blended-colours',
-    },
-    {
-      title: 'Food Additives',
-      image: foodAdditivesImg,
-      link: '/products/food-additives',
-    },
-    {
-      title: 'Titanium Dioxide',
-      image: titaniumImg,
-      link: '/products/titanium-dioxide',
-    },
-    {
-      title: 'Natural Food Colors',
-      image: naturalColorsImg,
-      link: '/products/natural-food-colors',
-    },
-    {
-      title: 'Pearl Pigment Powder',
-      image: pearlPigmentImg,
-      link: '/products/pearl-pigment-powder',
-    },
-    {
-      title: 'Edible Lustre',
-      image: edibleLustreImg,
-      link: '/products/edible-lustre',
-    },
-    {
-      title: 'Fluorescent Colours',
-      image: fluorescentImg,
-      link: '/products/fluorescent-colours',
-    },
-    {
-      title: 'Natural Fruit Powder',
-      image: fruitPowderImg,
-      link: '/products/natural-fruit-powder',
-    },
-    {
-      title: 'Fruit Fragrance',
-      image: fruitFragranceImg,
-      link: '/products/fruit-fragrance',
-    },
-    {
-      title: 'Chemicals',
-      image: chemicalsImg,
-      link: '/products/chemicals',
-    },
-  ]
+  // Everything shown here comes from the API (GET /categories)
+  const products = useMemo(
+    () =>
+      (categories || []).map((cat) => ({
+        title: cat.name,
+        image: cat.image || null,
+        link: cat.path || `/products/${cat.slug}`,
+      })),
+    [categories],
+  )
 
   // Triple set for seamless, mathematically invisible infinite wrapping
-  const tripleProducts = [...products, ...products, ...products]
+  const tripleProducts = useMemo(() => [...products, ...products, ...products], [products])
 
   // Animation & interaction references
   const containerRef = useRef(null)
@@ -374,6 +279,8 @@ export default function DiverseRangeSection() {
     velocityRef.current = -620
   }
 
+  if (products.length === 0) return null
+
   return (
     <section id="products-section" className="scroll-mt-20 pt-6 sm:pt-9 pb-12 sm:pb-16 bg-white border-t border-slate-100 overflow-hidden w-full">
       {/* Header Container - Contained within max-w-7xl for clean alignment */}
@@ -478,14 +385,20 @@ export default function DiverseRangeSection() {
             >
               {/* Card Image Container */}
               <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-100 mb-3 select-none flex items-center justify-center">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  draggable={false}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
-                  loading="lazy"
-                  onLoad={updateMetrics}
-                />
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    draggable={false}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 select-none"
+                    loading="lazy"
+                    onLoad={updateMetrics}
+                  />
+                ) : (
+                  <span className="text-4xl font-black font-heading text-slate-300 select-none">
+                    {item.title.charAt(0)}
+                  </span>
+                )}
               </div>
 
               {/* Bottom Row with Title & Arrow */}

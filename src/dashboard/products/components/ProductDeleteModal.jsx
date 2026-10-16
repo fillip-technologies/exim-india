@@ -20,7 +20,7 @@ export default function ProductDeleteModal({
 
   const description = isBulk
     ? `Are you sure you want to delete these ${Array.isArray(target) ? target.length : ''} selected products? This will remove them from the export catalog.`
-    : `Are you sure you want to permanently delete "${target?.name}" (SKU: ${target?.sku})? This action cannot be undone.`
+    : `Are you sure you want to delete "${target?.name}"? It will be removed from the public catalogue.`
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">

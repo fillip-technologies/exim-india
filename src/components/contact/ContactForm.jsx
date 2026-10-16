@@ -1,7 +1,11 @@
 import { useState } from 'react'
 import { submitContact } from '../../api'
+import { useCategories } from '../../api/useCatalog'
+
+const OTHER_OPTION = 'Other / Custom Requirement'
 
 export default function ContactForm() {
+  const { categories } = useCategories()
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading]     = useState(false)
   const [apiError, setApiError]   = useState('')
@@ -10,30 +14,13 @@ export default function ContactForm() {
     email:            '',
     phone:            '',
     company:          '',
-    product_interest: 'Synthetic Food Colours',
+    product_interest: '',
     message:          '',
     website:          '', // honeypot — never filled by real users
   })
 
-  const productOptions = [
-    'Synthetic Food Colours',
-    'Lake Colours',
-    'Blended Colours',
-    'Cosmetic Colours',
-    'Pharmaceutical Colours',
-    'Liquid Flavours',
-    'Emulsion Flavours',
-    'Powder Flavours',
-    'Natural Fruit Powder',
-    'Natural Food Colors',
-    'Fruit Fragrance',
-    'Edible Lustre',
-    'Fluorescent Colours',
-    'Pearl Pigment Powder',
-    'Food Additives & Chemicals',
-    'Mango Pulp & Purees',
-    'Other / Custom Requirement',
-  ]
+  // Options come from the API; the free-form choice is always available
+  const productOptions = [...categories.map((c) => c.name), OTHER_OPTION]
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -96,7 +83,7 @@ export default function ContactForm() {
                   email:            '',
                   phone:            '',
                   company:          '',
-                  product_interest: 'Synthetic Food Colours',
+                  product_interest: '',
                   message:          '',
                   website:          '',
                 })
@@ -218,6 +205,7 @@ export default function ContactForm() {
               onChange={handleChange}
               className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800 focus:outline-none focus:border-[#0a3622] focus:ring-1 focus:ring-[#0a3622] transition-colors cursor-pointer disabled:opacity-60"
             >
+              <option value="">Select a category (optional)</option>
               {productOptions.map((prod) => (
                 <option key={prod} value={prod}>
                   {prod}

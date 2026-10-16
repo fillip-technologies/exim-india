@@ -1,85 +1,44 @@
-import { useState } from 'react'
-
-// High-resolution images added by user in src/assets/home/
-import colorProductImg from '../../assets/home/color-product.jpg'
-import cosmeticProductImg from '../../assets/home/coesmtic-product.jpg'
-import makeupProductImg from '../../assets/home/makeup-product.jpg'
-import medicineImg2 from '../../assets/home/medicine-image-2.jpg'
-import medicineImg1 from '../../assets/home/medicine-image-1.jpg'
-import medicineImg from '../../assets/home/medicine-image.jpg'
-import oilProductImg from '../../assets/home/oil-product.jpg'
-import pearlsProductImg from '../../assets/home/edible-pearls-non-pareils-dragees-sugar-ball-silver.jpg'
-import sugarCraftsImg from '../../assets/home/sugar-crafts-vermacili.jpg'
-import multipleDecorationsImg from '../../assets/home/multiple-decorations.jpg'
+import { useState, useMemo } from 'react'
+import { useCategories } from '../../api/useCatalog'
 import backgroundGalleryImg from '../../assets/home/background-gallery.jpg'
 
+// Purely visual palette; the cards themselves (title, image, order) come from the API
+const CARD_STYLES = [
+  { gradient: 'from-[#0284c7] via-[#0369a1] to-[#072d4a]', accentColor: '#38bdf8' },
+  { gradient: 'from-[#8b5cf6] via-[#6d28d9] to-[#2e1065]', accentColor: '#c084fc' },
+  { gradient: 'from-[#ea580c] via-[#c2410c] to-[#431407]', accentColor: '#fb923c' },
+  { gradient: 'from-[#059669] via-[#047857] to-[#022c22]', accentColor: '#34d399' },
+  { gradient: 'from-[#d97706] via-[#b45309] to-[#451a03]', accentColor: '#fbbf24' },
+]
+const MAX_CARDS = 5
+
 export default function ProductAccordionSection() {
-  const [activeId, setActiveId] = useState(1)
+  const { categories } = useCategories()
+  const [openId, setOpenId] = useState(null)
   const [previewImage, setPreviewImage] = useState(null)
   const [selectedSubImg, setSelectedSubImg] = useState({})
 
-  const accordionCards = [
-    {
-      id: 1,
-      number: '01',
-      verticalTitle: 'FOOD COLOURS',
-      primaryImage: colorProductImg,
-      altImages: [
-        { label: 'Colours', src: colorProductImg },
-      ],
-      gradient: 'from-[#0284c7] via-[#0369a1] to-[#072d4a]',
-      accentColor: '#38bdf8',
-    },
-    {
-      id: 2,
-      number: '02',
-      verticalTitle: 'COSMETIC PIGMENTS',
-      primaryImage: cosmeticProductImg,
-      altImages: [
-        { label: 'Cosmetic', src: cosmeticProductImg },
-        { label: 'Makeup', src: makeupProductImg },
-      ],
-      gradient: 'from-[#8b5cf6] via-[#6d28d9] to-[#2e1065]',
-      accentColor: '#c084fc',
-    },
-    {
-      id: 3,
-      number: '03',
-      verticalTitle: 'PHARMACEUTICAL COLOURS',
-      primaryImage: medicineImg2,
-      altImages: [
-        { label: 'Capsules', src: medicineImg2 },
-        { label: 'Tablets', src: medicineImg1 },
-        { label: 'Medicine', src: medicineImg },
-      ],
-      gradient: 'from-[#ea580c] via-[#c2410c] to-[#431407]',
-      accentColor: '#fb923c',
-    },
-    {
-      id: 4,
-      number: '04',
-      verticalTitle: 'BOTANICAL EXTRACTS',
-      primaryImage: oilProductImg,
-      altImages: [
-        { label: 'Botanical Extracts', src: oilProductImg },
-      ],
-      gradient: 'from-[#059669] via-[#047857] to-[#022c22]',
-      accentColor: '#34d399',
-    },
-    {
-      id: 5,
-      number: '05',
-      verticalTitle: 'EDIBLE PEARLS & CRAFTS',
-      primaryImage: pearlsProductImg,
-      altImages: [
-        { label: 'Silver Dragees', src: pearlsProductImg },
-        { label: 'Vermicelli', src: sugarCraftsImg },
-        { label: 'Decorations', src: multipleDecorationsImg },
-      ],
-      gradient: 'from-[#d97706] via-[#b45309] to-[#451a03]',
-      accentColor: '#fbbf24',
-    },
-  ]
+  const accordionCards = useMemo(
+    () =>
+      (categories || [])
+        .filter((c) => c.image)
+        .slice(0, MAX_CARDS)
+        .map((c, i) => ({
+          id: c.id,
+          number: String(i + 1).padStart(2, '0'),
+          verticalTitle: (c.navLabel || c.name).toUpperCase(),
+          primaryImage: c.image,
+          altImages: [{ label: c.name, src: c.image }],
+          ...CARD_STYLES[i % CARD_STYLES.length],
+        })),
+    [categories],
+  )
+
+  // Until the visitor picks a card, the first one is expanded
+  const activeId = openId ?? accordionCards[0]?.id
+  const setActiveId = setOpenId
+
+  if (accordionCards.length === 0) return null
 
   return (
     <section className="relative py-10 sm:py-14 lg:py-16 bg-white overflow-hidden select-none border-b border-slate-200">

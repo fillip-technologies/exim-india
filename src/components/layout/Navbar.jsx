@@ -3,14 +3,29 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import logoImg from '../../assets/logo.png'
 import { NAV_LINKS } from '../../constants/navigation'
+import { useCategories } from '../../api/useCatalog'
 
 export default function Navbar() {
   const location = useLocation()
+  const { categories } = useCategories({ nav: true })
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [productsDropdownOpen, setProductsDropdownOpen] = useState(false)
   const navPillRef = useRef(null)
   const dropdownRef = useRef(null)
+
+  const navLinks = NAV_LINKS.map((link) => {
+    if (!link.hasCategoryMenu) return link
+    // Only show the menu when the API returned categories
+    if (!categories || categories.length === 0) return link
+    return {
+      ...link,
+      dropdown: categories.map((c) => ({
+        name: c.navLabel || c.name,
+        path: c.path || `/products/${c.slug}`,
+      })),
+    }
+  })
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -106,7 +121,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {NAV_LINKS.map((link) => {
+            {navLinks.map((link) => {
               if (link.dropdown) {
                 return (
                   <div
@@ -140,7 +155,7 @@ export default function Navbar() {
                         <div className="grid grid-cols-2 gap-x-4 sm:gap-x-6 gap-y-1">
                           {link.dropdown.map((item) => (
                             <Link
-                              key={item.name}
+                              key={item.path}
                               to={item.path}
                               onClick={() => setProductsDropdownOpen(false)}
                               className="flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#0a3622] hover:bg-emerald-50/70 transition-all group"
@@ -208,7 +223,7 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="lg:hidden max-w-md mx-auto mt-2.5 rounded-3xl bg-white/95 backdrop-blur-2xl border border-slate-200/90 shadow-2xl p-5 pointer-events-auto animate-fadeIn max-h-[80vh] overflow-y-auto">
           <div className="space-y-1">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <div key={link.name}>
                 <Link
                   to={link.path}
@@ -221,7 +236,7 @@ export default function Navbar() {
                   <div className="pl-3.5 space-y-1 py-1 max-h-72 overflow-y-auto pr-1">
                     {link.dropdown.map((sub) => (
                       <Link
-                        key={sub.name}
+                        key={sub.path}
                         to={sub.path}
                         onClick={() => setMobileMenuOpen(false)}
                         className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-emerald-800 hover:bg-emerald-50/60 transition-colors"

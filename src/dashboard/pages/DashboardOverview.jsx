@@ -1,7 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { http, getUser } from '../../api'
-import { productStore } from '../products/productStructure'
 
 const STATUS_STYLES = {
   new:      'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
@@ -37,28 +36,27 @@ export default function DashboardOverview() {
   const fetchStats = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true)
     try {
-      const [categories, products, contacts, orders, testimonials] = await Promise.all([
+      const [categories, products, contacts, orders, testimonials, unread] = await Promise.all([
         http.get('/admin/categories').catch(() => []),
-        http.get('/admin/products').catch(() => ({ total: 0 })),
-        http.get('/admin/contacts').catch(() => ({ data: [] })),
-        http.get('/admin/contacts', { params: { type: 'order' } }).catch(() => ({ data: [] })),
+        http.get('/admin/products', { params: { per_page: 1 } }).catch(() => null),
+        http.get('/admin/contacts').catch(() => null),
+        http.get('/admin/contacts', { params: { type: 'order', per_page: 1 } }).catch(() => null),
         http.get('/admin/testimonials').catch(() => []),
+        http.get('/admin/contacts', { params: { status: 'new', per_page: 1 } }).catch(() => null),
       ])
 
+      // Paginated endpoints: Laravel resources nest the totals under `meta`, plain paginators don't
+      const totalOf = (res) => res?.meta?.total ?? res?.total ?? res?.data?.length ?? 0
       const contactsList     = contacts?.data || []
-      const newItems         = contactsList.filter(c => c.status === 'new').length
       const testimonialsList = Array.isArray(testimonials) ? testimonials : testimonials?.data || []
 
-      const localProdStats = productStore.getStats()
-      const totalProductsCount = products?.total ?? (products?.data ? products.data.length : localProdStats.total)
-
       setStats({
-        categories:   Array.isArray(categories) ? categories.length : categories?.length ?? 0,
-        products:     totalProductsCount,
-        contacts:     contacts?.total ?? contactsList.length ?? 0,
-        orders:       orders?.total ?? (orders?.data ?? []).length ?? 0,
+        categories:   Array.isArray(categories) ? categories.length : categories?.data?.length ?? 0,
+        products:     totalOf(products),
+        contacts:     totalOf(contacts),
+        orders:       totalOf(orders),
         testimonials: testimonialsList.length,
-        newCount:     newItems,
+        newCount:     totalOf(unread),
       })
 
       setRecentContacts(contactsList.slice(0, 5))
