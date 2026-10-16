@@ -8,20 +8,35 @@ export default function ContactMap() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-10">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <div className="inline-flex items-center gap-2 mb-2">
             <span className="w-6 h-0.5 bg-[#c59b27] rounded-full inline-block" />
             <span className="text-xs font-black uppercase tracking-widest text-[#0a3622] font-heading">
-              LOCATION &amp; DIRECTIONS
+              LOCATIONS &amp; DIRECTIONS
             </span>
             <span className="w-6 h-0.5 bg-[#c59b27] rounded-full inline-block" />
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold font-heading text-slate-900 tracking-tight">
-            Our Corporate Office Location
+            Our Corporate Office &amp; Warehouse
           </h2>
-          <p className="mt-2 text-xs sm:text-sm text-slate-600 leading-relaxed">
-            San Mamede Cottage, Flat No. 1, 1st Floor, Cross Road No. 4, I. C. Colony, Borivali West, Mumbai - 400103, Maharashtra, India.
-          </p>
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-[#0a3622] block mb-1">
+                📍 Corporate Office
+              </span>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                San Mamede Cottage, Flat No. 1, 1st Floor, Cross Road No. 4, I. C. Colony, Borivali West, Mumbai - 400103, Maharashtra, India.
+              </p>
+            </div>
+            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-amber-800 block mb-1">
+                🏭 Warehouse Details
+              </span>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Shop no B-13, Ground Floor, New Heritage CHS Ltd, Kandarpada, Dahisar West, Mumbai - 400068, Maharashtra, India.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Map Wrapper with Floating Card */}

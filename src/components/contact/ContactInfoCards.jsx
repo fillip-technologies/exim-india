@@ -34,9 +34,7 @@ export default function ContactInfoCards() {
       title: 'Packaging & Warehouse Depots',
       icon: '📦',
       address:
-        'Pooja Complex, Opp. Bhadra Petrol Pump, Near Apollo Roadlines, Rahnal Village, Bhiwandi, Maharashtra.',
-      secondAddress:
-        'Andhra Bombay Carriers, Sativali Road, Vasai East, Thane, Maharashtra.',
+        'Shop no B-13, Ground Floor, New Heritage CHS Ltd, Kandarpada, Dahisar West, Mumbai - 400068, Maharashtra, India.',
       phones: [
         { label: 'Logistics Dispatch Desk', number: '+91 22 2892 5032' },
       ],

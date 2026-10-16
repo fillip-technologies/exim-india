@@ -28,7 +28,7 @@ export default function Contact() {
               </div>
 
               <div className="space-y-6 text-sm">
-                {/* Address */}
+                {/* Corporate Office */}
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-xl bg-emerald-50 text-[#0a3622] flex items-center justify-center shrink-0 border border-emerald-100 text-lg">
                     📍
@@ -39,6 +39,26 @@ export default function Contact() {
                       San Mamede Cottage, Flat No. 1, 1st Floor,<br />
                       Cross Road No. 4, I. C. Colony, Borivali West,<br />
                       Mumbai - 400103, Maharashtra, India.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Warehouse Details */}
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200/80 text-lg">
+                    🏭
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-bold text-slate-900 text-base">Warehouse Details</h3>
+                      <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100/70 border border-amber-200 px-2 py-0.5 rounded-full">
+                        Dispatch Hub
+                      </span>
+                    </div>
+                    <p className="text-slate-600 text-xs sm:text-sm mt-1 leading-relaxed">
+                      Shop no B-13, Ground Floor, New Heritage CHS Ltd,<br />
+                      Kandarpada, Dahisar West,<br />
+                      Mumbai - 400068, Maharashtra, India.
                     </p>
                   </div>
                 </div>

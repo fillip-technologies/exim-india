@@ -21,6 +21,7 @@ export const CONTACT_INFO = {
   whatsapp: '917977523176',
   secondaryWhatsapp: '919892364600',
   address: 'San Mamede Cottage, Flat No. 1, 1st Floor, Cross Road No. 4, I. C. Colony, Borivali West, Mumbai - 400103, Maharashtra, India',
+  warehouseAddress: 'Shop no B-13, Ground Floor, New Heritage CHS Ltd, Kandarpada, Dahisar West, Mumbai - 400068, Maharashtra, India',
   certifications: 'ISO 9001:2015 • FSSAI • HALAL • KOSHER • GMP',
   tagline: 'INDIAN PRODUCTS. GLOBAL OPPORTUNITIES.',
 }

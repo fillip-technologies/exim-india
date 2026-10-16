@@ -45,12 +45,12 @@ export default function ContactLogisticsFaq() {
       mapQuery: 'https://maps.google.com/maps?q=Orchid+Residency+Al+Nahda+Sharjah&t=&z=15&ie=UTF8&iwloc=&output=embed',
     },
     warehouses: {
-      name: 'Warehouses & Port Depots',
-      sub: 'Bhiwandi & Vasai Packaging Hubs (Near JNPT Sea Port)',
-      address: 'Pooja Complex, Opp Bhadra Petrol Pump, Rahnal Village, Bhiwandi & Andhra Bombay Carriers, Sativali Road, Vasai East, Maharashtra',
-      hours: 'Dispatch Operations: 24/7 Sea & Air Consignment Processing',
-      phone: '+91 22 2892 5032',
-      mapQuery: 'https://maps.google.com/maps?q=Bhiwandi+Maharashtra+Warehousing+Zone&t=&z=13&ie=UTF8&iwloc=&output=embed',
+      name: 'Central Warehouse & Dispatch Hub',
+      sub: 'Dahisar West, Mumbai Logistics Facility',
+      address: 'Shop no B-13, Ground Floor, New Heritage CHS Ltd, Kandarpada, Dahisar West, Mumbai - 400068, Maharashtra',
+      hours: 'Dispatch Operations: 24/7 Consignment & Order Fulfillment',
+      phone: '+91 79775 23176',
+      mapQuery: 'https://maps.google.com/maps?q=Kandarpada+Dahisar+West+Mumbai+400068&t=&z=14&ie=UTF8&iwloc=&output=embed',
     },
   }
 
