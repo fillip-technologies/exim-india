@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { submitOrder } from '../../../api/orders'
 import { CONTACT_INFO } from '../../../constants/navigation'
+import PhoneInput, { formatPhone, DEFAULT_PHONE_CODE } from '../../common/PhoneInput'
 
 /**
  * Order / sample-request modal.
@@ -27,6 +28,7 @@ export default function OrderModal({
   const [orderForm, setOrderForm] = useState({
     name: '',
     email: '',
+    phone_code: DEFAULT_PHONE_CODE,
     phone: '',
     quantity: isOrderMode ? defaultMoq : '',
     address: '',
@@ -63,7 +65,7 @@ export default function OrderModal({
         product_id: product.productId,
         name:       orderForm.name.trim(),
         email:      orderForm.email.trim(),
-        phone:      orderForm.phone.trim()   || undefined,
+        phone:      formatPhone(orderForm.phone_code, orderForm.phone),
         quantity,
         address:    orderForm.address.trim() || undefined,
         message,
@@ -246,15 +248,13 @@ export default function OrderModal({
                 <label className="block text-xs font-bold text-slate-700 mb-1">
                   Phone / WhatsApp <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="tel"
-                  name="phone"
+                <PhoneInput
+                  code={orderForm.phone_code}
+                  number={orderForm.phone}
+                  onChange={(phone_code, phone) => setOrderForm(prev => ({ ...prev, phone_code, phone }))}
                   required
                   disabled={loading}
-                  placeholder="+91 79775 23176"
-                  value={orderForm.phone}
-                  onChange={handleChange}
-                  className="w-full text-xs px-3 py-2 rounded-lg border border-slate-300 focus:border-emerald-600 focus:outline-none disabled:opacity-60"
+                  className="text-xs px-2 py-2 rounded-lg border border-slate-300 focus:border-emerald-600 focus:outline-none disabled:opacity-60"
                 />
               </div>
               <div>

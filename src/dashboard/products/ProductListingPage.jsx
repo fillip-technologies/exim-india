@@ -11,6 +11,7 @@ import {
   adminUpdateProduct,
   adminDeleteProduct,
 } from '../../api'
+import SearchSelect from '../SearchSelect'
 import ProductDeleteModal from './components/ProductDeleteModal'
 
 const PAGE_SIZE = 20
@@ -153,18 +154,13 @@ export default function ProductListingPage() {
           placeholder="Search by name, CAS No. or model number…"
           className="flex-1 text-sm px-3 py-2 rounded-xl border border-slate-200 focus:outline-none focus:border-[#0a3622]"
         />
-        <select
+        <SearchSelect
+          className="md:w-56"
           value={category}
-          onChange={(e) => updateParams({ category: e.target.value, page: '' })}
-          className="text-sm px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-[#0a3622]"
-        >
-          <option value="">All categories</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+          onChange={(v) => updateParams({ category: String(v), page: '' })}
+          options={categories.map((c) => ({ value: c.id, label: c.name }))}
+          placeholder="All categories"
+        />
         <select
           value={status}
           onChange={(e) => updateParams({ status: e.target.value, page: '' })}

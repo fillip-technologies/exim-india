@@ -245,7 +245,6 @@ function ProductDetail({ categorySlug, id }) {
         productName={product.name}
         categoryName={categoryName || categorySlug}
         categoryUrl={`/products/${categorySlug}`}
-        totalCount={siblings.length}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -675,7 +674,7 @@ function SwatchSection({ option, selectedId, onSelect, isAvailable }) {
         <div className="flex items-center gap-2 mb-1">
           <span className="w-5 h-1 bg-[#c59b27] rounded-full inline-block" />
           <h3 className="text-xl sm:text-2xl font-black font-heading text-slate-900 tracking-tight">
-            {option.name} ({option.values.length})
+            {option.name}
           </h3>
         </div>
         <p className="text-xs sm:text-sm text-slate-500">

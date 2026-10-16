@@ -1,15 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate, Link } from 'react-router-dom'
 import { getOrder, deleteOrder, updateOrderStatus } from '../../api/orders'
+import { ORDER_STATUSES, ORDER_STATUS_STYLES } from '../orderStatus'
 
-const STATUS_STYLES = {
-  new:      'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
-  read:     'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
-  replied:  'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-  archived: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-}
-
-const STATUSES = ['new', 'read', 'replied', 'archived']
+const STATUS_STYLES = ORDER_STATUS_STYLES
+const STATUSES = ORDER_STATUSES
 
 function Badge({ label }) {
   return (

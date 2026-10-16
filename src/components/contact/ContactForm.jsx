@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { submitContact } from '../../api'
+import PhoneInput, { formatPhone, DEFAULT_PHONE_CODE } from '../common/PhoneInput'
 import { useCategories } from '../../api/useCatalog'
 
 const OTHER_OPTION = 'Other / Custom Requirement'
@@ -12,6 +13,7 @@ export default function ContactForm() {
   const [formData, setFormData] = useState({
     name:             '',
     email:            '',
+    phone_code:       DEFAULT_PHONE_CODE,
     phone:            '',
     company:          '',
     product_interest: '',
@@ -36,7 +38,7 @@ export default function ContactForm() {
       await submitContact({
         name:             formData.name.trim(),
         email:            formData.email.trim(),
-        phone:            formData.phone.trim() || undefined,
+        phone:            formatPhone(formData.phone_code, formData.phone),
         company:          formData.company.trim() || undefined,
         product_interest: formData.product_interest || undefined,
         message:          formData.message.trim(),
@@ -81,6 +83,7 @@ export default function ContactForm() {
                 setFormData({
                   name:             '',
                   email:            '',
+                  phone_code:       DEFAULT_PHONE_CODE,
                   phone:            '',
                   company:          '',
                   product_interest: '',
@@ -166,14 +169,12 @@ export default function ContactForm() {
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Phone / WhatsApp Number
               </label>
-              <input
-                type="tel"
-                name="phone"
+              <PhoneInput
+                code={formData.phone_code}
+                number={formData.phone}
+                onChange={(phone_code, phone) => setFormData(prev => ({ ...prev, phone_code, phone }))}
                 disabled={loading}
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="+91 79775 23176 / +91 98923 64600"
-                className="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0a3622] focus:ring-1 focus:ring-[#0a3622] transition-colors disabled:bg-slate-50 disabled:opacity-60"
+                className="rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[#0a3622] focus:ring-1 focus:ring-[#0a3622] transition-colors disabled:bg-slate-50 disabled:opacity-60"
               />
             </div>
 

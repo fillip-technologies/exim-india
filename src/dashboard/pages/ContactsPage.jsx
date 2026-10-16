@@ -4,7 +4,6 @@ import { getContacts, deleteContact } from '../../api'
 
 // ─── Constants ─────────────────────────────────────────────────
 const STATUSES = ['new', 'read', 'replied', 'archived']
-const TYPES    = ['contact', 'order']
 
 const STATUS_STYLES = {
   new:      'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
@@ -13,10 +12,6 @@ const STATUS_STYLES = {
   archived: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
 }
 
-const TYPE_STYLES = {
-  contact: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200',
-  order:   'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200',
-}
 
 function Badge({ label, styleMap }) {
   return (
@@ -42,7 +37,6 @@ export default function ContactsPage() {
   const [error,       setError]       = useState('')
 
   // Filters
-  const [filterType,   setFilterType]   = useState('')
   const [filterStatus, setFilterStatus] = useState('')
   const [page,         setPage]         = useState(1)
 
@@ -54,7 +48,7 @@ export default function ContactsPage() {
     setLoading(true)
     setError('')
     try {
-      const res = await getContacts({ type: filterType, status: filterStatus, page })
+      const res = await getContacts({ status: filterStatus, page })
       // Laravel paginated resource → { data, links, meta } OR { data, current_page, last_page, total }
       const list     = res?.data       ?? []
       const metaData = res?.meta       ?? res
@@ -69,7 +63,7 @@ export default function ContactsPage() {
     } finally {
       setLoading(false)
     }
-  }, [filterType, filterStatus, page])
+  }, [filterStatus, page])
 
   useEffect(() => {
     document.title = 'Contacts | Exim India Admin'
@@ -116,7 +110,7 @@ export default function ContactsPage() {
       {/* Header with Title on Left, Filters on Right */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Contacts & Inquiries</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Contact Messages</h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
             {meta.total} total {meta.total === 1 ? 'inquiry' : 'inquiries'}
           </p>
@@ -125,20 +119,14 @@ export default function ContactsPage() {
         {/* Filters on Right Side */}
         <div className="flex flex-wrap items-center gap-2.5 sm:justify-end">
           <FilterSelect
-            label="All Types"
-            value={filterType}
-            onChange={handleFilterChange(setFilterType)}
-            options={TYPES}
-          />
-          <FilterSelect
             label="All Statuses"
             value={filterStatus}
             onChange={handleFilterChange(setFilterStatus)}
             options={STATUSES}
           />
-          {(filterType || filterStatus) && (
+          {filterStatus && (
             <button
-              onClick={() => { setFilterType(''); setFilterStatus(''); setPage(1) }}
+              onClick={() => { setFilterStatus(''); setPage(1) }}
               className="px-3 py-2 text-xs sm:text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg border border-red-200 transition-colors cursor-pointer"
             >
               Clear filters
@@ -163,7 +151,6 @@ export default function ContactsPage() {
                 <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
                 <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th>
                 <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Phone</th>
-                <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Type</th>
                 <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
                 <th className="px-4 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Date</th>
                 <th className="px-4 py-3.5 text-right text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
@@ -183,14 +170,14 @@ export default function ContactsPage() {
                 ))
               ) : contacts.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-4 py-16 text-center">
+                  <td colSpan={6} className="px-4 py-16 text-center">
                     <div className="flex flex-col items-center gap-2 text-slate-400">
                       <svg className="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5"
                           d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                       <p className="text-sm font-medium">No contacts found</p>
-                      {(filterType || filterStatus) && (
+                      {filterStatus && (
                         <p className="text-xs">Try clearing the filters</p>
                       )}
                     </div>
@@ -227,11 +214,6 @@ export default function ContactsPage() {
                       <span className="text-sm text-slate-600 font-mono">
                         {contact.phone || '—'}
                       </span>
-                    </td>
-
-                    {/* Type */}
-                    <td className="px-4 py-3.5 whitespace-nowrap">
-                      <Badge label={contact.type} styleMap={TYPE_STYLES} />
                     </td>
 
                     {/* Status */}

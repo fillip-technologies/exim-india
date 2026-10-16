@@ -40,7 +40,7 @@ export default function DashboardOverview() {
         http.get('/admin/categories').catch(() => []),
         http.get('/admin/products', { params: { per_page: 1 } }).catch(() => null),
         http.get('/admin/contacts').catch(() => null),
-        http.get('/admin/contacts', { params: { type: 'order', per_page: 1 } }).catch(() => null),
+        http.get('/admin/orders', { params: { per_page: 1 } }).catch(() => null),
         http.get('/admin/testimonials').catch(() => []),
         http.get('/admin/contacts', { params: { status: 'new', per_page: 1 } }).catch(() => null),
       ])

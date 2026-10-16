@@ -4,7 +4,6 @@ export default function ProductDetailHeader({
   productName,
   categoryName,
   categoryUrl,
-  totalCount,
 }) {
   return (
     <div className="-mt-20 sm:-mt-24 bg-gradient-to-r from-sky-900 via-cyan-900 to-emerald-900 pt-28 sm:pt-32 pb-8 sm:pb-9 text-white relative overflow-hidden mb-6 shadow-sm">
@@ -29,7 +28,7 @@ export default function ProductDetailHeader({
           className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-white/15 hover:bg-white/25 px-4 py-2 rounded-xl backdrop-blur-xs transition-colors border border-white/20"
         >
           <span>&larr;</span>
-          <span>{totalCount > 1 ? `Back to All ${totalCount} Products` : "Back to Products"}</span>
+          <span>Back to {categoryName}</span>
         </Link>
       </div>
     </div>

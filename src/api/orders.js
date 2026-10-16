@@ -2,8 +2,7 @@
  * src/api/orders.js
  * ─────────────────────────────────────────────────────────────
  * Order-specific API helpers.
- * Orders are stored in the backend as contacts with type = "order".
- * No backend changes required.
+ * Orders live in their own table (GET/PATCH/DELETE /admin/orders).
  */
 
 import { http } from './httpClient'
@@ -19,13 +18,13 @@ export function submitOrder(data) {
 }
 
 /**
- * Admin: list orders (contacts filtered by type=order).
+ * Admin: list orders.
  * @param {{ status?: string, page?: number }} opts
  */
 export function getOrders({ status = '', page = 1 } = {}) {
-  const params = { page, type: 'order' }
+  const params = { page }
   if (status) params.status = status
-  return http.get('/admin/contacts', { params })
+  return http.get('/admin/orders', { params })
 }
 
 /**
@@ -33,7 +32,7 @@ export function getOrders({ status = '', page = 1 } = {}) {
  * @param {string|number} id
  */
 export function getOrder(id) {
-  return http.get(`/admin/contacts/${id}`)
+  return http.get(`/admin/orders/${id}`)
 }
 
 /**
@@ -42,7 +41,7 @@ export function getOrder(id) {
  * @param {string} status  one of: new | read | replied | archived
  */
 export function updateOrderStatus(id, status) {
-  return http.patch(`/admin/contacts/${id}`, { status })
+  return http.patch(`/admin/orders/${id}`, { status })
 }
 
 /**
@@ -50,5 +49,5 @@ export function updateOrderStatus(id, status) {
  * @param {string|number} id
  */
 export function deleteOrder(id) {
-  return http.delete(`/admin/contacts/${id}`)
+  return http.delete(`/admin/orders/${id}`)
 }

@@ -9,10 +9,6 @@ const STATUS_STYLES = {
   archived: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
 }
 
-const TYPE_STYLES = {
-  contact: 'bg-purple-50 text-purple-700 ring-1 ring-purple-200',
-  order:   'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-200',
-}
 
 function Badge({ label, styleMap }) {
   return (
@@ -143,7 +139,6 @@ export default function ContactDetailPage() {
               )}
             </div>
             <div className="flex flex-wrap justify-center gap-2">
-              <Badge label={contact?.type}   styleMap={TYPE_STYLES} />
               <Badge label={contact?.status} styleMap={STATUS_STYLES} />
             </div>
           </div>
@@ -188,19 +183,6 @@ export default function ContactDetailPage() {
             <InfoRow label="Phone"           value={contact?.phone} />
             <InfoRow label="Company"         value={contact?.company} />
             <InfoRow label="Product Interest" value={contact?.product_interest} />
-            {contact?.product && (
-              <InfoRow label="Linked Product">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                  {contact.product.name}
-                </span>
-              </InfoRow>
-            )}
-            <InfoRow label="Quantity"        value={contact?.quantity} />
-            <InfoRow label="Address"         value={contact?.address} />
-            <InfoRow label="Type">
-              <Badge label={contact?.type} styleMap={TYPE_STYLES} />
-            </InfoRow>
             <InfoRow label="Received"        value={formatDate(contact?.created_at)} />
           </dl>
         </div>

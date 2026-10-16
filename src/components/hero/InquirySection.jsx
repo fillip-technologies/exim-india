@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import bgTelephoneImg from '../../assets/support-bg-telephone.jpg'
 import { submitContact } from '../../api'
+import PhoneInput, { formatPhone, DEFAULT_PHONE_CODE } from '../common/PhoneInput'
 import { useCategories } from '../../api/useCatalog'
 
 export default function InquirySection() {
@@ -8,6 +9,7 @@ export default function InquirySection() {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
+    phone_code: DEFAULT_PHONE_CODE,
     phone: '',
     purpose: '',
     message: '',
@@ -33,7 +35,7 @@ export default function InquirySection() {
       await submitContact({
         name:             formData.fullName.trim(),
         email:            formData.email.trim(),
-        phone:            formData.phone.trim() || undefined,
+        phone:            formatPhone(formData.phone_code, formData.phone),
         product_interest: formData.purpose || undefined,
         message:          formData.message.trim(),
         website:          formData.website || undefined,
@@ -59,6 +61,7 @@ export default function InquirySection() {
     setFormData({
       fullName: '',
       email: '',
+      phone_code: DEFAULT_PHONE_CODE,
       phone: '',
       purpose: '',
       message: '',
@@ -223,16 +226,17 @@ export default function InquirySection() {
                       <label htmlFor="phone" className="block text-xs font-semibold text-slate-700 mb-1.5">
                         Contact Number <span className="text-[#eb4738]">*</span>
                       </label>
-                      <input
+                      <PhoneInput
                         id="phone"
-                        name="phone"
-                        type="tel"
+                        code={formData.phone_code}
+                        number={formData.phone}
+                        onChange={(phone_code, phone) => {
+                          setFormData((prev) => ({ ...prev, phone_code, phone }))
+                          if (error) setError('')
+                        }}
                         required
                         disabled={submitting}
-                        value={formData.phone}
-                        onChange={handleChange}
-                        placeholder="+91 / International"
-                        className="w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs disabled:opacity-60"
+                        className="px-3 py-3 text-xs sm:text-sm rounded-xl bg-[#f5f1ef]/85 hover:bg-[#f5f1ef] focus:bg-white border border-[#ebdcd8]/80 focus:border-[#eb4738] focus:ring-2 focus:ring-[#eb4738]/20 outline-none transition-all placeholder:text-slate-400 text-slate-900 shadow-xs disabled:opacity-60"
                       />
                     </div>
                   </div>

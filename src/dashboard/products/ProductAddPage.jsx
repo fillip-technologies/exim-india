@@ -14,6 +14,7 @@ import {
   adminUpdateProduct,
   adminUploadImage,
 } from '../../api'
+import SearchSelect from '../SearchSelect'
 
 /** Optional product columns (backend snake_case) grouped for the form. */
 const FIELD_GROUPS = [
@@ -61,6 +62,37 @@ const slugify = (value) =>
     .replace(/[^a-z0-9\s-]/g, '')
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-')
+
+/** Turn the stored `extra` object into editable rows; arrays/objects keep their shape on save. */
+const extraToRows = (extra) =>
+  Object.entries(extra || {}).map(([key, value]) => {
+    if (Array.isArray(value) && value.every((v) => typeof v !== 'object' || v === null)) {
+      return { key, value: value.join(', '), kind: 'list' }
+    }
+    if (value && typeof value === 'object') return { key, value: JSON.stringify(value), kind: 'json' }
+    return { key, value: value == null ? '' : String(value), kind: 'text' }
+  })
+
+const rowsToExtra = (rows) => {
+  const extra = {}
+  rows.forEach(({ key, value, kind }) => {
+    const k = key.trim()
+    const v = value.trim()
+    if (!k || !v) return
+    if (kind === 'list') {
+      extra[k] = v.split(',').map((x) => x.trim()).filter(Boolean)
+    } else if (kind === 'json') {
+      try {
+        extra[k] = JSON.parse(v)
+      } catch {
+        extra[k] = v
+      }
+    } else {
+      extra[k] = v
+    }
+  })
+  return Object.keys(extra).length ? extra : null
+}
 
 const emptyForm = () => ({
   category_id: '',
@@ -148,7 +180,7 @@ export default function ProductAddPage({ isEdit = false }) {
   const [imageUrl, setImageUrl] = useState('')
   const [analysis, setAnalysis] = useState([])
   const [attributes, setAttributes] = useState([])
-  const [extraText, setExtraText] = useState('')
+  const [customFields, setCustomFields] = useState([])
   const [categories, setCategories] = useState([])
   const [slugTouched, setSlugTouched] = useState(isEdit)
   const [loading, setLoading] = useState(isEdit)
@@ -185,7 +217,7 @@ export default function ProductAddPage({ isEdit = false }) {
         setImageUrl(p.image_url || '')
         setAnalysis((p.analysis_specs || []).map((s) => ({ key: s.characteristic, value: s.requirement })))
         setAttributes((p.detail_attributes || []).map((a) => ({ key: a.label, value: a.value })))
-        setExtraText(p.extra && Object.keys(p.extra).length ? JSON.stringify(p.extra, null, 2) : '')
+        setCustomFields(extraToRows(p.extra))
       })
       .catch((err) => active && setFormError(err.message || 'Could not load the product.'))
       .finally(() => active && setLoading(false))
@@ -229,15 +261,8 @@ export default function ProductAddPage({ isEdit = false }) {
     if (!form.name.trim()) nextErrors.name = 'Name is required.'
     if (!form.slug.trim()) nextErrors.slug = 'Slug is required.'
 
-    let extra = null
-    if (extraText.trim()) {
-      try {
-        extra = JSON.parse(extraText)
-        if (!extra || typeof extra !== 'object' || Array.isArray(extra)) throw new Error()
-      } catch {
-        nextErrors.extra = 'Must be a valid JSON object, e.g. {"certificates": ["ISO"]}.'
-      }
-    }
+    const extra = rowsToExtra(customFields)
+
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors)
       return
@@ -313,18 +338,13 @@ export default function ProductAddPage({ isEdit = false }) {
       <Card title="Basics">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field label="Category" required error={errors.category_id}>
-            <select
-              className={inputCls}
+            <SearchSelect
               value={form.category_id}
-              onChange={(e) => set('category_id', e.target.value)}
-            >
-              <option value="">Select a category…</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
+              onChange={(v) => set('category_id', v)}
+              options={categories.map((c) => ({ value: c.id, label: c.name }))}
+              placeholder="Select a category…"
+              clearable={false}
+            />
           </Field>
           <Field label="Name" required error={errors.name}>
             <input className={inputCls} value={form.name} onChange={(e) => set('name', e.target.value)} />
@@ -450,18 +470,11 @@ export default function ProductAddPage({ isEdit = false }) {
         <RowsEditor rows={attributes} onChange={setAttributes} keyLabel="Label" valueLabel="Value" />
       </Card>
 
-      <Card title="Custom data (JSON)" hint="Optional free-form object; each top-level key becomes a row on the public page.">
-        <textarea
-          rows={4}
-          className={`${inputCls} font-mono text-xs`}
-          value={extraText}
-          onChange={(e) => {
-            setExtraText(e.target.value)
-            if (errors.extra) setErrors((prev) => ({ ...prev, extra: undefined }))
-          }}
-          placeholder='{"certificates": ["ISO", "FSSAI"]}'
-        />
-        {errors.extra && <p className="text-[11px] text-red-600">{errors.extra}</p>}
+      <Card
+        title="Custom fields"
+        hint="Anything else you want to show on the product page, e.g. “Certificates” → “ISO, FSSAI”. Separate several values with commas."
+      >
+        <RowsEditor rows={customFields} onChange={setCustomFields} keyLabel="Field name" valueLabel="Value(s)" />
       </Card>
 
       <Card title="Visibility">

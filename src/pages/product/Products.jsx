@@ -41,11 +41,6 @@ export default function Products() {
                       </p>
                     )}
                   </div>
-                  {cat.productCount !== undefined && (
-                    <span className="self-start sm:self-auto text-xs font-semibold text-emerald-800 bg-emerald-100/70 border border-emerald-300 px-3 py-1 rounded-full whitespace-nowrap">
-                      {cat.productCount} {cat.productCount === 1 ? 'Product' : 'Products'} Available
-                    </span>
-                  )}
                 </div>
 
                 <div className="mt-5 pt-4 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-3">

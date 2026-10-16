@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import { getCategories, getCategory, getCategoryProducts, getProduct } from './catalog'
+import { getCategories, getCategory, getCategoryProducts, getCategoryProductsPage, getProduct } from './catalog'
 
 /**
  * Generic fetch hook. `fetcher` is re-run whenever `key` changes; results from
  * a superseded request are ignored. When `enabled` is false nothing is
  * fetched and `loading` stays false.
  */
-function useFetch(fetcher, key, { enabled = true, initial = null } = {}) {
+function useFetch(fetcher, key, { enabled = true, initial = null, keepPrevious = false } = {}) {
   const [data, setData] = useState(initial)
   const [loading, setLoading] = useState(enabled)
   const [error, setError] = useState(null)
@@ -21,7 +21,7 @@ function useFetch(fetcher, key, { enabled = true, initial = null } = {}) {
     let active = true
     setLoading(true)
     setError(null)
-    setData(initial)
+    if (!keepPrevious) setData(initial)
     fetcher()
       .then((result) => {
         if (active) setData(result)
@@ -64,6 +64,20 @@ export function useCategoryProducts(categorySlug, params = {}) {
     initial: [],
   })
   return { products: data, loading, error }
+}
+
+/**
+ * Server-side paginated products for a category.
+ * `params` can hold page, per_page, q (search) and group_key; the previous
+ * page stays on screen while the next one loads.
+ */
+export function usePagedCategoryProducts(categorySlug, params = {}) {
+  const key = `paged:${categorySlug}:${JSON.stringify(params)}`
+  const { data, loading, error } = useFetch(() => getCategoryProductsPage(categorySlug, params), key, {
+    enabled: Boolean(categorySlug),
+    keepPrevious: true,
+  })
+  return { products: data?.data || [], meta: data?.meta || null, loading, error }
 }
 
 export function useProduct(categorySlug, productSlug) {

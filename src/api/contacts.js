@@ -9,9 +9,8 @@ export function submitContact(data) {
   return http.post('/contact', data)
 }
 
-export function getContacts({ type = '', status = '', page = 1 } = {}) {
+export function getContacts({ status = '', page = 1 } = {}) {
   const params = { page }
-  if (type)   params.type   = type
   if (status) params.status = status
   return http.get('/admin/contacts', { params })
 }

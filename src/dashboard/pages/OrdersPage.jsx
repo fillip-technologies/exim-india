@@ -1,23 +1,12 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getOrders, deleteOrder, updateOrderStatus } from '../../api/orders'
+import { ORDER_STATUSES, ORDER_STATUS_STYLES, ORDER_STATUS_ICONS } from '../orderStatus'
 
 // ─── Constants ─────────────────────────────────────────────────
-const STATUSES = ['new', 'read', 'replied', 'archived']
-
-const STATUS_STYLES = {
-  new:      'bg-blue-50 text-blue-700 ring-1 ring-blue-200',
-  read:     'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
-  replied:  'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-  archived: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-}
-
-const STATUS_ICONS = {
-  new:      '🔵',
-  read:     '👁',
-  replied:  '✅',
-  archived: '📦',
-}
+const STATUSES = ORDER_STATUSES
+const STATUS_STYLES = ORDER_STATUS_STYLES
+const STATUS_ICONS = ORDER_STATUS_ICONS
 
 function Badge({ label }) {
   return (

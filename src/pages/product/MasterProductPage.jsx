@@ -1,8 +1,11 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import ProductHero from '../../components/product/ProductHero'
 import UniversalProductCard from '../../components/common/UniversalProductCard'
-import { useCategory, useCategoryProducts } from '../../api/useCatalog'
+import { useCategory, usePagedCategoryProducts } from '../../api/useCatalog'
+
+/** Products per page (12 fills the 4-column grid in three rows) */
+const PAGE_SIZE = 12
 
 /**
  * MasterProductPage
@@ -22,10 +25,38 @@ export default function MasterProductPage() {
 function CategoryPage({ slug }) {
 
   const { category, loading: categoryLoading, error: categoryError } = useCategory(slug)
-  const { products, loading: productsLoading } = useCategoryProducts(slug)
 
   const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
+  const [page, setPage] = useState(1)
+  const gridRef = useRef(null)
+
+  // Search, filtering and paging all happen on the server
+  const { products, meta, loading: productsLoading } = usePagedCategoryProducts(slug, {
+    page,
+    per_page: PAGE_SIZE,
+    q: debouncedQuery || undefined,
+    group_key: activeFilter !== 'all' ? activeFilter : undefined,
+  })
+
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setDebouncedQuery(searchQuery.trim())
+      setPage(1)
+    }, 300)
+    return () => clearTimeout(t)
+  }, [searchQuery])
+
+  const changeFilter = (key) => {
+    setActiveFilter(key)
+    setPage(1)
+  }
+
+  const goToPage = (n) => {
+    setPage(n)
+    gridRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   const title = category?.name || ''
   const description = category?.description || ''
@@ -35,34 +66,15 @@ function CategoryPage({ slug }) {
     if (title) document.title = `${title} | Exim India Corporation`
   }, [title])
 
-  // Filter chips: one per distinct groupKey, labelled with groupName
-  const filterGroups = useMemo(() => {
-    const groups = new Map()
-    products.forEach((p) => {
-      if (p.groupKey && !groups.has(p.groupKey)) {
-        groups.set(p.groupKey, p.groupName || p.groupKey)
-      }
-    })
-    return Array.from(groups, ([key, label]) => ({ key, label }))
-  }, [products])
+  // Filter chips come from the category (all groups, not just the current page)
+  const filterGroups = useMemo(
+    () => (category?.groups || []).map((g) => ({ key: g.key, label: g.name || prettyKey(g.key) })),
+    [category],
+  )
 
-  const filteredProducts = useMemo(() => {
-    const q = searchQuery.toLowerCase().trim()
-    return products.filter((item) => {
-      if (activeFilter !== 'all' && item.groupKey !== activeFilter) return false
-      if (!q) return true
-
-      const haystack = [
-        item.name,
-        item.shortName,
-        item.casNo,
-        item.otherNames,
-        item.description,
-        ...(item.attributes || []).map((a) => a.value),
-      ]
-      return haystack.some((v) => v && String(v).toLowerCase().includes(q))
-    })
-  }, [products, searchQuery, activeFilter])
+  const lastPage = meta?.last_page || 1
+  const total = meta?.total ?? products.length
+  const hasFilter = Boolean(debouncedQuery || activeFilter !== 'all')
 
   const loading = categoryLoading || productsLoading
 
@@ -111,7 +123,7 @@ function CategoryPage({ slug }) {
             )}
           </div>
 
-          {products.length > 0 && (
+          {(total > 0 || searchQuery || activeFilter !== 'all') && (
             <div className="relative w-full md:w-72 shrink-0">
               <input
                 type="text"
@@ -152,20 +164,20 @@ function CategoryPage({ slug }) {
           <div className="flex flex-wrap items-center gap-2 mb-6 pb-2 border-b border-slate-100">
             <button
               type="button"
-              onClick={() => setActiveFilter('all')}
+              onClick={() => changeFilter('all')}
               className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
                 activeFilter === 'all'
                   ? 'bg-[#0a3622] text-white shadow-xs'
                   : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              All ({products.length})
+              All
             </button>
             {filterGroups.map((g) => (
               <button
                 key={g.key}
                 type="button"
-                onClick={() => setActiveFilter(g.key)}
+                onClick={() => changeFilter(g.key)}
                 className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
                   activeFilter === g.key
                     ? 'bg-[#0a3622] text-white shadow-xs'
@@ -179,15 +191,20 @@ function CategoryPage({ slug }) {
         )}
 
         {/* Product grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {loading && products.length === 0 ? (
+          <div ref={gridRef} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {[1, 2, 3, 4].map((n) => (
               <div key={n} className="aspect-square rounded-3xl bg-slate-100 animate-pulse" />
             ))}
           </div>
-        ) : filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
+        ) : products.length > 0 ? (
+          <div
+            ref={gridRef}
+            className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 transition-opacity scroll-mt-28 ${
+              productsLoading ? 'opacity-50' : ''
+            }`}
+          >
+            {products.map((product) => (
               <UniversalProductCard
                 key={product.productId || product.id}
                 product={product}
@@ -196,27 +213,27 @@ function CategoryPage({ slug }) {
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center bg-slate-50/50 rounded-3xl border border-slate-200">
+          <div ref={gridRef} className="py-20 text-center bg-slate-50/50 rounded-3xl border border-slate-200">
             <div className="text-4xl mb-3">🔍</div>
             <h3 className="text-lg font-bold font-heading text-slate-900">No Products Found</h3>
             <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-sm mx-auto">
-              {searchQuery
-                ? `No products matching "${searchQuery}" were found.`
+              {debouncedQuery
+                ? `No products matching "${debouncedQuery}" were found.`
                 : 'There are currently no products available in this category.'}
             </p>
-            {(searchQuery || activeFilter !== 'all') && (
+            {hasFilter && (
               <button
                 type="button"
                 onClick={() => {
                   setSearchQuery('')
-                  setActiveFilter('all')
+                  changeFilter('all')
                 }}
                 className="mt-4 px-4 py-2 rounded-xl bg-[#0a3622] text-white text-xs font-bold hover:bg-[#0f4d30] transition-colors cursor-pointer"
               >
                 Reset Filters
               </button>
             )}
-            {!searchQuery && activeFilter === 'all' && (
+            {!hasFilter && (
               <div className="mt-4">
                 <Link
                   to="/contact"
@@ -228,6 +245,8 @@ function CategoryPage({ slug }) {
             )}
           </div>
         )}
+
+        {lastPage > 1 && <Pagination page={page} lastPage={lastPage} onChange={goToPage} />}
 
         {/* Category-level specification table (only if the category has one) */}
         {category?.analysis?.length > 0 && (
@@ -245,6 +264,52 @@ function CategoryPage({ slug }) {
         )}
       </main>
     </div>
+  )
+}
+
+/** Fallback label for a group that has a key but no display name: "bakery-dairy" → "Bakery & Dairy" */
+const prettyKey = (key) =>
+  String(key)
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' & ')
+
+function Pagination({ page, lastPage, onChange }) {
+  // Always show first, last and the pages around the current one
+  const pages = []
+  for (let n = 1; n <= lastPage; n++) {
+    if (n === 1 || n === lastPage || Math.abs(n - page) <= 1) pages.push(n)
+    else if (pages[pages.length - 1] !== '…') pages.push('…')
+  }
+  const btn =
+    'min-w-9 h-9 px-3 rounded-xl text-xs font-bold border transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-default'
+
+  return (
+    <nav aria-label="Pagination" className="mt-10 flex flex-wrap items-center justify-center gap-1.5">
+      <button type="button" disabled={page <= 1} onClick={() => onChange(page - 1)} className={`${btn} border-slate-200 bg-white text-slate-700 hover:bg-slate-50`}>
+        ← Prev
+      </button>
+      {pages.map((n, i) =>
+        n === '…' ? (
+          <span key={`gap-${i}`} className="px-1 text-slate-400">…</span>
+        ) : (
+          <button
+            key={n}
+            type="button"
+            onClick={() => onChange(n)}
+            aria-current={n === page ? 'page' : undefined}
+            className={`${btn} ${
+              n === page ? 'bg-[#0a3622] border-[#0a3622] text-white' : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+            }`}
+          >
+            {n}
+          </button>
+        ),
+      )}
+      <button type="button" disabled={page >= lastPage} onClick={() => onChange(page + 1)} className={`${btn} border-slate-200 bg-white text-slate-700 hover:bg-slate-50`}>
+        Next →
+      </button>
+    </nav>
   )
 }
 

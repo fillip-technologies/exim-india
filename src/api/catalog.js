@@ -16,6 +16,12 @@ export const getCategoryProducts = async (categorySlug, params = {}) => {
   return res.data || []
 }
 
+/** One page of a category: { data: Product[], meta: { current_page, last_page, total, per_page } } */
+export const getCategoryProductsPage = async (categorySlug, params = {}) => {
+  const res = await http.get(`/categories/${categorySlug}/products`, { params })
+  return { data: res.data || [], meta: res.meta || null }
+}
+
 export const getProduct = async (categorySlug, productSlug) => {
   const res = await http.get(`/categories/${categorySlug}/products/${productSlug}`)
   return res.data
