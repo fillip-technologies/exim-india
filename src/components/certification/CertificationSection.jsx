@@ -7,9 +7,9 @@ import fssaiCert from '../../assets/img/certificate/fssai-certificate.png'
 import iecCert from '../../assets/img/certificate/iec-certificate.png'
 import gstCert from '../../assets/img/certificate/gst-registration-certificate.png'
 import rofCert from '../../assets/img/certificate/rof-registration-certificate.png'
+import chemexilCert from '../../assets/img/certificate/rcmc-certificate.png'
 
 // Existing Unique Image Certificates
-import chemexilCert from '../../assets/img/certificate/chemexil-certificate.jpg'
 import spicesBoardCert from '../../assets/img/certificate/exim1.jpeg'
 import india5000Cert1 from '../../assets/img/certificate/India5000_Nomination_Certificate.jpg'
 import india5000Cert2 from '../../assets/img/certificate/India5000_Nomination_Certificate2018.jpg'
@@ -23,6 +23,7 @@ import fssaiPdf from '../../assets/img/certificate/FSSAI-25-30-EXIM.pdf'
 import iecPdf from '../../assets/img/certificate/IEC-Certificate.pdf'
 import gstPdf from '../../assets/img/certificate/25-GST-REGISTRATION.pdf'
 import rofPdf from '../../assets/img/certificate/ROF-copy.pdf'
+import chemexilPdf from '../../assets/img/certificate/RCMC-25-28.pdf'
 
 const CERTIFICATES = [
   { id: 1, src: iso9001Cert, fileUrl: iso9001Pdf, alt: 'ISO 9001:2015 Certificate' },
@@ -31,7 +32,7 @@ const CERTIFICATES = [
   { id: 4, src: newFdaCert, fileUrl: newFdaPdf, alt: 'FDA Certificate' },
   { id: 5, src: fssaiCert, fileUrl: fssaiPdf, alt: 'FSSAI License Certificate' },
   { id: 6, src: iecCert, fileUrl: iecPdf, alt: 'IEC Importer-Exporter Code' },
-  { id: 8, src: chemexilCert, fileUrl: chemexilCert, alt: 'CHEMEXCIL Export Certificate' },
+  { id: 8, src: chemexilCert, fileUrl: chemexilPdf, alt: 'CHEMEXCIL Export Certificate' },
   { id: 9, src: gstCert, fileUrl: gstPdf, alt: 'GST Registration Certificate' },
   { id: 10, src: rofCert, fileUrl: rofPdf, alt: 'ROF Registration Certificate' },
   // { id: 11, src: spicesBoardCert, fileUrl: spicesBoardCert, alt: 'Spices Board Exporter Certificate' },
